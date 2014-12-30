@@ -1,0 +1,50 @@
+[INFO_|12/27 22:58:13|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=65.0, Free=44.4, Used=20.6 [3%]
+[INFO_|12/27 22:58:14|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/27 22:58:38|DBConnection.closeAllConnections:386] Closed all open DBConnections: 1
+[INFO_|12/27 22:58:38|RTConfigContextListener.contextDestroyed:247] Remaining pool threads [0]: 0
+[INFO_|12/27 22:58:38|RTConfigContextListener.contextDestroyed:250] ... Servlet Context destroyed: TrackWar
+[INFO_|12/27 22:58:38|RTConfigContextListener.contextDestroyed:251] -----------------------------------------------
+[INFO_|12/27 23:01:23|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=51.5, Free=34.3, Used=17.2 [2%]
+[INFO_|12/27 23:01:24|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/27 23:04:26|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=51.5, Free=34.3, Used=17.2 [2%]
+[INFO_|12/27 23:04:27|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/27 23:04:47|Track._doWork:1329] Login Account/User: admin/admin [From 127.0.0.1]
+[INFO_|12/27 23:04:47|Audit.userLoginOK:113] Login: Time=1419717887 Domain=default Account=admin User=admin IP=127.0.0.1
+[INFO_|12/27 23:06:31|TrackMap.writeJS_MapUpdate:408] js: SortableLocationDetails = [default:map.device] false
+[INFO_|12/28 22:46:59|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=51.5, Free=34.1, Used=17.4 [2%]
+[INFO_|12/28 22:47:01|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/28 22:47:42|Track._doWork:1329] Login Account/User: admin/admin [From 127.0.0.1]
+[INFO_|12/28 22:47:42|Audit.userLoginOK:113] Login: Time=1419803262 Domain=default Account=admin User=admin IP=127.0.0.1
+[INFO_|12/28 22:56:47|DBConnection.closeAllConnections:386] Closed all open DBConnections: 1
+[INFO_|12/28 22:56:48|RTConfigContextListener.contextDestroyed:247] Remaining pool threads [0]: 0
+[INFO_|12/28 22:56:48|RTConfigContextListener.contextDestroyed:250] ... Servlet Context destroyed: TrackWar
+[INFO_|12/28 22:56:48|RTConfigContextListener.contextDestroyed:251] -----------------------------------------------
+[INFO_|12/28 23:35:27|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=51.5, Free=35.8, Used=15.7 [2%]
+[INFO_|12/28 23:35:28|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/28 23:35:43|Track._doWork:1329] Login Account/User: admin/admin [From 127.0.0.1]
+[INFO_|12/28 23:35:43|Audit.userLoginOK:113] Login: Time=1419806143 Domain=default Account=admin User=admin IP=127.0.0.1
+[INFO_|12/28 23:55:30|DBConnection.closeAllConnections:386] Closed all open DBConnections: 2
+[INFO_|12/28 23:55:30|RTConfigContextListener.contextDestroyed:247] Remaining pool threads [0]: 0
+[INFO_|12/28 23:55:30|RTConfigContextListener.contextDestroyed:250] ... Servlet Context destroyed: TrackWar
+[INFO_|12/28 23:55:30|RTConfigContextListener.contextDestroyed:251] -----------------------------------------------
+[INFO_|12/28 23:55:31|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=115.2, Free=81.5, Used=33.8 [4%]
+[INFO_|12/28 23:55:32|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/28 23:55:38|RTConfigContextListener.contextDestroyed:247] Remaining pool threads [0]: 0
+[INFO_|12/28 23:55:38|RTConfigContextListener.contextDestroyed:250] ... Servlet Context destroyed: TrackWar
+[INFO_|12/28 23:55:38|RTConfigContextListener.contextDestroyed:251] -----------------------------------------------
+[INFO_|12/28 23:55:49|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=51.5, Free=34.1, Used=17.4 [2%]
+[INFO_|12/28 23:55:50|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/28 23:55:58|Track._doWork:1329] Login Account/User: admin/admin [From 127.0.0.1]
+[INFO_|12/28 23:55:58|Audit.userLoginOK:113] Login: Time=1419807358 Domain=default Account=admin User=admin IP=127.0.0.1
+[INFO_|12/28 23:56:03|TrackMap.writeJS_MapUpdate:408] js: SortableLocationDetails = [default:map.live] false
+[INFO_|12/28 23:56:05|RequestProperties.getMapEvents:1388] No devices ...
+[INFO_|12/28 23:56:58|DBConnection.closeAllConnections:386] Closed all open DBConnections: 3
+[INFO_|12/28 23:56:59|RTConfigContextListener.contextDestroyed:247] Remaining pool threads [0]: 0
+[INFO_|12/28 23:56:59|RTConfigContextListener.contextDestroyed:250] ... Servlet Context destroyed: TrackWar
+[INFO_|12/28 23:56:59|RTConfigContextListener.contextDestroyed:251] -----------------------------------------------
+[INFO_|12/31 00:27:38|OSTools.printMemoryUsage:1077] Memory-Mb: Max=762.8, Total=51.5, Free=34.1, Used=17.4 [2%]
+[INFO_|12/31 00:27:39|RTConfigContextListener.contextInitialized:215] java.awt.headless=false
+[INFO_|12/31 00:27:58|DBConnection.closeAllConnections:386] Closed all open DBConnections: 1
+[INFO_|12/31 00:27:59|RTConfigContextListener.contextDestroyed:247] Remaining pool threads [0]: 0
+[INFO_|12/31 00:27:59|RTConfigContextListener.contextDestroyed:250] ... Servlet Context destroyed: TrackWar
+[INFO_|12/31 00:27:59|RTConfigContextListener.contextDestroyed:251] -----------------------------------------------

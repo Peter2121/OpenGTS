@@ -1,0 +1,34 @@
+
+Version 2.5.7 [2014/10/07]
+- NEW: Added additional status codes.
+- NEW: Initial support for DeviceGroup notify email address (incomplete).
+- NEW: Added "useResultAddress" property to "nominatim" reverse-geocode provider.
+- NEW: Added DATA_VEHICLE_MAKE, DATA_VEHICLE_MODEL for report FieldLayout.
+- NEW: Added "fleetSortByField" property to MotionReport.
+- FIX: Fixed odometer offset used by MotionReport.
+- FIX: Fixed ignition-hour accoumulation in "Device.java".
+- UPD: Check for "Timezones" tag within "Domain" in private.xml
+- UPD: Changes made to support compiling under Java-8.
+- UPD: Added comments to "org/opengts/war/tools/BufferedHttpServletResponse.java"
+       to indicate the change required in this module to support compiling with
+       Tomcat-8 (changes required due to API differences in Servlet Spec 3.1).
+- DCS: tk10x] Added support for using the last valid GPS location.
+- DCS: tk10x] Added support for VJoy device.
+- DCS: tk10x] Cell-tower data parsing for tk103_2 (thanks to Franjieh El Khoury).
+
+-----------------------------------------------------------------------------------
+
+Project Home Page:
+    http://www.opengts.org
+
+Download Latest Version from SourceForge:
+    https://sourceforge.net/projects/opengts/
+
+Documentation (installation/configuration, tutorials, FAQ):
+    http://www.opengts.org/FAQ.html
+    http://www.opengts.org/documentation.html
+
+GTS Enterprise:
+    http://www.geotelematic.com/gts.html
+    http://www.geotelematic.com/documentation.html
+
