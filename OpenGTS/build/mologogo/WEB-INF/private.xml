@@ -1305,6 +1305,13 @@ Notes:
                 <Property key="showFleetFromCalendar">false</Property>
                 <!-- <Property key="fleetDeviceEventCount">1</Property> -->
                 </Page>
+            <Page rtKey="TrackMapFleetLive" class="org.opengts.war.track.page.TrackMapFleetLive">
+                <AclName>acl.map.fleet</AclName>
+                <!-- <ButtonImage> Place_Button_Cap_Image_URL_Here </ButtonImage> -->
+                <!-- <ButtonImageAlt> Place_Rollover_Button_Cap_Image_URL_Here </ButtonImageAlt> -->
+                <!-- <IconImage> Place_Button_Icon_Overlay_Image_URL_Here </IconImage> -->
+                <!-- <Property key="fleetDeviceEventCount">1</Property> -->
+                </Page>
         </MenuGroup>
         <!-- Reports -->
         <MenuGroup name="menuGroup.reports" topMenu="true" menuBar="true">

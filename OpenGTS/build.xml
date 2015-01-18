@@ -942,6 +942,20 @@ File     : build.xml
     <echo message="Deployed ${catalina.base}/webapps/${track.deployWar}"/>
   </target>
 
+	  <!-- Target: track.deploy.eclipse -->
+	  <target name="track.deploy.eclipse" depends="track.war" 
+	    description="Deploy 'track.war' to Eclipse Tomcat folder">
+	    <echo message="Deploying 'track.war' to /home/peter/jeeworkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/${track.deployWar}"/>
+	    <copy 
+	        file="${build.home}/track.war" 
+	        tofile="/home/peter/jeeworkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/${track.deployWar}"
+	        overwrite="true"
+	        failonerror="true"
+	        verbose="true"
+	        />
+	    <echo message="Deployed /home/peter/jeeworkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/${track.deployWar}"/>
+	  </target>
+
   <!-- ======================================================================== -->
   <!-- ======================================================================== -->
 

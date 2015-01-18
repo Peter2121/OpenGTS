@@ -207,9 +207,11 @@ public abstract class TrackMap
     // WebPage interface
 
     private boolean         isFleet                 = false;
+    private boolean         isFleetLive             = false;
     private int             statusCodes[]           = null;
     private boolean         alertEventsOnly         = false;
     private boolean         showFromCalendar        = false;
+    private boolean         showToCalendar        	= true;
 
     public TrackMap()
     {
@@ -267,6 +269,20 @@ public abstract class TrackMap
     public boolean isFleet()
     {
         return this.isFleet;
+    }
+
+    // ------------------------------------------------------------------------
+
+    protected void setFleetLive(boolean fleetlive)
+    {
+        this.isFleetLive = fleetlive;
+        this.showFromCalendar = false;
+        this.showToCalendar = false;
+    }
+    
+    public boolean isFleetLive()
+    {
+        return this.isFleetLive;
     }
 
     // ------------------------------------------------------------------------
@@ -479,9 +495,12 @@ public abstract class TrackMap
         } else {
             JavaScriptTools.writeJSVar(out, CALENDAR_FROM, null);
         }
-        Calendar.writeNewCalendar(out, CALENDAR_TO, null/*formID*/, i18n.getString("TrackMap.dateTo","To"), reqState.getEventDateTo());
-        out.write(CALENDAR_TO+".setYearAdvanceSelection(false);\n");
-
+        if (this.showToCalendar) {
+        	Calendar.writeNewCalendar(out, CALENDAR_TO, null/*formID*/, i18n.getString("TrackMap.dateTo","To"), reqState.getEventDateTo());
+        	out.write(CALENDAR_TO+".setYearAdvanceSelection(false);\n");
+        } else {
+            JavaScriptTools.writeJSVar(out, CALENDAR_TO, null);
+        }
         /* end JavaScript */
         JavaScriptTools.writeEndJavaScript(out);
 
@@ -702,6 +721,9 @@ public abstract class TrackMap
         // "YYYY/MM[/DD[/hh[:mm[:ss]]]]"  ie "YYYY/MM/DD/hh:mm:ss"
         DateTime dateTo; // initialized below
         String rangeToFld[] = !StringTools.isBlank(rangeTo)? StringTools.parseStringArray(rangeTo, "/:") : null;
+        if (!this.showToCalendar) {
+            dateTo = null;
+        } else
         if (ListTools.isEmpty(rangeToFld)) {
             dateTo = new DateTime(now.getDayEnd(tz), tz);
         } else
@@ -732,8 +754,8 @@ public abstract class TrackMap
         }
 
         /* save from/to dates */
-        if ((dateFr != null) && dateFr.isAfter(dateTo)) { 
-            dateFr = dateTo; 
+        if ((dateFr != null) && (dateTo != null)) { 
+            if(dateFr.isAfter(dateTo)) dateFr = dateTo; 
         }
         if (this.showFromCalendar) {
             reqState.setEventDateFrom(dateFr);
@@ -742,8 +764,13 @@ public abstract class TrackMap
             reqState.setEventDateFrom(null);
             AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_FR[0], "");
         }
-        reqState.setEventDateTo(dateTo);
-        AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_TO[0], Calendar.formatArgDateTime(dateTo));
+        if (this.showToCalendar) {
+        	reqState.setEventDateTo(dateTo);
+        	AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_TO[0], Calendar.formatArgDateTime(dateTo));
+        } else {
+            reqState.setEventDateTo(null);
+            AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_TO[0], "");
+        }
         //Print.logInfo("Date Range: " + dateFr + " ==> " + dateTo);
 
         /* map provider */
@@ -1219,18 +1246,19 @@ public abstract class TrackMap
                     out.println(  "<div id='"+Calendar.ID_CAL_BOTTOM+"'></div>");
                     out.println("</div>\n");
                     out.println("</td></tr>\n");
-                } else {
-                    out.println("<!-- 'To' Calendar -->");
-                    out.println("<tr><td style='font-size:9pt; font-weight:bold; border-top: solid #CCCCCC 1px;'>"+i18n.getString("TrackMap.selectToDate","Select 'To' Date:")+"</td></tr>");
-                    out.println("<tr><td valign='top'>");
-                    out.println("<div   id='"+Calendar.ID_CAL_DIV+"' class='"+Calendar.CLASS_CAL_DIV+"' style='margin-top: 3px;'>");
-                    out.println(  "<div id='"+CALENDAR_TO+"' class='"+Calendar.CLASS_CAL_DIV+"'></div>");
-                    out.println(  "<div id='"+Calendar.ID_CAL_BOTTOM+"'></div>");
-                    out.println("</div>\n");
-                    out.println("</td></tr>");
-                }
+                } 
+            	if (TrackMap.this.showToCalendar) {
+            		out.println("<!-- 'To' Calendar -->");
+                	out.println("<tr><td style='font-size:9pt; font-weight:bold; border-top: solid #CCCCCC 1px;'>"+i18n.getString("TrackMap.selectToDate","Select 'To' Date:")+"</td></tr>");
+                	out.println("<tr><td valign='top'>");
+                	out.println("<div   id='"+Calendar.ID_CAL_DIV+"' class='"+Calendar.CLASS_CAL_DIV+"' style='margin-top: 3px;'>");
+                	out.println(  "<div id='"+CALENDAR_TO+"' class='"+Calendar.CLASS_CAL_DIV+"'></div>");
+                	out.println(  "<div id='"+Calendar.ID_CAL_BOTTOM+"'></div>");
+                	out.println("</div>\n");
+                	out.println("</td></tr>");
+            	} 
 
-                // Map update form
+            	// Map update form
                 out.println("<tr>");
                 out.println("<td style='padding-top:2px;'>");
 

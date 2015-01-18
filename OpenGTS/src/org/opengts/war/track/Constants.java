@@ -141,6 +141,7 @@ public interface Constants
 
     public  static final String PAGE_MAP_DEVICE             = "map.device";             // GPS map tracking
     public  static final String PAGE_MAP_FLEET              = "map.fleet";              // GPS map tracking
+    public  static final String PAGE_MAP_FLEETLIVE          = "map.fleetlive";          // GPS map tracking
 
     public  static final String PAGE_ZONE_INFO              = "zone.info";              // Geozone information
 

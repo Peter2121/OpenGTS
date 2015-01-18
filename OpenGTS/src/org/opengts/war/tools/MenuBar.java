@@ -99,6 +99,9 @@ public class MenuBar
     public static final String MENU_TRACK_FLEET             = "menu.track.fleet";
         // DeviceGroup Map
 
+    public static final String MENU_TRACK_FLEETLIVE         = "menu.track.fleetlive";
+    	// Live DeviceGroup Map
+    
     public static final String MENU_REPORTS                 = "menu.rpts";
     public static final String MENU_REPORTS_DEVDETAIL       = "menu.rpts.devDetail";
         // Device Detail[X]

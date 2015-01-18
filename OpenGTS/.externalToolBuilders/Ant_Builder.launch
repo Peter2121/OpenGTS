@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.ant.AntBuilderLaunchConfigurationType">
 <stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_AFTER_CLEAN_TARGETS" value="clean,all,"/>
-<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_AUTO_TARGETS" value="all,track.deploy,"/>
+<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_AUTO_TARGETS" value="all,track.deploy,track.deploy.eclipse,"/>
 <stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_CLEAN_TARGETS" value="clean,"/>
-<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_MANUAL_TARGETS" value="all,track.deploy,"/>
+<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_MANUAL_TARGETS" value="all,track.deploy,track.deploy.eclipse,"/>
 <booleanAttribute key="org.eclipse.ant.ui.ATTR_TARGETS_UPDATED" value="true"/>
 <booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="false"/>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="false"/>
