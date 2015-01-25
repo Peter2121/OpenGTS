@@ -98,9 +98,7 @@ import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
 import org.opengts.geocoder.GeocodeProvider;
-
 import org.opengts.war.tools.*;
-import org.opengts.war.track.Calendar;
 import org.opengts.war.track.*;
 import org.opengts.war.maps.JSMap;
 import org.opengts.war.report.ReportPresentation;
@@ -157,6 +155,8 @@ public abstract class TrackMap
 
     public  static final String  CALENDAR_FROM                  = "mapCal_fr";
     public  static final String  CALENDAR_TO                    = "mapCal_to";
+    public  static final String  CALENDAR_FROM_ST               = "map_fr";
+    public  static final String  CALENDAR_TO_ST                 = "map_to";
 
     // ------------------------------------------------------------------------
     // Auto update map timer
@@ -211,7 +211,10 @@ public abstract class TrackMap
     private int             statusCodes[]           = null;
     private boolean         alertEventsOnly         = false;
     private boolean         showFromCalendar        = false;
+    private boolean			useDateFr				= false;
     private boolean         showToCalendar        	= true;
+    private boolean			useDateTo				= true;
+    private  int			minsFleetLive			= 60;	// TODO: get this value from parameters
 
     public TrackMap()
     {
@@ -244,9 +247,14 @@ public abstract class TrackMap
             String frCal = this.getStringProperty(privLabel,PROP_showFleetFromCalendar,"");
             this.showFromCalendar = (StringTools.isBlank(frCal) || frCal.equalsIgnoreCase("default"))?
                 false : StringTools.parseBoolean(frCal,false);
+            this.useDateFr = this.showFromCalendar;
         } else {
             // device map
             this.showFromCalendar = true;
+        }
+        if (this.isFleetLive()) {
+        	this.showFromCalendar = false;
+        	this.useDateFr = true;
         }
 
     }
@@ -264,6 +272,7 @@ public abstract class TrackMap
     {
         this.isFleet = fleet;
         this.showFromCalendar = !this.isFleet;
+        this.useDateFr = this.showFromCalendar;
     }
     
     public boolean isFleet()
@@ -278,6 +287,8 @@ public abstract class TrackMap
         this.isFleetLive = fleetlive;
         this.showFromCalendar = false;
         this.showToCalendar = false;
+        this.useDateFr = true;
+        this.useDateTo = true;
     }
     
     public boolean isFleetLive()
@@ -426,7 +437,10 @@ public abstract class TrackMap
         /* other vars */
         out.write("// TrackMap misc vars\n");
         JavaScriptTools.writeJSVar(out, "IS_FLEET"                  , isFleet);
+//        JavaScriptTools.writeJSVar(out, "IS_FLEETLIVE"              , isFleetLive);
         JavaScriptTools.writeJSVar(out, "IS_DEVICE"                 , !isFleet);
+        JavaScriptTools.writeJSVar(out, "IS_CAL_FR_STATIC"          , useDateFr && !showFromCalendar);
+        JavaScriptTools.writeJSVar(out, "IS_CAL_TO_STATIC"          , useDateTo && !showToCalendar);
         JavaScriptTools.writeJSVar(out, "MAP_UPDATE_URL"            , mapUpdURL);
         JavaScriptTools.writeJSVar(out, "DEVICE_PING_URL"           , devicePingURL);
         JavaScriptTools.writeJSVar(out, "DEVICE_PUSHPIN"            , devicePushpinNdx);
@@ -487,6 +501,7 @@ public abstract class TrackMap
         }
 
         /* From Calendar vars */
+        /* Calendar.formatArgDateTime(dateFr) */
         out.write("// Calendar vars \n");
         if (this.showFromCalendar) {
             //Print.logInfo("Writing 'From' Calendar JavaScript var ...");
@@ -495,11 +510,17 @@ public abstract class TrackMap
         } else {
             JavaScriptTools.writeJSVar(out, CALENDAR_FROM, null);
         }
+        if(this.useDateFr && !this.showFromCalendar) {
+            JavaScriptTools.writeJSVar(out, CALENDAR_FROM_ST, Calendar.formatArgDateTime(reqState.getEventDateFrom()));
+        }
         if (this.showToCalendar) {
         	Calendar.writeNewCalendar(out, CALENDAR_TO, null/*formID*/, i18n.getString("TrackMap.dateTo","To"), reqState.getEventDateTo());
         	out.write(CALENDAR_TO+".setYearAdvanceSelection(false);\n");
         } else {
-            JavaScriptTools.writeJSVar(out, CALENDAR_TO, null);
+        	JavaScriptTools.writeJSVar(out, CALENDAR_TO, null);
+        }
+        if(this.useDateTo && !this.showToCalendar) {
+        	JavaScriptTools.writeJSVar(out, CALENDAR_TO_ST, Calendar.formatArgDateTime(reqState.getEventDateTo()));
         }
         /* end JavaScript */
         JavaScriptTools.writeEndJavaScript(out);
@@ -677,15 +698,19 @@ public abstract class TrackMap
         /* range 'from' [keywords: frDate, startDate, dateRange] */
         // "YYYY/MM[/DD[/hh[:mm[:ss]]]]"  ie "YYYY/MM/DD/hh:mm:ss"
         DateTime dateFr; // initialized below
+        
         String rangeFrFld[] = !StringTools.isBlank(rangeFr)? StringTools.parseStringArray(rangeFr, "/:") : null;
         if (!this.showFromCalendar) {
-            dateFr = null;
+            if(!useDateFr) dateFr = null;
+            else {
+            	dateFr=new DateTime(DateTime.getCurrentTimeSec()-60*minsFleetLive,tz);
+            }
         } else
         if (ListTools.isEmpty(rangeFrFld)) {
             if (isFleet) {
                 // one month ago
                 // (only save if displaying the 'From' Calendar
-                dateFr = new DateTime(now.getMonthDelta(tz,-1), tz);
+                dateFr = new DateTime(now.getMonthDelta(tz,-1), tz);	// TODO: change to days, get this period (X days) from parameter
             } else {
                 // beginning of today
                 dateFr = new DateTime(now.getDayStart(tz), tz);
@@ -722,7 +747,10 @@ public abstract class TrackMap
         DateTime dateTo; // initialized below
         String rangeToFld[] = !StringTools.isBlank(rangeTo)? StringTools.parseStringArray(rangeTo, "/:") : null;
         if (!this.showToCalendar) {
-            dateTo = null;
+        	if(!useDateTo) dateTo = null;
+        	else {
+        		dateTo = new DateTime(now.getDayEnd(tz), tz);
+        	}
         } else
         if (ListTools.isEmpty(rangeToFld)) {
             dateTo = new DateTime(now.getDayEnd(tz), tz);
@@ -757,18 +785,21 @@ public abstract class TrackMap
         if ((dateFr != null) && (dateTo != null)) { 
             if(dateFr.isAfter(dateTo)) dateFr = dateTo; 
         }
-        if (this.showFromCalendar) {
-            reqState.setEventDateFrom(dateFr);
+        
+        if (dateFr != null) {
+        	reqState.setEventDateFrom(dateFr);
             AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_FR[0], Calendar.formatArgDateTime(dateFr));
-        } else {
-            reqState.setEventDateFrom(null);
+        }
+        else {
+        	reqState.setEventDateFrom(null);
             AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_FR[0], "");
         }
-        if (this.showToCalendar) {
+        if (dateTo != null) {
         	reqState.setEventDateTo(dateTo);
         	AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_TO[0], Calendar.formatArgDateTime(dateTo));
-        } else {
-            reqState.setEventDateTo(null);
+        }
+        else {
+        	reqState.setEventDateTo(null);
             AttributeTools.setSessionAttribute(request, Calendar.PARM_RANGE_TO[0], "");
         }
         //Print.logInfo("Date Range: " + dateFr + " ==> " + dateTo);

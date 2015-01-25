@@ -227,8 +227,10 @@ function trackMapPingDevice(devcmd)
 {
     if (!IS_FLEET && mapDevicePing && DEVICE_PING_URL && (DEVICE_PING_URL != "")) { 
         var dev = document.SelectDeviceForm.device.value; // PARM_DEVICE
-        var rfr = mapCal_fr.getArgDateTime();
-        var rto = mapCal_to.getArgDateTime();
+        if(IS_CAL_FR_STATIC) var rfr = map_fr;
+        else var rfr = mapCal_fr.getArgDateTime();
+        if(IS_CAL_TO_STATIC) var rto = map_to;
+        else var rto = mapCal_to.getArgDateTime();
         var tmz = calGetTimeZone();
         var url = DEVICE_PING_URL + 
             "&_uniq=" + Math.random() +  // necessary to make the URL unique
@@ -288,8 +290,10 @@ function trackMapUpdateMap(limit, limitType, recenterMode, replay)
     var limitFirst = false;
     //try { document.getElementById(ID_CENTER_LAST_POINT_FORM).centerLastPoint.checked = false; } catch (e) {}
     var dev = IS_FLEET? document.SelectDeviceForm.group.value : document.SelectDeviceForm.device.value; // PARM_GEOUP/PARM_DEVICE
-    var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
-    var rto = mapCal_to.getArgDateTime();
+    if(IS_CAL_FR_STATIC) var rfr = map_fr;
+    else var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
+    if(IS_CAL_TO_STATIC) var rto = map_to;
+    else var rto = mapCal_to.getArgDateTime();
     var tmz = calGetTimeZone();
     var url = MAP_UPDATE_URL + 
         "&_uniq=" + Math.random() +  // necessary to make the URL unique
@@ -312,8 +316,10 @@ function trackMapUpdateKML()
 {
     if (KML_UPDATE_URL && (KML_UPDATE_URL != "")) {
         var dev = IS_FLEET? document.SelectDeviceForm.group.value : document.SelectDeviceForm.device.value; // PARM_GEOUP/PARM_DEVICE
-        var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
-        var rto = mapCal_to.getArgDateTime();
+        if(IS_CAL_FR_STATIC) var rfr = map_fr;
+        else var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
+        if(IS_CAL_TO_STATIC) var rto = map_to;
+        else var rto = mapCal_to.getArgDateTime();
         var tmz = calGetTimeZone();
         var url = KML_UPDATE_URL +  // Google KML
             "&_uniq=" + Math.random() +  // necessary to make the URL unique
