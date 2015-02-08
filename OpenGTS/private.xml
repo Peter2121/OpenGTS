@@ -306,7 +306,7 @@ Notes:
         <Property key="track.validateIDs">true</Property>                       <!-- [true|false] validate all IDs (MUST BE TRUE) -->
         <Property key="track.enableAuthenticationService">false</Property>      <!-- [true|false] enable "page=AUTHENTICATE" -->
         <Property key="track.forwardToSecureAccess">false</Property>            <!-- [true|false] forward 'http' to 'https' -->
-        <Property key="track.firstLoginPageID">menu.top</Property>              <!-- [menu.top|map.device|map.fleet] first page after login -->
+        <Property key="track.firstLoginPageID">map.fleetlive</Property>              <!-- [menu.top|map.device|map.fleet] first page after login -->
 
         <!-- AccountLogin properties -->
         <Property key="accountLogin.showLoginLink">true</Property>              <!-- [true|false] show "Login" link on login page -->
@@ -330,12 +330,12 @@ Notes:
 
         <!-- TopMenu properties -->
         <Property key="topMenu.maximumIconsPerRow">9</Property>                 <!-- [#] (for 'menuType=icon') max icons per row -->
-        <Property key="topMenu.showHeader">default</Property>                   <!-- [true|false|default] show header -->
+        <Property key="topMenu.showHeader">false</Property>                   <!-- [true|false|default] show header -->
         <Property key="topMenu.showMenuDescription">long</Property>             <!-- [none|short|long] show menu description -->
         <Property key="topMenu.showMenuHelp">true</Property>                    <!-- [true|false] show menu help -->
 
         <!-- TrackMap properties -->
-        <Property key="trackMap.fleetDeviceEventCount">1</Property>             <!-- [#] limit of points per device on "fleet" map -->
+        <Property key="trackMap.fleetDeviceEventCount">10</Property>             <!-- [#] limit of points per device on "fleet" map -->
         <Property key="trackMap.showFleetMapDevicePushpin">default</Property>   <!-- [default|true|false] display device pushpin on fleet map -->
         <Property key="trackMap.calendarAction">fade</Property>                 <!-- [fixed|fade|popup] calendar action -->
         <Property key="trackMap.calendarDateOnLoad">last</Property>             <!-- [last|current] set calendar date OnLoad -->
@@ -345,9 +345,9 @@ Notes:
         <Property key="trackMap.showDistanceRuler">true</Property>              <!-- [true|false] show distance ruler (if supported by map) -->
         <Property key="trackMap.showLegend">true</Property>                     <!-- [true|false] show legend -->
         <Property key="trackMap.mapUpdateOnLoad">all</Property>                 <!-- [all|last] Update Map -->
-        <Property key="trackMap.autoUpdateRecenter">zoom</Property>             <!-- [no|last|zoom] recenter map on auto-update -->
+        <Property key="trackMap.autoUpdateRecenter">no</Property>             <!-- [no|last|zoom] recenter map on auto-update -->
         <Property key="trackMap.detailCenterPushpin">false</Property>           <!-- [true|false] center pushpin when selecting a detail row -->
-        <Property key="trackMap.showLocationDetails">true</Property>            <!-- [true|false] show "Location Details" report -->
+        <Property key="trackMap.showLocationDetails">false</Property>            <!-- [true|false] show "Location Details" report -->
         <Property key="trackMap.detailAscending">true</Property>                <!-- [true|false] sort detail events in ascending/descending order -->
         <Property key="trackMap.showUpdateAll">true</Property>                  <!-- [true|false] show "Update All" location button -->
         <Property key="trackMap.showUpdateLast">false</Property>                <!-- [true|false] show Update "Last" location button -->
@@ -361,7 +361,7 @@ Notes:
         <Property key="trackMap.showBatteryLevel">false</Property>              <!-- [false|icon|percent|default] show last Battery Level (requires Device support) -->
         <Property key="trackMap.useRouteDisplayColor">true</Property>           <!-- [true|false] use Device 'displayColor' for route-line color -->
         <Property key="trackMap.showAllContainedGeozones">false</Property>      <!-- [true|false] (EXPERIMENTAL) show all contained Geozones ('false' shows only 'inner' Geozone) -->
-        <Property key="trackMap.lastDevicePushpin.fleet">true</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
+        <Property key="trackMap.lastDevicePushpin.fleet">false</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
         <Property key="trackMap.lastDevicePushpin.device">false</Property>      <!-- [true|false] show device pushpin for last pushpin on device map -->
 
         <!-- GoogleKML properties -->
@@ -424,7 +424,7 @@ Notes:
         <Property key="statusCodeInfo.showPushpinChooser">true</Property>       <!-- [true|false] show Pushpin Chooser -->
 
         <!-- SysAdminAccounts properties (module may not be present) -->
-        <Property key="sysAdminAccounts.showPasswords">false</Property>         <!-- [true|false] show passwords (possible security risk) -->
+        <Property key="sysAdminAccounts.showPasswords">true</Property>         <!-- [true|false] show passwords (possible security risk) -->
         <Property key="sysAdminAccounts.showAccountManager">false</Property>    <!-- [true|false] show account manager, if supported -->
         <Property key="sysAdminAccounts.showNotes">false</Property>             <!-- [true|false] show "Notes" -->
 
@@ -460,7 +460,7 @@ Notes:
         <Property key="deviceChooser.extraDebugEntries">0</Property>            <!-- DEBUG TESTING PURPOSES ONLY! -->
 
         <!-- Calendar properties -->
-        <Property key="calendar.firstDayOfWeek">0</Property>                    <!-- [0=Sun,1=Mon,...6=Sat] calendar first day of week -->
+        <Property key="calendar.firstDayOfWeek">1</Property>                    <!-- [0=Sun,1=Mon,...6=Sat] calendar first day of week -->
         <Property key="calendar.timeTextField">true</Property>                  <!-- [true|false] allow entering hour:minute via a text field -->
 
         <!-- DeviceAlerts properties (module may not be present) -->

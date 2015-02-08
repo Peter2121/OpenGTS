@@ -62,7 +62,7 @@ function trackMapOnLoad()
 {
 
     /* display calendars */
-    if (mapCal_fr) {
+    if (mapCal_fr && mapCal_to) {
         mapCal_fr.setCollapsible(CalendarCollapsible, CalendarFade, CalendarDivBox);
         mapCal_to.setCollapsible(CalendarCollapsible, CalendarFade, CalendarDivBox);
         calWriteCalendars(mapCal_fr, mapCal_to);
@@ -70,12 +70,14 @@ function trackMapOnLoad()
             mapCal_to.setDate(jsvLastEventYMD.YYYY, jsvLastEventYMD.MM, jsvLastEventYMD.DD);
             mapCal_fr.setDate(jsvLastEventYMD.YYYY, jsvLastEventYMD.MM, jsvLastEventYMD.DD);
         }
-    } else {
+    } else if (mapCal_to) {
         mapCal_to.writeCalendar();
         if ((CalendarDateOnLoad == "last") && jsvTodayYMD) {
             mapCal_to.setDate(jsvTodayYMD.YYYY, jsvTodayYMD.MM, jsvTodayYMD.DD);
         }
     }
+    
+    
 
     /* init AutoUpdate button text */
     var btn = document.getElementById(ID_MAP_AUTOUPDATE_BTN);
