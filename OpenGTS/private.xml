@@ -236,10 +236,26 @@ Notes:
     <I18N>
         <!-- Legend -->
         <String key="i18n.PushPin_Legend"    i18n="PrivateXML.legend.title"             >Pushpin Legend</String>
+        <!--
         <String key="i18n.More_than_20mph"   i18n="PrivateXML.legend.gt20mph"           >More than %{mph:20}</String>
         <String key="i18n.More_than_15mph"   i18n="PrivateXML.legend.gt15mph"           >More than %{mph:15}</String>
         <String key="i18n.More_than_5mph"    i18n="PrivateXML.legend.gt5mph"            >More than %{mph:5}</String>
         <String key="i18n.Less_than_5mph"    i18n="PrivateXML.legend.lt5mph"            >Less than %{mph:5}</String>
+        -->
+        <!-- TODO: add these translations -->
+        <String key="i18n.More_than_80kph"   i18n="PrivateXML.legend.gt80kph"           >More than %{kph:80}</String>
+        <String key="i18n.Less_than_80kph"   i18n="PrivateXML.legend.lt80kph"           >Less than %{kph:80}</String>
+        <String key="i18n.Less_than_40kph"   i18n="PrivateXML.legend.lt40kph"           >Less than %{kph:40}</String>
+        <String key="i18n.Less_than_10kph"   i18n="PrivateXML.legend.lt10kph"           >Less than %{kph:10}</String>
+        <String key="i18n.Less_than_2kph"    i18n="PrivateXML.legend.lt2kph"            >Less than %{kph:2}</String>
+
+        <Icon name="fast"		scale="1.0">${i18n.More_than_80kph}</Icon>
+        <Icon name="normal"		scale="1.0">${i18n.Less_than_80kph}</Icon>
+        <Icon name="slow"		scale="1.0">${i18n.Less_than_40kph}</Icon>
+        <Icon name="veryslow"	scale="1.0">${i18n.Less_than_10kph}</Icon>
+        <Icon name="stop"		scale="1.0">${i18n.Less_than_2kph}</Icon>
+
+
         <String key="i18n.Last_Location"     i18n="PrivateXML.legend.lastLocation"      >Last Location</String>
         <String key="i18n.Page_Title"        i18n="PrivateXML.pageTitle"                >GPS Tracking</String>
         <!-- MenuGroup -->
@@ -573,17 +589,33 @@ Notes:
         <Pushpin key="all"      eval="evHeadingMarkerURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>
         <!- - -->
         <Pushpin key="fleet"    icon="pin30_blue_dot.png"    shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>
-        <Pushpin key="stop"     icon="pin30_red_dot.png"     shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>
-        <Pushpin key="slow"     eval="evHeadingYellowURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_yellow_h1.png"/>
-        <Pushpin key="moving"   eval="evHeadingGreenURL(e)"  shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>
+<!--        <Pushpin key="stop"     icon="pin30_red_dot.png"     shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>	-->
+<!--        <Pushpin key="slow"     eval="evHeadingYellowURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_yellow_h1.png"/>	-->
+<!--        <Pushpin key="moving"   eval="evHeadingGreenURL(e)"  shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>	-->
         <!-- If uncommented, the "last" key will control the icon selected for the last pushpin on the map within the date range - ->
         <Pushpin key="last"     icon="pin30_blue_dot.png"    shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>
         <!- - -->
     </Pushpins>
     <Pushpins baseURL="images/pp/">
-        <Pushpin key="greenh"   eval="evHeadingGreenURL(e)"  shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>
-        <Pushpin key="yellowh"  eval="evHeadingYellowURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_yellow_h1.png"/>
-        <Pushpin key="heading"  eval="evHeadingMarkerURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>
+<!--        <Pushpin key="greenh"   eval="evHeadingGreenURL(e)"  shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>	-->
+<!--        <Pushpin key="yellowh"  eval="evHeadingYellowURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_yellow_h1.png"/>	-->
+<!--        <Pushpin key="heading"  eval="evHeadingMarkerURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>	-->
+    </Pushpins>
+
+    <Pushpins baseURL="images/tr/">
+<!--        <Pushpin key="moving"   eval="evHeadingURL(e)"  shadow="blank.png" iconSize="32,32" iconOffset="16,16" shadowSize="2,2" image="s-rtrack-0.png"/>	-->
+<!--        <Pushpin key="slow"   eval="evHeadingURL(e)"  shadow="blank.png" iconSize="32,32" iconOffset="16,16" shadowSize="2,2" image="s-rtrack-0.png"/>	-->
+<!--        <Pushpin key="stop"     icon="s-rtrack-none.png" shadow="blank.png" iconSize="32,32" iconOffset="16,16" shadowSize="2,2"/>	-->
+<!--        <Pushpin key="heading"   eval="evHeadingURL(e)"  shadow="blank.png" iconSize="32,32" iconOffset="16,16" shadowSize="2,2" image="s-rtrack-0.png"/>	-->
+        <Pushpin key="moving"   eval="evHeadingURL(e)"  shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2" image="xs-rtrack-0.png"/>
+        <Pushpin key="slow"   eval="evHeadingURL(e)"  shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2" image="xs-rtrack-0.png"/>
+        <Pushpin key="stop"     icon="s-rtrack-none.png" shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2"/>
+        <Pushpin key="heading"   eval="evHeadingURL(e)"  shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2" image="xs-rtrack-0.png"/>
+<!--	For legend	-->
+        <Pushpin key="veryslow" icon="s-rtrack-0.png" shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2"/>
+        <Pushpin key="slow"     icon="s-ytrack-0.png" shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2"/>
+        <Pushpin key="normal"   icon="s-gtrack-0.png" shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2"/>
+        <Pushpin key="fast"     icon="s-btrack-0.png" shadow="blank.png" iconSize="16,16" iconOffset="8,8" shadowSize="2,2"/>
     </Pushpins>
  
     <!-- Text Label pushpin -->
@@ -611,9 +643,16 @@ Notes:
          ===   %{mph:XX} : XX, specified in mph, will be converted to the account speed units
          ===   IE. "%{mph:20}" is replaced with "32 km/h" if the current account speed units is km/h
          -->
+         <!--
         <Icon name="greendot" scale="0.7">${i18n.More_than_20mph}</Icon>
         <Icon name="yellow"   scale="0.7">${i18n.More_than_5mph}</Icon>
         <Icon name="stop"     scale="0.7">${i18n.Less_than_5mph}</Icon>
+        -->
+        <Icon name="fast"		scale="1.0">${i18n.More_than_80kph}</Icon>
+        <Icon name="normal"		scale="1.0">${i18n.Less_than_80kph}</Icon>
+        <Icon name="slow"		scale="1.0">${i18n.Less_than_40kph}</Icon>
+        <Icon name="veryslow"	scale="1.0">${i18n.Less_than_10kph}</Icon>
+        <Icon name="stop"		scale="1.0">${i18n.Less_than_2kph}</Icon>
         </Legend>
 
     <Legend type="fleet" includeDefault="true">

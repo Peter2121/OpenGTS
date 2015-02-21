@@ -166,6 +166,14 @@ var DISPLAY_COLOR_TYPE          = 1;
 /* Route color NONE */
 var ROUTE_COLOR_NONE            = "none";
 
+/* Speed graduations levels km/h */
+/* TODO: read from xlm file */
+var SPEED_STOPPED				= 2; // red stopped
+var SPEED_VERYSLOW				= 10;// red moving
+var SPEED_SLOW					= 40;// yellow
+var SPEED_NORMAL				= 80;// green
+//										blue
+
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 // --- JSMapPoint
@@ -2786,6 +2794,47 @@ function evSpeedLastURL(e)
         return "extra/images/pp/CrosshairGreen.gif";
     }
 };
+
+/**
+*** Pushpin: 
+*** Returns a pushpin/icon URL based on the event heading and speed
+*** Used for images/tr pushpins
+*** @param e  The 'MapEventRecord' object
+**/
+function evHeadingURL(e)
+{
+/*
+var SPEED_STOPPED				= 2; // red stopped
+var SPEED_VERYSLOW				= 10;// red moving
+var SPEED_SLOW					= 40;// yellow
+var SPEED_NORMAL				= 80;// green
+//										blue
+*/	
+//	var prefix = "s-";	// small icons
+	var prefix = "xs-";	// extra small icons
+//	var prefix = "";	// large icons
+	
+	var spindex = ["r", "y", "g", "b"];
+	
+	var baseurl = "images/tr/";
+	var root = "track-";
+	var ext = ".png";
+	var speed=e.speedKPH;
+	
+    if( (speed<SPEED_STOPPED) || (e.heading==0) ) {
+        // probably not moving or no heading information
+        return baseurl+prefix+spindex[0]+root+"none"+ext;
+    } else {
+        var x = Math.round(e.heading / 22.5) % 16;
+        var i=0;
+        if(speed>SPEED_VERYSLOW) i++;
+        if(speed>SPEED_SLOW) i++;
+        if(speed>SPEED_NORMAL) i++;
+        return baseurl+prefix+spindex[i]+root+x+ext;
+    }
+};
+
+
 
 // ----------------------------------------------------------------------------
 // custom label markers
