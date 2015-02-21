@@ -1,3 +1,2 @@
-/logs
-/sampleData
-/build
+#/logs
+#/build
