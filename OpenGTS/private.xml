@@ -285,7 +285,7 @@ Notes:
      ===    - MM/dd/yyyy
      ===    - dd/MM/yyyy
      -->
-    <DateFormat>${Domain.DateFormat=yyyy/MM/dd}</DateFormat> <!-- see "java.text.SimpleDateFormat" -->
+    <DateFormat>${Domain.DateFormat=dd/MM/yyyy}</DateFormat> <!-- see "java.text.SimpleDateFormat" -->
     <TimeFormat>${Domain.TimeFormat=HH:mm:ss}</TimeFormat>   <!-- see "java.text.SimpleDateFormat" -->
 
     <!-- EMail addresses -->
@@ -322,12 +322,12 @@ Notes:
         <Property key="track.validateIDs">true</Property>                       <!-- [true|false] validate all IDs (MUST BE TRUE) -->
         <Property key="track.enableAuthenticationService">false</Property>      <!-- [true|false] enable "page=AUTHENTICATE" -->
         <Property key="track.forwardToSecureAccess">false</Property>            <!-- [true|false] forward 'http' to 'https' -->
-        <Property key="track.firstLoginPageID">map.fleetlive</Property>              <!-- [menu.top|map.device|map.fleet] first page after login -->
+        <Property key="track.firstLoginPageID">map.fleetlive</Property>         <!-- [menu.top|map.device|map.fleet|map.fleetlive] first page after login -->
 
         <!-- AccountLogin properties -->
         <Property key="accountLogin.showLoginLink">true</Property>              <!-- [true|false] show "Login" link on login page -->
         <Property key="accountLogin.legacyLAF">false</Property>                 <!-- [true|false] show "Login" legacy look-and-feel -->
-        <Property key="accountLogin.showLocaleSelection">false</Property>       <!-- [true|false] (EXPERIMENTAL) show "Language" selection on login page -->
+        <Property key="accountLogin.showLocaleSelection">true</Property>       <!-- [true|false] (EXPERIMENTAL) show "Language" selection on login page -->
 
         <!-- MenuBar properties -->
         <Property key="menuBar.openOnMouseOver">true</Property>                 <!-- [true|false] popup menu on mouseover -->
@@ -377,8 +377,8 @@ Notes:
         <Property key="trackMap.showBatteryLevel">false</Property>              <!-- [false|icon|percent|default] show last Battery Level (requires Device support) -->
         <Property key="trackMap.useRouteDisplayColor">true</Property>           <!-- [true|false] use Device 'displayColor' for route-line color -->
         <Property key="trackMap.showAllContainedGeozones">false</Property>      <!-- [true|false] (EXPERIMENTAL) show all contained Geozones ('false' shows only 'inner' Geozone) -->
-        <Property key="trackMap.lastDevicePushpin.fleet">false</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
-        <Property key="trackMap.lastDevicePushpin.device">false</Property>      <!-- [true|false] show device pushpin for last pushpin on device map -->
+        <Property key="trackMap.lastDevicePushpin.fleet">true</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
+        <Property key="trackMap.lastDevicePushpin.device">true</Property>      <!-- [true|false] show device pushpin for last pushpin on device map -->
 
         <!-- GoogleKML properties -->
         <Property key="googleKML.lastPushpinID">blue</Property>                 <!-- Color ID of the last event pushpin -->
@@ -404,7 +404,7 @@ Notes:
         <Property key="deviceInfo.showExpectedAcks">false</Property>            <!-- [true|false] show "Expect Ack" column -->
         <Property key="deviceInfo.showIgnitionIndex">false</Property>           <!-- [true|false] show Ignition Index -->
         <Property key="deviceInfo.maximumIgnitionIndex">7</Property>            <!-- [0..15]      maximum Ignition Index -->
-        <Property key="deviceInfo.showPushpinID">false</Property>               <!-- [true|false] show Pushpin ID -->
+        <Property key="deviceInfo.showPushpinID">true</Property>               <!-- [true|false] show Pushpin ID -->
         <Property key="deviceInfo.showPushpinChooser">true</Property>           <!-- [true|false] show Pushpin Chooser -->
         <Property key="deviceInfo.showDisplayColor">true</Property>             <!-- [true|false] show Display Color ("Route-Line") -->
         <Property key="deviceInfo.showDataKey">false</Property>                 <!-- [true|false] (EXPERIMENTAL) show Data Key -->
@@ -418,7 +418,7 @@ Notes:
 
         <!-- UserInfo properties -->
         <Property key="userInfo.showPreferredDeviceID">false</Property>         <!-- [true|false] show preferred device ID field -->
-        <Property key="userInfo.showPassword">false</Property>                  <!-- [true|false] Show passwords on User admin -->
+        <Property key="userInfo.showPassword">true</Property>                  <!-- [true|false] Show passwords on User admin -->
         <Property key="userInfo.authorizedGroupCount">0</Property>              <!-- [Integer] (EXPERIMENTAL) Number of authorized group pull-downs to show -->
 
         <!-- DriverInfo properties -->
@@ -442,7 +442,7 @@ Notes:
         <!-- SysAdminAccounts properties (module may not be present) -->
         <Property key="sysAdminAccounts.showPasswords">true</Property>         <!-- [true|false] show passwords (possible security risk) -->
         <Property key="sysAdminAccounts.showAccountManager">false</Property>    <!-- [true|false] show account manager, if supported -->
-        <Property key="sysAdminAccounts.showNotes">false</Property>             <!-- [true|false] show "Notes" -->
+        <Property key="sysAdminAccounts.showNotes">true</Property>             <!-- [true|false] show "Notes" -->
 
         <!-- Account-Login properties (if available) -->
         <Property key="accountLogin.enableLogin">false</Property>               <!-- [true|false] allow login to other accounts (possible security risk) -->
@@ -625,7 +625,7 @@ Notes:
          ===   to write the device short name into the png image.  "label47_fill.png" can handle
          ===   text up to 6 or 7 characters long (using 9pt font).
          === - To use this feature, edit the Device information (using the Device Admin page), add
-         ===   a 'Short Name', and select "label" for the 'Group Pushpin ID'.  The icon will show
+         ===   a 'Short Name', and select "devlabel" for the 'Group Pushpin ID'.  The icon will show
          ===   on the fleet map with the embedded short-name text (if a short name has not been
          ===   entered, the DeviceID will be used).
          -->
@@ -656,8 +656,15 @@ Notes:
         </Legend>
 
     <Legend type="fleet" includeDefault="true">
+         <!--
         <Title>${i18n.PushPin_Legend}:</Title>
         <Icon name="bluedot" scale="0.7">${i18n.Last_Location}</Icon>
+        -->
+        <Icon name="fast"		scale="1.0">${i18n.More_than_80kph}</Icon>
+        <Icon name="normal"		scale="1.0">${i18n.Less_than_80kph}</Icon>
+        <Icon name="slow"		scale="1.0">${i18n.Less_than_40kph}</Icon>
+        <Icon name="veryslow"	scale="1.0">${i18n.Less_than_10kph}</Icon>
+        <Icon name="stop"		scale="1.0">${i18n.Less_than_2kph}</Icon>
         </Legend>
 
     <!-- ========================================================================================== -->
@@ -726,8 +733,8 @@ Notes:
 
         <!-- default zoom/location -->
         <Property key="default.zoom">4</Property>                       <!-- default zoom when no pushpins are displayed -->
-        <Property key="default.lat">39.0000</Property>                  <!-- default latitude when no pushpins are displayed -->
-        <Property key="default.lon">-96.5000</Property>                 <!-- default longitude when no pushpins are displayed -->
+        <Property key="default.lat">45.20000</Property>                  <!-- default latitude when no pushpins are displayed -->
+        <Property key="default.lon">4.5000</Property>                 <!-- default longitude when no pushpins are displayed -->
 
         <!-- Geozone map size/config -->
         <!-- <Property key="zone.map.width">630</Property> -->
@@ -752,7 +759,7 @@ Notes:
         <!-- enable auto-update -->
         <Property key="auto.enable">true</Property>
         <Property key="auto.interval">20</Property>
-        <Property key="auto.count">10</Property>
+        <Property key="auto.count">100</Property>
 
         <!-- use default pushpins -->
         <Pushpins includeDefault="true"/>
@@ -1268,11 +1275,13 @@ Notes:
      ===    For instance "Domain.JSPEntries.defailt=/jsp/myLoginSession.jsp"
      -->
     <JSPEntries rtPropPrefix="Domain.JSPEntries.">
-        <JSP name="default"     file="/jsp/loginSession_banner.jsp"/>
+        <JSP name="default"     file="/jsp/loginSession.jsp"/>
         <JSP name="banner"      file="/jsp/loginSession_banner.jsp"/>
+     <!--   
         <JSP name="frame"       file="/jsp/loginSession_frame.jsp"/>
         <JSP name="emailReport" file="/jsp/emailReport.jsp"/>
         <JSP name="oldjsp"      file="/jsp/loginSession.jsp"/>
+     -->   
     </JSPEntries>
 
     <!-- Defined pages
@@ -1307,10 +1316,9 @@ Notes:
         iconDir=""
         buttonDir=""
         >
-        <!-- NewAccount: Uncomment to enable "New Account" button on login page - ->
+        <!-- NewAccount: Uncomment to enable "New Account" button on login page -->
         <Page class="org.opengts.war.track.page.NewAccount">
             </Page>
-        <!- - -->
         <Page rtKey="ForgotPassword" class="org.opengts.war.track.page.ForgotPassword">
             </Page>
         <Page rtKey="ReportDisplay" class="org.opengts.war.track.page.ReportDisplay">
@@ -1320,7 +1328,7 @@ Notes:
             <Title i18n="PrivateXML.menugroup.main">Main</Title>
             <Page rtKey="TopMenu" class="org.opengts.war.track.page.TopMenu">
                 </Page>
-            <Page rtKey="AccountLogin" class="org.opengts.war.track.page.AccountLogin">
+            <Page rtKey="AccountLogin" jsp="banner" class="org.opengts.war.track.page.AccountLogin">
                 <Property key="customLoginUrl"></Property>
                 <Property key="VSeparatorImage.path"></Property>
                 <Property key="VSeparatorImage.width"></Property>
@@ -1353,6 +1361,7 @@ Notes:
                 </Page>
         </MenuGroup>
         <!-- Reports -->
+        <!--
         <MenuGroup name="menuGroup.reports" topMenu="true" menuBar="true">
             <Title i18n="PrivateXML.menugroup.reports">Reports</Title>
             <Page rtKey="ReportMenuDeviceDetail" class="org.opengts.war.track.page.ReportMenuDeviceDetail">
@@ -1367,10 +1376,11 @@ Notes:
             <Page rtKey="ReportMenuDriverPerformance" class="org.opengts.war.track.page.ReportMenuDriverPerformance">
                 <AclName>acl.reportGroup.performance</AclName>
                 </Page>
-       <!-- <Page class="org.opengts.war.track.page.ReportMenuIFTA">
+       <!- - <Page class="org.opengts.war.track.page.ReportMenuIFTA">
                 <AclName>acl.reportGroup.ifta</AclName>
-                </Page> -->
+                </Page> - ->
         </MenuGroup>
+		-->                
         <!-- Admin -->
         <MenuGroup name="menuGroup.admin" topMenu="true" menuBar="true">
             <Title i18n="PrivateXML.menugroup.administration">Administration</Title>
@@ -1386,11 +1396,11 @@ Notes:
             <Page rtKey="GroupInfo" class="org.opengts.war.track.page.GroupInfo">
                 <AclName>acl.admin.group</AclName>
                 </Page>
-            <!-- DriverInfo: uncomment this section to enable the "Driver Admin" page
+            <!-- DriverInfo: uncomment this section to enable the "Driver Admin" page	
             <Page rtKey="DriverInfo" class="org.opengts.war.track.page.DriverInfo">
                 <AclName>acl.admin.driver</AclName>
                 </Page>
-                -->
+            -->    
             <Page rtKey="ZoneInfo" class="org.opengts.war.track.page.ZoneInfo">
                 <AclName>acl.admin.zone</AclName>
                 </Page>

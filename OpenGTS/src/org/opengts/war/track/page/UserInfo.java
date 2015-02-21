@@ -153,6 +153,7 @@ public class UserInfo
         TOP_MENU        (Constants.PAGE_MENU_TOP           , I18N.getString(UserInfo.class,"UserInfo.firstLogin.topMenu"      ,"Main Menu"      )), // default
         MAP_DEVICE      (Constants.PAGE_MAP_DEVICE         , I18N.getString(UserInfo.class,"UserInfo.firstLogin.mapDevice"    ,"Device Map"     )),
         MAP_FLEET       (Constants.PAGE_MAP_FLEET          , I18N.getString(UserInfo.class,"UserInfo.firstLogin.mapFleet"     ,"Fleet Map"      )),
+        MAP_FLEETLIVE   (Constants.PAGE_MAP_FLEETLIVE      , I18N.getString(UserInfo.class,"UserInfo.firstLogin.mapFleetLive" ,"Fleet Map (Live)")),
         REPORT_DETAIL   (Constants.PAGE_MENU_RPT_DEVDETAIL , I18N.getString(UserInfo.class,"UserInfo.firstLogin.reportDetail" ,"Detail Reports" )),
         REPORT_SUMMARY  (Constants.PAGE_MENU_RPT_GRPSUMMRY , I18N.getString(UserInfo.class,"UserInfo.firstLogin.reportSummary","Fleet Reports"  ));
         // ---

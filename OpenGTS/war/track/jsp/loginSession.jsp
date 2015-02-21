@@ -141,30 +141,12 @@ response.setDateHeader("EXPIRES"  , 0         );
 
   <!-- Begin Page header/navigation ======================================== -->
   <tr>
-  <td width="100%">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#EFF7FF">
-    <tbody>
-    <tr>
-
-      <gts:var>
-      <td class="titleText" valign="center">
-        ${pageTitle}<br>
-        <font style="font-size: 8pt;"><i>(Powered by <a href="http://www.opengts.org" target="_blank" style="color:#444444;">OpenGTS</a>)</i></font>
-      </td>
-      </gts:var>
-
-    </tr>
-    </tbody>
-    </table>
-  </td>
-  </tr>
-  <tr>
   <td>
      <table width="100%" border="0" cellpadding="0" cellspacing="0">
      <tbody>
      <tr>
        <td class="navBar" nowrap align="left">&nbsp;<gts:var ifKey="isLoggedIn" value="true"><i>${i18n.Account}:</i> ${accountDesc} (${userDesc})</gts:var></td>
-       <td class="navBar" nowrap align="right" width="100%"><gts:var>&nbsp;${navigation}&nbsp;&nbsp;</gts:var></td>
+<!--       <td class="navBar" nowrap align="right" width="100%"><gts:var>&nbsp;${navigation}&nbsp;&nbsp;</gts:var></td>	-->
      </tr>
      </tbody>
      </table>
@@ -204,30 +186,7 @@ response.setDateHeader("EXPIRES"  , 0         );
   <!-- End Page contents ======================================== -->
 
   <!-- Begin Page footer ======================================== -->
-  <tr>
-    <td style="font-size: 7pt; border-bottom: 1px solid #888888;">&nbsp;</td>
-  </tr>
-  <tr>
-  <td>
-    <table class="copyrightFooter" width="100%" border="0" cellpadding="0" cellspacing="0">
-    <tbody>
-    <tr>
-      <td style="padding: 0px 0px 2px 5px;">
-        <span style="font-size: 7pt; font-style: oblique; color: #888888;"><gts:var>[${loginCount}]</gts:var></span>
-      </td>
-      <td width="100%">
-         &nbsp;
-         <gts:var>${copyright}</gts:var>
-      </td>
-      <td nowrap style="padding-bottom: 2px;">
-         <span style="font-size: 7pt; font-style: oblique; color: #888888;"><gts:var ifTrue="login.showGTSVersion">${version}</gts:var></span>&nbsp;&nbsp;
-         <gts:var ifTrue="login.showPiLink"><a style="font-size: 11pt; text-decoration: none;" href="${login.piLink=http://www.opengts.org}" target="_blank">&pi;</a>&nbsp;</gts:var>
-      </td>
-    </tr>
-    </tbody>
-    </table>
-  </td>
-  </tr>
+
   <!-- End Page footer ======================================== -->
 
 </tbody>
