@@ -334,7 +334,7 @@ Notes:
         <Property key="menuBar.includeTextAnchor">false</Property>              <!-- [true|false] include text anchor tag (link) -->
 
         <!-- TopMenu menu type -->
-        <Property key="topMenu.menuType">expand</Property>                      <!-- [fixed|expand|button] menu type -->
+        <Property key="topMenu.menuType">fixed-icon</Property>                  <!-- [fixed|expand|button] menu type -->
         <!--
          ===  fixed       : Fixed (non-expandable) text menu items
          ===  fixed-icon  : Fixed text menu items with icon representation (set by "IconImage" tag)
@@ -345,10 +345,17 @@ Notes:
          -->
 
         <!-- TopMenu properties -->
-        <Property key="topMenu.maximumIconsPerRow">9</Property>                 <!-- [#] (for 'menuType=icon') max icons per row -->
+        <Property key="topMenu.maximumIconsPerRow">15</Property>                 <!-- [#] (for 'menuType=icon') max icons per row -->
         <Property key="topMenu.showHeader">false</Property>                   <!-- [true|false|default] show header -->
         <Property key="topMenu.showMenuDescription">long</Property>             <!-- [none|short|long] show menu description -->
         <Property key="topMenu.showMenuHelp">true</Property>                    <!-- [true|false] show menu help -->
+
+        <!-- TopMenu menu type -->
+        <Property key="navMenu.menuType">icon</Property>                  <!-- [fixed|expand|button] menu type -->
+        <!--
+         ===  text        : Fixed text menu items (default)
+         ===  icon        : Fixed menu items with icon representation (set by "IconImage" tag)
+         -->
 
         <!-- TrackMap properties -->
         <Property key="trackMap.fleetDeviceEventCount">10</Property>             <!-- [#] limit of points per device on "fleet" map -->
@@ -1313,8 +1320,8 @@ Notes:
     <WebPages rtPropPrefix="Domain.WebPages."
         jsp="default" 
         cssDir="/css" 
-        iconDir=""
-        buttonDir=""
+        iconDir="icons"
+        buttonDir="icons"
         >
         <!-- NewAccount: Uncomment to enable "New Account" button on login page -->
         <Page class="org.opengts.war.track.page.NewAccount">
@@ -1326,13 +1333,22 @@ Notes:
         <!-- Login/Menu -->
         <MenuGroup name="menuGroup.main" topMenu="false" menuBar="true">
             <Title i18n="PrivateXML.menugroup.main">Main</Title>
-            <Page rtKey="TopMenu" class="org.opengts.war.track.page.TopMenu">
+	            <Page rtKey="TopMenu" class="org.opengts.war.track.page.TopMenu">
+    	        <IconImage>menu.png</IconImage>
+    	        <ButtonImage>menu.png</ButtonImage>
                 </Page>
             <Page rtKey="AccountLogin" jsp="banner" class="org.opengts.war.track.page.AccountLogin">
                 <Property key="customLoginUrl"></Property>
                 <Property key="VSeparatorImage.path"></Property>
                 <Property key="VSeparatorImage.width"></Property>
                 <Property key="VSeparatorImage.height"></Property>
+                <IconImage>logout.png</IconImage>
+    	        <ButtonImage>logout.png</ButtonImage>
+                </Page>
+            <Page rtKey="ChangePassword" class="org.opengts.war.track.page.ChangePassword">
+                <AclName>acl.admin.password</AclName>
+                <IconImage>password.png</IconImage>
+    	        <ButtonImage>password.png</ButtonImage>
                 </Page>
         </MenuGroup>
         <!-- Maps -->
@@ -1342,13 +1358,15 @@ Notes:
                 <AclName>acl.map.device</AclName>
                 <!-- <ButtonImage> Place_Button_Cap_Image_URL_Here </ButtonImage> -->
                 <!-- <ButtonImageAlt> Place_Rollover_Button_Cap_Image_URL_Here </ButtonImageAlt> -->
-                <!-- <IconImage> Place_Button_Icon_Overlay_Image_URL_Here </IconImage> -->
+                <IconImage>map-device.png</IconImage>
+    	        <ButtonImage>map-device.png</ButtonImage>
                 </Page>
             <Page rtKey="TrackMapFleet" class="org.opengts.war.track.page.TrackMapFleet">
                 <AclName>acl.map.fleet</AclName>
                 <!-- <ButtonImage> Place_Button_Cap_Image_URL_Here </ButtonImage> -->
                 <!-- <ButtonImageAlt> Place_Rollover_Button_Cap_Image_URL_Here </ButtonImageAlt> -->
-                <!-- <IconImage> Place_Button_Icon_Overlay_Image_URL_Here </IconImage> -->
+                <IconImage>map-group.png</IconImage>
+    	        <ButtonImage>map-group.png</ButtonImage>
                 <Property key="showFleetFromCalendar">false</Property>
                 <!-- <Property key="fleetDeviceEventCount">1</Property> -->
                 </Page>
@@ -1356,7 +1374,8 @@ Notes:
                 <AclName>acl.map.fleet</AclName>
                 <!-- <ButtonImage> Place_Button_Cap_Image_URL_Here </ButtonImage> -->
                 <!-- <ButtonImageAlt> Place_Rollover_Button_Cap_Image_URL_Here </ButtonImageAlt> -->
-                <!-- <IconImage> Place_Button_Icon_Overlay_Image_URL_Here </IconImage> -->
+                <IconImage>map-grouplive.png</IconImage>
+    	        <ButtonImage>map-grouplive.png</ButtonImage>
                 <!-- <Property key="fleetDeviceEventCount">1</Property> -->
                 </Page>
         </MenuGroup>
@@ -1386,15 +1405,23 @@ Notes:
             <Title i18n="PrivateXML.menugroup.administration">Administration</Title>
             <Page rtKey="AccountInfo" class="org.opengts.war.track.page.AccountInfo">
                 <AclName>acl.admin.account</AclName>
+                <IconImage>account.png</IconImage>
+    	        <ButtonImage>account.png</ButtonImage>
                 </Page>
             <Page rtKey="UserInfo" class="org.opengts.war.track.page.UserInfo">
                 <AclName>acl.admin.user</AclName>
+                <IconImage>user.png</IconImage>
+    	        <ButtonImage>user.png</ButtonImage>
                 </Page>
             <Page rtKey="DeviceInfo" class="org.opengts.war.track.page.DeviceInfo">
                 <AclName>acl.admin.device</AclName>
+                <IconImage>device.png</IconImage>
+    	        <ButtonImage>device.png</ButtonImage>
                 </Page>
             <Page rtKey="GroupInfo" class="org.opengts.war.track.page.GroupInfo">
                 <AclName>acl.admin.group</AclName>
+                <IconImage>group.png</IconImage>
+    	        <ButtonImage>group.png</ButtonImage>
                 </Page>
             <!-- DriverInfo: uncomment this section to enable the "Driver Admin" page	
             <Page rtKey="DriverInfo" class="org.opengts.war.track.page.DriverInfo">
@@ -1403,9 +1430,8 @@ Notes:
             -->    
             <Page rtKey="ZoneInfo" class="org.opengts.war.track.page.ZoneInfo">
                 <AclName>acl.admin.zone</AclName>
-                </Page>
-            <Page rtKey="ChangePassword" class="org.opengts.war.track.page.ChangePassword">
-                <AclName>acl.admin.password</AclName>
+                <IconImage>zone.png</IconImage>
+    	        <ButtonImage>zone.png</ButtonImage>
                 </Page>
         </MenuGroup>
         <!-- Remove/Comment this group to remove the "Links" menu bar tab -->

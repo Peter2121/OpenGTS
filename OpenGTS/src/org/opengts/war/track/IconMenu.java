@@ -293,7 +293,7 @@ public class IconMenu
     }
 
     /* break menu description text into reasonable length lines */
-    private static String filterButtonMenuDescription(String str)
+    public static String filterButtonMenuDescription(String str)
     {
         String s[] = StringTools.split(str, ' ');
         StringBuffer sb = new StringBuffer();

@@ -146,7 +146,7 @@ response.setDateHeader("EXPIRES"  , 0         );
      <tbody>
      <tr>
        <td class="navBar" nowrap align="left">&nbsp;<gts:var ifKey="isLoggedIn" value="true"><i>${i18n.Account}:</i> ${accountDesc} (${userDesc})</gts:var></td>
-<!--       <td class="navBar" nowrap align="right" width="100%"><gts:var>&nbsp;${navigation}&nbsp;&nbsp;</gts:var></td>	-->
+       <td class="navBar" nowrap align="right" width="100%"><gts:var>&nbsp;${navigation}&nbsp;&nbsp;</gts:var></td>
      </tr>
      </tbody>
      </table>
@@ -163,7 +163,7 @@ response.setDateHeader("EXPIRES"  , 0         );
         <td valign='top' align='center' height='100%'>
            <table class="<gts:track section='content.class.table'/>" cellspacing='0' cellpadding='0' border='0'>
            <tbody>
-              <!-- The MenuBar is display iff 'content.class.table' is "contentTable"/"contentMapTable" -->
+              <!-- The MenuBar is display if 'content.class.table' is "contentTable"/"contentMapTable" -->
               <tr><gts:track section="content.menubar"/></tr>
               <tr height='100%'>
                 <td class="<gts:track section='content.class.cell'/>">

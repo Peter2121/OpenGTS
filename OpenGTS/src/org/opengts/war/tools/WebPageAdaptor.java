@@ -44,8 +44,9 @@ import org.opengts.Version;
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
-
 import org.opengts.war.tools.*;
+import org.opengts.war.track.IconMenu;
+import org.opengts.war.track.page.TopMenu.MenuType;
 import org.opengts.war.report.ReportPresentation;
 
 public abstract class WebPageAdaptor
@@ -68,7 +69,7 @@ public abstract class WebPageAdaptor
     public  static final String  SORTTABLE_JS                           = ReportPresentation.SORTTABLE_JS;
 
     private static final boolean COMBOBOX_SHOW_DISABLED_IF_NOT_ENABLED  = true;
-    
+
     // ------------------------------------------------------------------------
 
     /**
@@ -912,31 +913,18 @@ public abstract class WebPageAdaptor
     
     public String getPageNavigationHTML(RequestProperties reqState, boolean reInit)
     {
-        if ((reInit || (this.pageNavHTML == null)) && this.hasPageNavigation()) {
+
+//    	final PrivateLabel privLabel  = reqState.getPrivateLabel();
+    	
+    	if ((reInit || (this.pageNavHTML == null)) && this.hasPageNavigation()) {
             String pageNavNames[] = this.getPageNavigation();
             PrivateLabel privLbl = this.getPrivateLabel();
             if (privLbl == null) {
                 Print.logWarn("Page Navigation PrivateLabel undefined: " + this.getPageName());
                 this.pageNavHTML = "";
             } else {
-                // <a href="/track/Track?page=menu.top">Main Menu</a> | 
-                // <a href="/track/Track?page=login">Logout</a>&nbsp;&nbsp;
-                StringBuffer sb = new StringBuffer();
-                for (int i = pageNavNames.length - 1; i >= 0; i--) {
-                    String pageName = pageNavNames[i];
-                    WebPage page = privLbl.getWebPage(pageName);
-                    if (page != null) {
-                        if (sb.length() > 0) { sb.append(" | "); }
-                        String uri  = WebPageAdaptor.EncodeURL(reqState, page.getPageURI());
-                        String desc = page.getNavigationDescription(reqState);
-                        sb.append("<a href='"+uri+"'>").append(desc).append("</a>");
-                    } else {
-                        String vers   = Version.getVersion();
-                        String plName = privLbl.getName();
-                        Print.logWarn("Page not found: " + pageName + " [v="+vers+", pl="+plName+"]");
-                        //Print.logStackTrace("Page not found: " + pageName + " [v="+vers+", pl="+plName+"]");
-                    }
-                }
+            	NavMenu navigationMenu = new NavMenu(privLbl, pageNavNames);
+            	StringBuffer sb = navigationMenu.getStringBuffer(reqState);
                 this.pageNavHTML = sb.toString();
             }
             //Print.logStackTrace("Setting Navigation HTML: " + this.pageNavHTML);

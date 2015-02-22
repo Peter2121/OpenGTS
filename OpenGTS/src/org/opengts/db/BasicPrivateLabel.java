@@ -173,6 +173,9 @@ public class BasicPrivateLabel
     public  static final String PROP_TopMenu_showMenuDescription            = "topMenu.showMenuDescription";
     public  static final String PROP_TopMenu_showMenuHelp                   = "topMenu.showMenuHelp";
 
+    /* NavMenu properties */
+    public  static final String PROP_NavMenu_menuType                       = "navMenu.menuType";
+    
     /* DriverInfo properties */
     public  static final String PROP_DriverInfo_showDeviceID                = "driverInfo.showDeviceID";            // true|false
     public  static final String PROP_DriverInfo_showDateCalendar            = "driverInfo.showDateCalendar";        // true|false
