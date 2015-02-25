@@ -68,7 +68,7 @@ public class ChangePassword
     {
         this.setBaseURI(RequestProperties.TRACK_BASE_URI());
         this.setPageName(PAGE_PASSWD);
-        this.setPageNavigation(new String[] { PAGE_LOGIN, PAGE_MENU_TOP });
+        this.setPageNavigation(new String[] { PAGE_MENU_TOP });
         this.setLoginRequired(true);
     }
 

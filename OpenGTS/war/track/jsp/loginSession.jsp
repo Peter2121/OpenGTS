@@ -163,8 +163,6 @@ response.setDateHeader("EXPIRES"  , 0         );
         <td valign='top' align='center' height='100%'>
            <table class="<gts:track section='content.class.table'/>" cellspacing='0' cellpadding='0' border='0'>
            <tbody>
-              <!-- The MenuBar is display if 'content.class.table' is "contentTable"/"contentMapTable" -->
-              <tr><gts:track section="content.menubar"/></tr>
               <tr height='100%'>
                 <td class="<gts:track section='content.class.cell'/>">
                     <gts:track section="content.body"/>

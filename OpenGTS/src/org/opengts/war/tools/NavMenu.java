@@ -37,9 +37,6 @@ public class NavMenu {
     private PrivateLabel privLabel;
     private NavType navigationType;
     private String pageNavNames[];
-//    private String pageIcons[];
-//    private String pageDescs[];
-//    private String pageURLs[];
     
     public NavMenu(PrivateLabel pl, String pNN[]) {
     	this.privLabel = pl;
@@ -74,7 +71,6 @@ public class NavMenu {
             }
             break;
         case ICON:
-//        	getIconsAndDescs(reqState);
             for (int i = pageNavNames.length - 1; i >= 0; i--) {
                 String pageName = pageNavNames[i];
                 WebPage page = privLabel.getWebPage(pageName);
@@ -95,32 +91,7 @@ public class NavMenu {
             }
         	break;
     	}
-    	
-    	
     	return sb;
     }
-/*   
-    private void getIconsAndDescs(RequestProperties reqState) {
-    	Map<String,MenuGroup> menuMap = privLabel.getMenuGroupMap();
-        for (String mgn : menuMap.keySet()) {
-            MenuGroup mg = menuMap.get(mgn);
-            for (WebPage wp : mg.getWebPageList(reqState)) {
-                String menuName  = wp.getPageName();
-                String iconImg   = wp.getMenuIconImage();
-//                String buttonImg = wp.getMenuButtonImage();
-//                String buttonAlt = wp.getMenuButtonAltImage();
-                String url       = wp.encodePageURL(reqState);//, RequestProperties.TRACK_BASE_URI());
-                String menuDesc = StringTools.trim(wp.getNavigationDescription(reqState)); // short
-                menuDesc = IconMenu.filterButtonMenuDescription(menuDesc);
-                for(int i=0; i<pageNavNames.length; i++) 
-                	if(menuName.equals(pageNavNames[i])) {
-                		pageIcons[i]=iconImg;
-                		pageDescs[i]=menuDesc;
-                		pageURLs[i]=url;
-                		}
-            }
-        }
-    }
-*/    
     
 }

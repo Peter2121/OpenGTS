@@ -100,7 +100,8 @@ public class AccountLogin
     {
         this.setBaseURI(RequestProperties.TRACK_BASE_URI());
         super.setPageName(PAGE_LOGIN); // 'super' required here
-        this.setPageNavigation(new String[] { PAGE_LOGIN });
+//        this.setPageNavigation(new String[] { PAGE_LOGIN });
+        this.setPageNavigation(new String[] { "" });
         this.setLoginRequired(false);
     }
 

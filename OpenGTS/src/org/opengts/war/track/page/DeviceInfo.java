@@ -119,11 +119,9 @@ import org.opengts.dbtypes.*;
 import org.opengts.db.*;
 import org.opengts.db.AclEntry.AccessLevel;
 import org.opengts.db.tables.*;
-
 import org.opengts.war.tools.*;
 import org.opengts.war.track.*;
 import org.opengts.war.maps.JSMap;
-
 import org.opengts.war.track.page.devcmd.*;
 
 public class DeviceInfo
@@ -602,7 +600,7 @@ public class DeviceInfo
     {
         this.setBaseURI(RequestProperties.TRACK_BASE_URI());
         this.setPageName(PAGE_DEVICE_INFO);
-        this.setPageNavigation(new String[] { PAGE_LOGIN, PAGE_MENU_TOP });
+        this.setPageNavigation(new String[] { PAGE_LOGIN, PAGE_PASSWD, PAGE_ZONE_INFO, PAGE_ACCOUNT_INFO, PAGE_USER_INFO, PAGE_GROUP_INFO, PAGE_DEVICE_INFO, PAGE_MAP_FLEET, PAGE_MAP_DEVICE, PAGE_MAP_FLEETLIVE });
         this.setLoginRequired(true);
     }
     

@@ -1,14 +1,15 @@
 
 /* Navigation bar */
 .navBar { 
-    font-size: 10pt; 
-    padding-bottom: 1px; 
+    font-size: 9pt; 
+    padding-bottom: 2px; 
+    padding-top: 5px; 
     background-color: #EFEFEF; 
     border-top: solid #555555 1px; 
     border-bottom: solid #555555 1px;
 }
 .navBarClear { 
-    font-size: 10pt; 
+    font-size: 9pt; 
     padding-bottom: 1px; 
 }
 
@@ -131,10 +132,11 @@
 
 /* Map page content */
 .contentMapTable {
-    width: 844px;
+/*    width: 844px; */
+    width: 95%;
     height: 550px;
     max-height: 550px;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 .contentTrackMapCell {
     width: 100%;
