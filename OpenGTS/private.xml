@@ -448,7 +448,7 @@ Notes:
 
         <!-- SysAdminAccounts properties (module may not be present) -->
         <Property key="sysAdminAccounts.showPasswords">true</Property>         <!-- [true|false] show passwords (possible security risk) -->
-        <Property key="sysAdminAccounts.showAccountManager">false</Property>    <!-- [true|false] show account manager, if supported -->
+        <Property key="sysAdminAccounts.showAccountManager">true</Property>    <!-- [true|false] show account manager, if supported -->
         <Property key="sysAdminAccounts.showNotes">true</Property>             <!-- [true|false] show "Notes" -->
 
         <!-- Account-Login properties (if available) -->
@@ -470,7 +470,7 @@ Notes:
         <Property key="ruleInfo.showPredefinedActions">false</Property>         <!-- [true|false] Display predefined (canned) actions -->
 
         <!-- SysAdminInfo properties (module may not be present) -->
-        <Property key="sysAdminInfo.showEventsPerSecond">false</Property>       <!-- [true|false] show Events-Per-Second -->
+        <Property key="sysAdminInfo.showEventsPerSecond">true</Property>       <!-- [true|false] show Events-Per-Second -->
 
         <!-- DeviceChooser properties -->
         <Property key="deviceChooser.sortBy">description</Property>             <!-- [id|name|description] sort by -->
@@ -595,7 +595,8 @@ Notes:
         <!-- If uncommented, the "all" key will control ALL icon selections for the map - ->
         <Pushpin key="all"      eval="evHeadingMarkerURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>
         <!- - -->
-        <Pushpin key="fleet"    icon="pin30_blue_dot.png"    shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>
+<!--        <Pushpin key="fleet"    icon="pin30_blue_dot.png"    shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>	-->
+        <Pushpin key="fleet" eval="evDeviceNameIconURL(e)" iconSize="47,24" iconOffset="9,24" image="images/pp/label47_fill.png"/>
 <!--        <Pushpin key="stop"     icon="pin30_red_dot.png"     shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>	-->
 <!--        <Pushpin key="slow"     eval="evHeadingYellowURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_yellow_h1.png"/>	-->
 <!--        <Pushpin key="moving"   eval="evHeadingGreenURL(e)"  shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>	-->
@@ -1403,6 +1404,11 @@ Notes:
         <!-- Admin -->
         <MenuGroup name="menuGroup.admin" topMenu="true" menuBar="true">
             <Title i18n="PrivateXML.menugroup.administration">Administration</Title>
+            <Page rtKey="SysAdminAccounts" class="org.opengts.war.track.page.SysAdminAccounts">
+                <IconImage>king.png</IconImage>
+    	        <ButtonImage>king.png</ButtonImage>
+                <AclName>acl.admin.sysAdmin</AclName>
+                </Page>
             <Page rtKey="AccountInfo" class="org.opengts.war.track.page.AccountInfo">
                 <AclName>acl.admin.account</AclName>
                 <IconImage>account.png</IconImage>
@@ -1456,20 +1462,19 @@ Notes:
         </MenuGroup>
         -->
         <!-- SysAdmin -->
+        <!--
         <MenuGroup name="menuGroup.sysAdmin" topMenu="true" menuBar="true">
-            <!-- These web-pages may not be available in this release -->
             <Title i18n="PrivateXML.menugroup.systemAdmin">System Admin</Title>
             <Page rtKey="SysAdminAccounts" class="org.opengts.war.track.page.SysAdminAccounts"
                 optional="true">
                 <AclName>acl.admin.sysAdmin</AclName>
                 </Page>
-            <!--
             <Page rtKey="ReportMenuSysAdmin" class="org.opengts.war.track.page.ReportMenuSysAdmin"
                 optional="true">
                 <AclName>acl.reportGroup.sysadmin</AclName>
                 </Page>
-            -->
        </MenuGroup>
+       -->
     </WebPages>
 
     <!-- Defined reports
