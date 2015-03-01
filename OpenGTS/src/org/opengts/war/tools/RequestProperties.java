@@ -1402,7 +1402,7 @@ public class RequestProperties
                 // get Device
                 Device device = Device._getDevice(account, deviceID);
                 if (device == null) {
-                    // -- (unblikely) skip this deviceID
+                    // -- (unlikely) skip this deviceID
                     continue;
                 }
 
@@ -1444,7 +1444,7 @@ public class RequestProperties
 
             } // Device loop
             
-            /* sort by Device Descrption */
+            /* sort by Device Description */
             Collections.sort(evList, EventData.getDeviceDescriptionComparator());
 
             // return fleet events

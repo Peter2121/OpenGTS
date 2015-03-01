@@ -363,8 +363,8 @@ public class Device // Asset
     {
         I18N i18n = I18N.getI18N(Device.class, loc);
         return new String[] {
-            i18n.getString("Device.title.singular", "Vehicle"),
-            i18n.getString("Device.title.plural"  , "Vehicles"),
+            i18n.getString("Device.title.singular", "Tracker"),
+            i18n.getString("Device.title.plural"  , "Trackers"),
         };
     }
 
@@ -11415,6 +11415,56 @@ public class Device // Asset
 
     }
 
+    /**
+    *** Gets a set of Device IDs for all Accounts (oes not return null)
+    *** @param inclInactv  True to include inactive Devices
+    *** @param limit  The maximum number of Device IDs to return
+    *** @return A set of Device IDs
+    *** @throws DBExeption
+    **/
+    public static OrderedSet<String> getAllDeviceIDs(boolean inclInactv, long limit)
+        throws DBException
+    {
+        /* read devices for all accounts */
+        OrderedSet<String> devList = new OrderedSet<String>();
+        DBConnection dbc = null;
+        Statement   stmt = null;
+        ResultSet     rs = null;
+        try {
+            /* select */
+            // DBSelect: SELECT * FROM Device ORDER BY deviceID
+            DBSelect<Device> dsel = new DBSelect<Device>(Device.getFactory());
+            dsel.setSelectedFields(Device.FLD_deviceID);
+            DBWhere dwh = dsel.createDBWhere();
+            if (!inclInactv) {
+                dsel.setWhere(dwh.WHERE(
+                        dwh.NE(Device.FLD_isActive,0)
+                ));
+            }
+            dsel.setOrderByFields(Device.FLD_deviceID);
+            dsel.setLimit(limit);
+
+            /* get records */
+            dbc  = DBConnection.getDefaultConnection();
+            stmt = dbc.execute(dsel.toString());
+            rs = stmt.getResultSet();
+            while (rs.next()) {
+                String devId = rs.getString(Device.FLD_deviceID);
+                devList.add(devId);
+            }
+
+        } catch (SQLException sqe) {
+            throw new DBException("Getting All Devices List", sqe);
+        } finally {
+            if (rs   != null) { try { rs.close();   } catch (Throwable t) {} }
+            if (stmt != null) { try { stmt.close(); } catch (Throwable t) {} }
+            DBConnection.release(dbc);
+        }
+
+        /* return list */
+        return devList;
+    }
+    
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // This section supports a method for obtaining human readable information from

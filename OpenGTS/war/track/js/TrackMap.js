@@ -291,7 +291,7 @@ function trackMapUpdateMap(limit, limitType, recenterMode, replay)
 {
     var limitFirst = false;
     //try { document.getElementById(ID_CENTER_LAST_POINT_FORM).centerLastPoint.checked = false; } catch (e) {}
-    var dev = IS_FLEET? document.SelectDeviceForm.group.value : document.SelectDeviceForm.device.value; // PARM_GEOUP/PARM_DEVICE
+    var dev = IS_FLEET? document.SelectDeviceForm.group.value : document.SelectDeviceForm.device.value; // PARM_GROUP/PARM_DEVICE
     if(IS_CAL_FR_STATIC) var rfr = map_fr;
     else var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
     if(IS_CAL_TO_STATIC) var rto = map_to;
