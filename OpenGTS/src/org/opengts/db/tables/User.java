@@ -1363,7 +1363,7 @@ public class User
         }
     }
 
-    /* return ture if specified device is authorized for this User */
+    /* return true if specified device is authorized for this User */
     public boolean isAuthorizedDevice(String deviceID)
         throws DBException
     {

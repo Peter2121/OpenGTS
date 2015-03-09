@@ -70,12 +70,10 @@ import javax.servlet.http.*;
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.geocoder.*;
-
 import org.opengts.Version;
 import org.opengts.db.*;
 import org.opengts.db.AclEntry.AccessLevel;
 import org.opengts.db.tables.*;
-
 import org.opengts.war.track.Constants;
 import org.opengts.war.track.page.UserInfo;
 import org.opengts.war.track.page.TrackMap;
@@ -171,6 +169,7 @@ public class RequestProperties
     private String              cmdArg                  = "";
 
     private boolean             isFleet                 = false;
+    private boolean             isFleetLive             = false;
     private boolean             isReport                = false;
     private boolean             notifyEventsOnly        = false;
 
@@ -453,6 +452,18 @@ public class RequestProperties
     public boolean isFleet()
     {
         return this.isFleet;
+    }
+
+    /* set "fleetlive" request */
+    public void setFleetLive(boolean fleet)
+    {
+        this.isFleetLive = fleet;
+    }
+
+    /* return true if this is a "fleetlive" request */
+    public boolean isFleetLive()
+    {
+        return this.isFleetLive;
     }
 
     /* return max number of events per device for fleet map */
@@ -1372,7 +1383,9 @@ public class RequestProperties
         /* get events */
         if (this.isFleet()) {
             // fleet events
-
+//			**************** TODO: check group - return all devices only when default group (ALL) is selected 
+//        	final boolean returnAllDevices=this.isFleetLive();
+        	final boolean returnAllDevices=true;	// ****************** For debug only!!!
             // get account
             Account account = this.getCurrentAccount();
             if (account == null) {
@@ -1383,7 +1396,9 @@ public class RequestProperties
             User user = this.getCurrentUser();
 
             // get list of devices
-            OrderedSet<String> devIDList = this._getDeviceIDsForSelectedGroup(true/*fleet*/,false/*inclActv*/);
+            OrderedSet<String> devIDList = null;
+            if(!returnAllDevices) devIDList = this._getDeviceIDsForSelectedGroup(true/*fleet*/,false/*inclActv*/);
+            	else devIDList = Device.getAllDeviceUniqueIDs(false/*inclActv*/, -1L/*limit*/);	// TODO: check limit and send correct value 
             if (ListTools.isEmpty(devIDList)) {
                 Print.logInfo("No devices ...");
                 return EventData.EMPTY_ARRAY;
@@ -1395,12 +1410,14 @@ public class RequestProperties
                 String deviceID = devIDList.get(i);
 
                 // omit unauthorized devices
-                if ((user != null) && !user.isAuthorizedDevice(deviceID)) {
-                    continue;
-                }
-
+                if ( !returnAllDevices && (user != null) && !user.isAuthorizedDevice(deviceID)) continue;
+                
                 // get Device
-                Device device = Device._getDevice(account, deviceID);
+                Device device = null; 
+//                if ( !returnAllDevices) device = Device._getDevice(account, deviceID);
+                if ( !returnAllDevices) device = Device.getDevice(account, deviceID);	// as we check (device == null) probably this function should be used
+//                   	else device = Device.getDevice(deviceID);
+                	else device = Device.loadDeviceByUniqueID(deviceID);	// we use uniqueID in this case
                 if (device == null) {
                     // -- (unlikely) skip this deviceID
                     continue;

@@ -567,6 +567,10 @@ public abstract class TrackMap
         final boolean isFleet = this.isFleet();
         reqState.setFleet(isFleet);
 
+        /* set "fleetlive" request type */
+        final boolean isFleetLive = this.isFleetLive();
+        reqState.setFleetLive(isFleetLive);
+
         /* notify events only */
         reqState.setDeviceNotifyEventsOnly(this.alertEventsOnly);
 

@@ -11190,9 +11190,9 @@ public class Device // Asset
             return null; // just say it doesn't exist
         }
     }
-
+    
     /**
-    *** Gets the specified Device record.<br>
+    *** Gets the specified Device record.
     *** This method should only be used when relatively sure that the specified deviceID exists.
     *** @param account     The Account
     *** @param devID       The Device ID
@@ -11422,10 +11422,12 @@ public class Device // Asset
     *** @return A set of Device IDs
     *** @throws DBExeption
     **/
-    public static OrderedSet<String> getAllDeviceIDs(boolean inclInactv, long limit)
+    public static OrderedSet<String> getAllDeviceUniqueIDs(boolean inclInactv, long limit)
         throws DBException
     {
         /* read devices for all accounts */
+    	/* we consider that device's ID is unique globally */
+    	/* TODO: add unique key in database, catch the error during device creation */
         OrderedSet<String> devList = new OrderedSet<String>();
         DBConnection dbc = null;
         Statement   stmt = null;
@@ -11434,14 +11436,14 @@ public class Device // Asset
             /* select */
             // DBSelect: SELECT * FROM Device ORDER BY deviceID
             DBSelect<Device> dsel = new DBSelect<Device>(Device.getFactory());
-            dsel.setSelectedFields(Device.FLD_deviceID);
+            dsel.setSelectedFields(Device.FLD_uniqueID);
             DBWhere dwh = dsel.createDBWhere();
             if (!inclInactv) {
                 dsel.setWhere(dwh.WHERE(
                         dwh.NE(Device.FLD_isActive,0)
                 ));
             }
-            dsel.setOrderByFields(Device.FLD_deviceID);
+            dsel.setOrderByFields(Device.FLD_uniqueID);
             dsel.setLimit(limit);
 
             /* get records */
@@ -11449,7 +11451,7 @@ public class Device // Asset
             stmt = dbc.execute(dsel.toString());
             rs = stmt.getResultSet();
             while (rs.next()) {
-                String devId = rs.getString(Device.FLD_deviceID);
+                String devId = rs.getString(Device.FLD_uniqueID);
                 devList.add(devId);
             }
 

@@ -72,6 +72,13 @@
 //  2013/08/06  Martin D. Flynn
 //     -Added PROP_FuelRegister_ignoreWhileMoving
 // ----------------------------------------------------------------------------
+
+// TODO: add trigger during DB creation to create 'gprmc_XXX' uniqueID by default (using MD5 hash)
+//
+// CREATE TRIGGER device_before_insert BEFORE INSERT ON gts.Device
+// FOR EACH ROW SET NEW.uniqueID=concat('gprmc_',md5(concat(NEW.accountID,NEW.deviceID)));
+//
+
 package org.opengts.db;
 
 import java.lang.*;
