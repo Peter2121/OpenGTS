@@ -427,7 +427,7 @@ function deviceDeviceChanged()
 function trackMapSelectDevice()
 { // 'PARM_PAGE=map' && PARM_DEVICE are defined in FORM_NEW_DEVICE
     document.SelectDeviceForm.date_fr.value = mapCal_fr? mapCal_fr.getArgDateTime() : ""; // PARM_RANGE_FR
-    document.SelectDeviceForm.date_to.value = mapCal_to.getArgDateTime(); // PARM_RANGE_TO
+    document.SelectDeviceForm.date_to.value = mapCal_to? mapCal_to.getArgDateTime() : ""; // PARM_RANGE_TO
     document.SelectDeviceForm.date_tz.value = calGetTimeZone(); // PARM_TIMEZONE
     document.SelectDeviceForm.submit();
 };

@@ -1380,12 +1380,16 @@ public class RequestProperties
         long endTime   = this.getEventDateToSec();
         //Print.logInfo("Date Range: " + new DateTime(startTime) + " to " + new DateTime(endTime));
 
+        String groupID = this.getSelectedDeviceGroupID();
+
         /* get events */
         if (this.isFleet()) {
             // fleet events
-//			**************** TODO: check group - return all devices only when default group (ALL) is selected 
-//        	final boolean returnAllDevices=this.isFleetLive();
-        	final boolean returnAllDevices=true;	// ****************** For debug only!!!
+
+        	final boolean returnAllDevices=this.isFleetLive() && groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);
+
+//        	final boolean returnAllDevices=groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);	// ****** For debug only!!!
+        	
             // get account
             Account account = this.getCurrentAccount();
             if (account == null) {
