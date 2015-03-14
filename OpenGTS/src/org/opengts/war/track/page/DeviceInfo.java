@@ -2340,9 +2340,9 @@ public class DeviceInfo
                     // -- Device description, name, id, make , model
                     out.println(FormRow_TextField(PARM_DEV_DESC         , _uiEdit    , i18n.getString("DeviceInfo.deviceDesc","{0} Description",devTitles) +":",(_selDev!=null)?_selDev.getDescription():"" , 40, 64));
                     out.println(FormRow_TextField(PARM_DEV_NAME         , _uiEdit    , i18n.getString("DeviceInfo.displayName","Short Name") +":"          , (_selDev!=null)?_selDev.getDisplayName():""    , 16, 64));
-                    out.println(FormRow_TextField(PARM_VEHICLE_ID       , _uiEdit    , i18n.getString("DeviceInfo.vehicleID","Vehicle ID") +":"            , (_selDev!=null)?_selDev.getVehicleID():""      , 24, 24));
-                    out.println(FormRow_TextField(PARM_VEHICLE_MAKE     , _uiEdit    , i18n.getString("DeviceInfo.vehicleMake","Vehicle Make") +":"        , (_selDev!=null)?_selDev.getVehicleMake():""    , 40, 40));
-                    out.println(FormRow_TextField(PARM_VEHICLE_MODEL    , _uiEdit    , i18n.getString("DeviceInfo.vehicleModel","Vehicle Model") +":"      , (_selDev!=null)?_selDev.getVehicleModel():""   , 40, 40));
+                    out.println(FormRow_TextField(PARM_VEHICLE_ID       , _uiEdit    , i18n.getString("DeviceInfo.vehicleID","Device ID") +":"            , (_selDev!=null)?_selDev.getVehicleID():""      , 24, 24));
+                    out.println(FormRow_TextField(PARM_VEHICLE_MAKE     , _uiEdit    , i18n.getString("DeviceInfo.vehicleMake","Device Make") +":"        , (_selDev!=null)?_selDev.getVehicleMake():""    , 40, 40));
+                    out.println(FormRow_TextField(PARM_VEHICLE_MODEL    , _uiEdit    , i18n.getString("DeviceInfo.vehicleModel","Device Model") +":"      , (_selDev!=null)?_selDev.getVehicleModel():""   , 40, 40));
                     // -- license plate/expire
                     out.println(FormRow_TextField(PARM_LICENSE_PLATE    , _uiEdit    , i18n.getString("DeviceInfo.licensePlate","License Plate") +":"      , (_selDev!=null)?_selDev.getLicensePlate():""   , 16, 24));
                     if (licExpOK) {

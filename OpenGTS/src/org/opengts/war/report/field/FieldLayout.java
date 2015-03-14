@@ -809,7 +809,7 @@ public class FieldLayout
                 }
                 public String getTitle(ReportData rd, ReportColumn rc) {
                     I18N i18n = rd.getPrivateLabel().getI18N(FieldLayout.class);
-                    return i18n.getString("FieldLayout.vehicleID","Vehicle-ID");
+                    return i18n.getString("FieldLayout.vehicleID","Device-ID");
                 }
             });
 
@@ -829,7 +829,7 @@ public class FieldLayout
                 }
                 public String getTitle(ReportData rd, ReportColumn rc) {
                     I18N i18n = rd.getPrivateLabel().getI18N(FieldLayout.class);
-                    return i18n.getString("FieldLayout.vehicleMake","Vehicle-Make");
+                    return i18n.getString("FieldLayout.vehicleMake","Device-Make");
                 }
             });
 
@@ -849,7 +849,7 @@ public class FieldLayout
                 }
                 public String getTitle(ReportData rd, ReportColumn rc) {
                     I18N i18n = rd.getPrivateLabel().getI18N(FieldLayout.class);
-                    return i18n.getString("FieldLayout.vehicleModel","Vehicle-Model");
+                    return i18n.getString("FieldLayout.vehicleModel","Device-Model");
                 }
             });
 

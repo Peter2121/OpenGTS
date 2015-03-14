@@ -788,7 +788,7 @@ public class EventDataLayout
                 }
                 public String getTitle(ReportData rd, ReportColumn rc) {
                     I18N i18n = rd.getPrivateLabel().getI18N(EventDataLayout.class);
-                    return i18n.getString("EventDataLayout.deviceVehicleID","Vehicle ID");
+                    return i18n.getString("EventDataLayout.deviceVehicleID","Device ID");
                 }
             });
 

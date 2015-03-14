@@ -363,8 +363,8 @@ public class Device // Asset
     {
         I18N i18n = I18N.getI18N(Device.class, loc);
         return new String[] {
-            i18n.getString("Device.title.singular", "Tracker"),
-            i18n.getString("Device.title.plural"  , "Trackers"),
+            i18n.getString("Device.title.singular", "Device"),
+            i18n.getString("Device.title.plural"  , "Devices"),
         };
     }
 
