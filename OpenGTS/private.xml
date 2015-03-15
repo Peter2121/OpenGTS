@@ -249,13 +249,6 @@ Notes:
         <String key="i18n.Less_than_10kph"   i18n="PrivateXML.legend.lt10kph"           >Less than %{kph:10}</String>
         <String key="i18n.Less_than_2kph"    i18n="PrivateXML.legend.lt2kph"            >Less than %{kph:2}</String>
 
-        <Icon name="fast"		scale="1.0">${i18n.More_than_80kph}</Icon>
-        <Icon name="normal"		scale="1.0">${i18n.Less_than_80kph}</Icon>
-        <Icon name="slow"		scale="1.0">${i18n.Less_than_40kph}</Icon>
-        <Icon name="veryslow"	scale="1.0">${i18n.Less_than_10kph}</Icon>
-        <Icon name="stop"		scale="1.0">${i18n.Less_than_2kph}</Icon>
-
-
         <String key="i18n.Last_Location"     i18n="PrivateXML.legend.lastLocation"      >Last Location</String>
         <String key="i18n.Page_Title"        i18n="PrivateXML.pageTitle"                >GPS Tracking</String>
         <!-- MenuGroup -->
@@ -325,7 +318,7 @@ Notes:
         <Property key="track.firstLoginPageID">map.fleetlive</Property>         <!-- [menu.top|map.device|map.fleet|map.fleetlive] first page after login -->
 
         <!-- AccountLogin properties -->
-        <Property key="accountLogin.showLoginLink">true</Property>              <!-- [true|false] show "Login" link on login page -->
+        <Property key="accountLogin.showLoginLink">false</Property>              <!-- [true|false] show "Login" link on login page -->
         <Property key="accountLogin.legacyLAF">false</Property>                 <!-- [true|false] show "Login" legacy look-and-feel -->
         <Property key="accountLogin.showLocaleSelection">true</Property>       <!-- [true|false] (EXPERIMENTAL) show "Language" selection on login page -->
 
@@ -386,7 +379,7 @@ Notes:
         <Property key="trackMap.showAllContainedGeozones">false</Property>      <!-- [true|false] (EXPERIMENTAL) show all contained Geozones ('false' shows only 'inner' Geozone) -->
         <Property key="trackMap.lastDevicePushpin.fleet">true</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
         <Property key="trackMap.lastDevicePushpin.device">true</Property>       <!-- [true|false] show device pushpin for last pushpin on device map -->
-        <Property key="trackMap.showAllDevices">true</Property>                 <!-- [true|false] show Devices from ALL accounts on fleet map if 'All' group is selected (attention, no security AT ALL) -->
+        <Property key="trackMap.showAllDevices">false</Property>                 <!-- [true|false] show Devices from ALL accounts on fleet map if 'All' group is selected (attention, no security AT ALL) -->
 
         <!-- GoogleKML properties -->
         <Property key="googleKML.lastPushpinID">blue</Property>                 <!-- Color ID of the last event pushpin -->

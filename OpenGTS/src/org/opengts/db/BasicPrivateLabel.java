@@ -264,6 +264,7 @@ public class BasicPrivateLabel
     public  static final String PROP_TrackMap_showNearbyGeozones            = "trackMap.showNearbyGeozones";        // true|false
     public  static final String PROP_TrackMap_lastDevicePushpin_device      = "trackMap.lastDevicePushpin.device";  // true|false
     public  static final String PROP_TrackMap_lastDevicePushpin_fleet       = "trackMap.lastDevicePushpin.fleet";   // true|false
+    public  static final String PROP_TrackMap_showAllDevices                = "trackMap.showAllDevices";                // true|false
 
     /* FullMap properties */
     // calendar properties

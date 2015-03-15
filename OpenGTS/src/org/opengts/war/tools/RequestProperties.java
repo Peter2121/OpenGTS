@@ -172,6 +172,7 @@ public class RequestProperties
     private boolean             isFleetLive             = false;
     private boolean             isReport                = false;
     private boolean             notifyEventsOnly        = false;
+    private boolean 			ShowAllDevices			= false;
 
     private PrivateLabel        privLabel               = null;
     private String              localeStr               = null;
@@ -465,7 +466,17 @@ public class RequestProperties
     {
         return this.isFleetLive;
     }
-
+    
+    public void setShowAllDevices(boolean show)
+    {
+    	this.ShowAllDevices = show;
+    }
+    
+    public boolean needShowAllDevices()
+    {
+    	return this.ShowAllDevices;
+    }
+    
     /* return max number of events per device for fleet map */
     public long getFleetDeviceEventCount()
     {
@@ -1386,7 +1397,7 @@ public class RequestProperties
         if (this.isFleet()) {
             // fleet events
 
-        	final boolean returnAllDevices=this.isFleetLive() && groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);
+        	final boolean returnAllDevices=this.needShowAllDevices() && this.isFleetLive() && groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);
 
 //        	final boolean returnAllDevices=groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);	// ****** For debug only!!!
         	

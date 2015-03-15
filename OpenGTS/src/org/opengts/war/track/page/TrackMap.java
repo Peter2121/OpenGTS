@@ -570,6 +570,9 @@ public abstract class TrackMap
         /* set "fleetlive" request type */
         final boolean isFleetLive = this.isFleetLive();
         reqState.setFleetLive(isFleetLive);
+        
+        final boolean showAllDevices = this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_showAllDevices,false);
+        reqState.setShowAllDevices(showAllDevices);
 
         /* notify events only */
         reqState.setDeviceNotifyEventsOnly(this.alertEventsOnly);
