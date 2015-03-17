@@ -405,13 +405,24 @@ Notes:
         <Property key="deviceInfo.showExpectedAcks">false</Property>            <!-- [true|false] show "Expect Ack" column -->
         <Property key="deviceInfo.showIgnitionIndex">false</Property>           <!-- [true|false] show Ignition Index -->
         <Property key="deviceInfo.maximumIgnitionIndex">7</Property>            <!-- [0..15]      maximum Ignition Index -->
-        <Property key="deviceInfo.showPushpinID">true</Property>               <!-- [true|false] show Pushpin ID -->
+        <Property key="deviceInfo.showPushpinID">true</Property>                <!-- [true|false] show Pushpin ID -->
         <Property key="deviceInfo.showPushpinChooser">true</Property>           <!-- [true|false] show Pushpin Chooser -->
         <Property key="deviceInfo.showDisplayColor">true</Property>             <!-- [true|false] show Display Color ("Route-Line") -->
         <Property key="deviceInfo.showDataKey">false</Property>                 <!-- [true|false] (EXPERIMENTAL) show Data Key -->
         <Property key="deviceInfo.allowNewDevice">true</Property>               <!-- [true|false|sysadmin] allow new device creation -->
         <Property key="deviceInfo.showFaultCodes">false</Property>              <!-- [true|false] show last fault codes (requires Device/EventData table support) -->
-        <Property key="deviceInfo.sms.useDeviceSMSCommands">true</Property>     <!-- [true|false] Use Device "deviceCode" SMS commands -->
+        <Property key="deviceInfo.sms.useDeviceSMSCommands">false</Property>    <!-- [true|false] Use Device "deviceCode" SMS commands -->
+        <Property key="deviceInfo.showReportedOdometer">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showReportedEngineHours">false</Property>     <!-- [true|false]  -->
+        <Property key="deviceInfo.showMaintenanceOdometer">false</Property>     <!-- [true|false]  -->
+        <Property key="deviceInfo.showMaintenanceHours">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showMaintenanceNotes">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showReminderMessage">false</Property>         <!-- [true|false]  -->
+        <Property key="deviceInfo.showServiceTime">false</Property>             <!-- [true|false]  -->
+        <Property key="deviceInfo.showHoursOfOperation">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showDcsPropertiesID">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showDcsConfigString">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showAssignedUserID">false</Property>        <!-- [true|false]  -->
 
         <!-- GroupInfo properties -->
         <Property key="groupInfo.showPropertiesButton">false</Property>         <!-- [true|false] show "Properties" button -->
@@ -707,7 +718,7 @@ Notes:
      === OpenLayers [http://www.openlayers.org] using OpenStreetMaps [http://www.openstreetmap.org]
      -->
     <MapProvider name="openLayers" 
-        active="${Domain.MapProvider.active=true}"
+        active="${Domain.MapProvider.active=false}"
         class="org.opengts.war.maps.jsmap.OpenLayers"
         rtPropPrefix="Domain.MapProvider.">
 
@@ -954,9 +965,9 @@ Notes:
      ===    https://developers.google.com/maps/terms
      -->
     <MapProvider name="googleMaps" 
-        active="${Domain.MapProvider.active=false}"
+        active="${Domain.MapProvider.active=true}"
         class="org.opengts.war.maps.jsmap.GoogleMaps"
-        key="${Domain.MapProvider.key=***PLACE_AUTHORIZATION_KEY_HERE***}"
+        key="${Domain.MapProvider.key=}"
         rtPropPrefix="Domain.MapProvider.">
 
         <!-- Google Maps configuration -->
@@ -1209,7 +1220,7 @@ Notes:
         <Acl name="acl.admin.device:uniqueID"       values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminUniqID"    >Device Administration (Device UniqueID)</Acl>
         <Acl name="acl.admin.device:active"         values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminActive"    >Device Administration (Device Active)</Acl>
         <Acl name="acl.admin.device:serverID"       values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminServID"    >Device Administration (Server ID)</Acl>
-        <Acl name="acl.admin.device:firmware"       values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminFirmware"  >Device Administration (Firmware)</Acl>
+        <Acl name="acl.admin.device:firmware"       values="0,1,2"   default="0" i18n="PrivateXML.acl.deviceAdminFirmware"  >Device Administration (Firmware)</Acl>
         <Acl name="acl.admin.device:rules"          values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminRules"     >Device Administration (Notification Rules)</Acl>
         <Acl name="acl.admin.device:commands"       values="0,2"     default="2" i18n="PrivateXML.acl.deviceAdminCommands"  >Device Administration (Commands)</Acl>
         <Acl name="acl.admin.device:sms"            values="0,2"     default="2" i18n="PrivateXML.acl.deviceAdminSms"       >Device Administration (SMS Commands)</Acl>
@@ -1219,9 +1230,9 @@ Notes:
         <Acl name="acl.admin.device:editIMEI"       values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminEditIMEI"  >Device Administration (Edit IMEI)</Acl>
         <Acl name="acl.admin.device:editSerial"     values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminEditSerial">Device Administration (Edit Serial#)</Acl>
         <Acl name="acl.admin.device:editDatKey"     values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminEditDatKey">Device Administration (Edit DataKey)</Acl>
-        <Acl name="acl.admin.device:fuelCapacity"   values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminFuelEconom">Device Administration (Fuel Economy)</Acl>
-        <Acl name="acl.admin.device:fuelProfile"    values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminFuelProfil">Device Administration (Fuel Profile)</Acl>
-        <Acl name="acl.admin.device:fuelEconomy"    values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminFuelCapac" >Device Administration (Fuel Capacity)</Acl>
+        <Acl name="acl.admin.device:fuelCapacity"   values="0,1,2"   default="0" i18n="PrivateXML.acl.deviceAdminFuelEconom">Device Administration (Fuel Economy)</Acl>
+        <Acl name="acl.admin.device:fuelProfile"    values="0,1,2"   default="0" i18n="PrivateXML.acl.deviceAdminFuelProfil">Device Administration (Fuel Profile)</Acl>
+        <Acl name="acl.admin.device:fuelEconomy"    values="0,1,2"   default="0" i18n="PrivateXML.acl.deviceAdminFuelCapac" >Device Administration (Fuel Capacity)</Acl>
         <Acl name="acl.admin.group"                 values="0,1,2,3" default="1" i18n="PrivateXML.acl.groupAdmin"           >Group Administration</Acl>
         <Acl name="acl.admin.driver"                values="0,1,2,3" default="1" i18n="PrivateXML.acl.driverAdmin"          >Driver Administration</Acl>
         <Acl name="acl.admin.zone"                  values="0,1,2,3" default="1" i18n="PrivateXML.acl.zoneAdmin"            >Geozone Administration</Acl>
