@@ -892,7 +892,7 @@ Notes:
         <!-- <Property key="scrollWheelZoom">false</Property> -->       <!-- enable/disable scroll wheel zoom -->
         <!-- <Property key="map.maxPushpins">10</Property> -->
         <Property key="map.view">road</Property>                        <!-- [road|aerial|hybrid] map view/style -->
-        <Property key="info.showAltitude">false</Property>              <!-- show altitude in info balloon -->
+        <Property key="info.showAltitude">true</Property>              <!-- show altitude in info balloon -->
         <Property key="info.showSpeed">true</Property>                  <!-- show speed in info-balloon -->
         <Property key="jsmap.showMapLoading">true</Property>
         <Property key="details.combineSpeedHeading">false</Property>    <!-- combine speed/heading into single column -->

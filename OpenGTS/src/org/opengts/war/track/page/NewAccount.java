@@ -275,6 +275,7 @@ public class NewAccount
             }
 
             /* create device */
+            // TODO: get default deviceID and description from private.xml
             String deviceID = "mobile";
             device = Device.getDevice(account, deviceID, true);
             device.setIsActive(true);
@@ -488,6 +489,7 @@ public class NewAccount
     private static final String ARG_EXPIRE[]        = new String[] { "expire", "exp", "e" };
     private static final String ARG_DECODE[]        = new String[] { "decode" };
 
+    // TODO: take into account the fact of initialization of uniqueID in table trigger
     public static void main(String argv[])
     {
         DBConfig.cmdLineInit(argv,true);  // main

@@ -294,6 +294,10 @@ public class Account
     public  static final long       MAX_UNCONFIRMED_SEC     = DateTime.HourSeconds(12);
     private static Object           TempAccountLock         = new Object();
 
+    private static String           PROP_TempAccount_Expiration_Days		= "Account.default.tempAccountExpireDays";
+    private static String           PROP_TempAccount_Max_Expiration_Days	= "Account.default.tempAccountMaxExpireDays";
+    private static String           PROP_TempAccount_Max_Uncorfirmed_Hours	= "Account.default.tempAccountMaxUnconfirmHours";
+    
     // ------------------------------------------------------------------------
     // Password attributes
 
@@ -658,9 +662,9 @@ public class Account
         AUD/*"aud"*/("$"  ,"Dollar","Australia"         ),
         NZD/*"nzd"*/("$"  ,"Dollar","New Zealand"       ),
         CAD/*"cad"*/("$"  ,"Dollar","Canada"            ),
-        GBP/*"gbp"*/("?"  ,"Pound" ,"United Kingdom"    ), // 
+        GBP/*"gbp"*/("£"  ,"Pound" ,"United Kingdom"    ), // 
         DOP/*"dop"*/("RD$","Peso"  ,"Dominican Republic"),
-        EUR/*"eur"*/("?"  ,"Euro"  ,"Europe"            ), // France/Germany/Ireland/Italy/Luxembourg/Spain
+        EUR/*"eur"*/("€"  ,"Euro"  ,"Europe"            ), // France/Germany/Ireland/Italy/Luxembourg/Spain
         INR/*"inr"*/("?"  ,"Rupee" ,"India"             ),
         MXN/*"mxn"*/("$"  ,"Peso"  ,"Mexico"            ),
         RUB/*"rub"*/("R"  ,"Ruble" ,"Russia"            ),
@@ -3618,8 +3622,12 @@ public class Account
     {
         Account account = null;
         long nowTime    = DateTime.getCurrentTimeSec();
-        long expireSec  = (expireDays > 0L)? DateTime.DaySeconds(expireDays) : Account.DFT_EXPIRATION_SEC;
-        if (expireSec > Account.MAX_EXPIRATION_SEC) { expireSec = Account.MAX_EXPIRATION_SEC; }
+        int defExpireDays = RTConfig.getInt(PROP_TempAccount_Expiration_Days, 0);
+        int maxExpireDays = RTConfig.getInt(PROP_TempAccount_Max_Expiration_Days, 0);
+        long defExpireSec = (defExpireDays > 0)? DateTime.DaySeconds(defExpireDays) : Account.DFT_EXPIRATION_SEC;
+        long expireSec  = (expireDays > 0L)? DateTime.DaySeconds(expireDays) : defExpireSec;
+        long maxExpireSec = (maxExpireDays > 0)? DateTime.DaySeconds(maxExpireDays) : Account.MAX_EXPIRATION_SEC;
+        if (expireSec > maxExpireSec) { expireSec = maxExpireSec; }
         long expireTime = (new DateTime((nowTime + expireSec),DateTime.getGMTTimeZone())).getDayEnd();
 
         // make sure we're creating only one account at a time
@@ -3740,7 +3748,9 @@ public class Account
     public static String[] getUnconfirmedAccounts()
         throws DBException
     {
-        return getUnconfirmedAccounts(Account.MAX_UNCONFIRMED_SEC);
+    	int maxUnconfirmedHours = RTConfig.getInt(PROP_TempAccount_Max_Uncorfirmed_Hours, 0);
+    	long maxUnconfirmedSec = (maxUnconfirmedHours > 0) ? DateTime.HourSeconds(maxUnconfirmedHours) : Account.MAX_UNCONFIRMED_SEC;
+        return getUnconfirmedAccounts(maxUnconfirmedSec);
     }
 
     /**
