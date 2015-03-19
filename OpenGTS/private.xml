@@ -420,9 +420,21 @@ Notes:
         <Property key="deviceInfo.showReminderMessage">false</Property>         <!-- [true|false]  -->
         <Property key="deviceInfo.showServiceTime">false</Property>             <!-- [true|false]  -->
         <Property key="deviceInfo.showHoursOfOperation">false</Property>        <!-- [true|false]  -->
-        <Property key="deviceInfo.showDcsPropertiesID">false</Property>        <!-- [true|false]  -->
-        <Property key="deviceInfo.showDcsConfigString">false</Property>        <!-- [true|false]  -->
-        <Property key="deviceInfo.showAssignedUserID">false</Property>        <!-- [true|false]  -->
+        <Property key="deviceInfo.showDcsPropertiesID">false</Property>         <!-- [true|false]  -->
+        <Property key="deviceInfo.showDcsConfigString">false</Property>         <!-- [true|false]  -->
+        <Property key="deviceInfo.showAssignedUserID">false</Property>          <!-- [true|false]  -->
+
+        <Property key="deviceInfo.showFirmwareVersion">false</Property>         <!-- [true|false]  -->
+        <Property key="deviceInfo.showLicensePlate">false</Property>            <!-- [true|false]  -->
+        <Property key="deviceInfo.showLicenseExpire">false</Property>           <!-- [true|false]  -->
+        <Property key="deviceInfo.showEquipmentStatus">false</Property>         <!-- [true|false]  -->
+        <Property key="deviceInfo.showImeiNumber">false</Property>              <!-- [true|false]  -->
+        <Property key="deviceInfo.showSerialNumber">false</Property>            <!-- [true|false]  -->
+        <Property key="deviceInfo.showSimPhoneNumbers">false</Property>         <!-- [true|false]  -->
+        <Property key="deviceInfo.showSmsEmail">false</Property>                <!-- [true|false]  -->
+        <Property key="deviceInfo.showDriverID">false</Property>                <!-- [true|false]  -->
+        <Property key="deviceInfo.showFuelCap">false</Property>                <!-- [true|false]  -->
+        <Property key="deviceInfo.showFuelProf">false</Property>                <!-- [true|false]  -->
 
         <!-- GroupInfo properties -->
         <Property key="groupInfo.showPropertiesButton">false</Property>         <!-- [true|false] show "Properties" button -->

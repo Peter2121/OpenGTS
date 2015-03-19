@@ -217,6 +217,19 @@ public class BasicPrivateLabel
     public  static final String PROP_DeviceInfo_showFaultCodes              = "deviceInfo.showFaultCodes";          // true|false
     public  static final String PROP_DeviceInfo_SMS_useDeviceSMSCommands    = "deviceInfo.sms.useDeviceSMSCommands";// true|false|pass
     public  static final String PROP_DeviceInfo_uniqueSimPhoneNumber        = "deviceInfo.uniqueSimPhoneNumber";    // true|false
+
+    public  static final String PROP_DeviceInfo_showFirmwareVersion         = "deviceInfo.showFirmwareVersion";     // true|false
+    public  static final String PROP_DeviceInfo_showLicensePlate            = "deviceInfo.showLicensePlate";        // true|false
+    public  static final String PROP_DeviceInfo_showLicenseExpire           = "deviceInfo.showLicenseExpire";       // true|false
+    public  static final String PROP_DeviceInfo_showEquipmentStatus         = "deviceInfo.showEquipmentStatus";     // true|false
+    public  static final String PROP_DeviceInfo_showImeiNumber              = "deviceInfo.showImeiNumber";          // true|false
+    public  static final String PROP_DeviceInfo_showSerialNumber            = "deviceInfo.showSerialNumber";        // true|false
+    public  static final String PROP_DeviceInfo_showSimPhoneNumbers         = "deviceInfo.showSimPhoneNumbers";     // true|false
+    public  static final String PROP_DeviceInfo_showSmsEmail                = "deviceInfo.showSmsEmail";            // true|false
+    public  static final String PROP_DeviceInfo_showDriverID                = "deviceInfo.showDriverID";            // true|false
+    public  static final String PROP_DeviceInfo_showFuelCap                 = "deviceInfo.showFuelCap";             // true|false
+    public  static final String PROP_DeviceInfo_showFuelProf                = "deviceInfo.showFuelProf";            // true|false
+    
     /* DeviceInfo custom fields */
     public  static final String PROP_DeviceInfo_custom_                     = "deviceInfo.custom.";                 // custom attr
 

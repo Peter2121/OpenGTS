@@ -158,6 +158,18 @@ public class DeviceInfo
     private static final boolean SHOW_FAULT_CODES           = true;
     private static final boolean OPTIMIZE_IGNITION_STATE    = false;
 
+    private static final boolean SHOW_LICENSE_EXPIRE    	= true;
+    private static final boolean SHOW_CODE_VER				= true;
+    private static final boolean SHOW_LIC_PLATE				= true;
+    private static final boolean SHOW_EQUIP_STA				= true;
+    private static final boolean SHOW_IMEI					= true;
+    private static final boolean SHOW_SERIAL				= true;
+    private static final boolean SHOW_SIM_PHONE				= true;
+    private static final boolean SHOW_SMS_MAIL				= true;
+    private static final boolean SHOW_DRIVER				= true;
+    private static final boolean SHOW_FUEL_CAP				= true;
+    private static final boolean SHOW_FUEL_PROF				= true;
+    
     // ------------------------------------------------------------------------
 
     public  static final String _ACL_SERVERID               = "serverID";
@@ -2248,13 +2260,13 @@ public class DeviceInfo
                     boolean maintNotesOK  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showMaintenanceNotes,SHOW_MAINTENANCE_NOTES);
                     boolean reminderOK    = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showReminderMessage,SHOW_REMINDER_MESSAGE);
                     boolean servTimeOK    = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showServiceTime,SHOW_SERVICE_TIME);
-                    boolean licExpOK      = true;
+                    boolean licExpOK      = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showLicenseExpire,SHOW_LICENSE_EXPIRE);
                     boolean dataKeyOK     = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showDataKey,SHOW_DATA_KEY);
                     boolean workHoursOK   = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showHoursOfOperation,SHOW_HOURS_OF_OPERATION);
                     boolean faultCodesOK  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showFaultCodes,SHOW_FAULT_CODES);
                     boolean speedLimOK    = Device.hasRuleFactory(); // || privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSpeedLimit,SHOW_SPEED_LIMIT);
-                    boolean showFuelCap   = true;
-                    boolean showFuelProf  = showFuelCap;
+                    boolean showFuelCap   = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showFuelCap,SHOW_FUEL_CAP);
+                    boolean showFuelProf  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showFuelProf,SHOW_FUEL_PROF);
                     boolean showFuelEcon  = DBConfig.hasExtraPackage();
                     boolean showFuelCost  = showFuelEcon;
                     boolean fixLocOK      = (_selDev != null) && Device.supportsFixedLocation() && 
@@ -2268,6 +2280,15 @@ public class DeviceInfo
                     boolean showPrefGrp   = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showPreferredGroupID,SHOW_PREFERRED_GROUP);
                     boolean showAssgnUsr  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showAssignedUserID,SHOW_ASSIGNED_USER);
 
+                    boolean showCodeVer   = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showFirmwareVersion,SHOW_CODE_VER);
+                    boolean showLicensePlate  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showLicensePlate,SHOW_LIC_PLATE);
+                    boolean showEquipmentStatus  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showEquipmentStatus,SHOW_EQUIP_STA);
+                    boolean showImei  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showImeiNumber,SHOW_IMEI);
+                    boolean showSerial  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSerialNumber,SHOW_SERIAL);
+                    boolean showSimPhone  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSimPhoneNumbers,SHOW_SIM_PHONE);
+                    boolean showSmsEmail = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSmsEmail,SHOW_SMS_MAIL);
+                    boolean showDriver = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showDriverID,SHOW_DRIVER);
+                    
                     /* distance units description */
                     Account.DistanceUnits distUnits = Account.getDistanceUnits(currAcct);
                     String distUnitsStr = distUnits.toString(locale);
@@ -2328,7 +2349,7 @@ public class DeviceInfo
                     if (_viewServID) {
                         out.println(FormRow_TextField(PARM_SERVER_ID        , edServID_  , i18n.getString("DeviceInfo.serverID","Server ID")+":"               , deviceCode, 18, 20, autoFill));
                     }
-                    if (_viewCodeVer) {
+                    if (showCodeVer && _viewCodeVer) {
                         out.println(FormRow_TextField(PARM_CODE_VERS        , edCodeVer_ , i18n.getString("DeviceInfo.firmwareVers","Firmware Version")+":"    , firmVers, 28, 28));
                     }
                     if (_viewUniqID) {
@@ -2344,7 +2365,9 @@ public class DeviceInfo
                     out.println(FormRow_TextField(PARM_VEHICLE_MAKE     , _uiEdit    , i18n.getString("DeviceInfo.vehicleMake","Device Make") +":"        , (_selDev!=null)?_selDev.getVehicleMake():""    , 40, 40));
                     out.println(FormRow_TextField(PARM_VEHICLE_MODEL    , _uiEdit    , i18n.getString("DeviceInfo.vehicleModel","Device Model") +":"      , (_selDev!=null)?_selDev.getVehicleModel():""   , 40, 40));
                     // -- license plate/expire
-                    out.println(FormRow_TextField(PARM_LICENSE_PLATE    , _uiEdit    , i18n.getString("DeviceInfo.licensePlate","License Plate") +":"      , (_selDev!=null)?_selDev.getLicensePlate():""   , 16, 24));
+                    if (showLicensePlate) {
+                    	out.println(FormRow_TextField(PARM_LICENSE_PLATE    , _uiEdit    , i18n.getString("DeviceInfo.licensePlate","License Plate") +":"      , (_selDev!=null)?_selDev.getLicensePlate():""   , 16, 24));
+                    }
                     if (licExpOK) {
                         String licTitle = i18n.getString("DeviceInfo.licenseExpire","License Expiration") + ":";
                         DateTime.DateStringFormat dsf = privLabel.getDateStringFormat();
@@ -2359,7 +2382,7 @@ public class DeviceInfo
                     }
                     // -- Equipment type/status
                     out.println(FormRow_TextField(PARM_DEV_EQUIP_TYPE   , _uiEdit    , i18n.getString("DeviceInfo.equipmentType","Equipment Type") +":"    , (_selDev!=null)?_selDev.getEquipmentType():""  , 30, 40));
-                    if (_viewEqStat) {
+                    if (showEquipmentStatus && _viewEqStat) {
                         String eqTitle = i18n.getString("DeviceInfo.equipmentStatus","Equipment Status") + ":";
                         String devEqSt = (_selDev != null)? _selDev.getEquipmentStatus() : "";
                         OrderedMap<String,String> eqStatMap = Device.GetEquipmentStatusMap(locale);
@@ -2374,19 +2397,19 @@ public class DeviceInfo
                             out.println(FormRow_TextField(PARM_DEV_EQUIP_STATUS, _editEqStat, eqTitle, devEqSt, 20, 20));
                         }
                     }
-                    if (_viewIMEI) {
+                    if (showImei && _viewIMEI) {
                         out.println(FormRow_TextField(PARM_DEV_IMEI         , _editIMEI  , i18n.getString("DeviceInfo.imeiNumber","IMEI/ESN Number") +":"      , (_selDev!=null)?_selDev.getImeiNumber():""     , 18, 24));
                     }
-                    if (_viewSERIAL) {
+                    if (showSerial && _viewSERIAL) {
                         out.println(FormRow_TextField(PARM_DEV_SERIAL_NO    , _editSERIAL, i18n.getString("DeviceInfo.serialNumber","Serial Number") +":"      , (_selDev!=null)?_selDev.getSerialNumber():""   , 20, 24));
                     }
                     if (dataKeyOK && _viewDATKEY) {
                         out.println(FormRow_TextField(PARM_DATA_KEY         , _editDATKEY, i18n.getString("DeviceInfo.dataKey","Data Key") +":"                , (_selDev!=null)?_selDev.getDataKey():""        , 60, 200));
                     }
-                    if (_viewSIM) {
+                    if (showSimPhone && _viewSIM) {
                         out.println(FormRow_TextField(PARM_DEV_SIMPHONE     , _editSIM   , i18n.getString("DeviceInfo.simPhoneNumber","SIM Phone#") +":"       , (_selDev!=null)?_selDev.getSimPhoneNumber():"" , 14, 18));
                     }
-                    if (_viewSMSEm) {
+                    if (showSmsEmail && _viewSMSEm) {
                         out.println(FormRow_TextField(PARM_SMS_EMAIL        , _editSMSEm , i18n.getString("DeviceInfo.smsEmail","SMS Email Address") +":"      , (_selDev!=null)?_selDev.getSmsEmail():""       , 60, 60));
                     }
                     if (ppidOK) {
@@ -2449,7 +2472,9 @@ public class DeviceInfo
                         out.println(FormRow_TextField(PARM_DEV_SPEED_LIMIT, _uiEdit  , i18n.getString("DeviceInfo.speedLimit","Maximum Speed") +":"            , speedLimStr                                    , 10, 10, speedUnitsStr));
                     }
                     // -- Driver ID
-                    out.println(FormRow_TextField(PARM_DRIVER_ID, _uiEdit, i18n.getString("DeviceInfo.driverID","Driver ID")+":", (_selDev!=null)?_selDev.getDriverID():""       , 24, 24));
+                    if (showDriver) {
+                    	out.println(FormRow_TextField(PARM_DRIVER_ID, _uiEdit, i18n.getString("DeviceInfo.driverID","Driver ID")+":", (_selDev!=null)?_selDev.getDriverID():""       , 24, 24));
+                    }
                     // -- User ID
                     if (showAssgnUsr && Device.supportsAssignedUserID()) {
                         OrderedMap<String,String> userMap = new OrderedMap<String,String>();
