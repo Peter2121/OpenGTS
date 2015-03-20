@@ -75,6 +75,9 @@ public class NewAccount
     public  static final String CSS_NEW_ACCOUNT_OFFLINE     = "newAccountOffline";
     public  static final String CSS_NEW_ACCOUNT_INSTRUCT    = "newAccountInstructions";
     public  static final String CSS_NEW_ACCOUNT_EXPIRE      = "newAccountExpire";
+    
+    private static final int ACCOUNT_ID_MAXLEN				= 20;
+    private static final int ACCOUNT_ID_RNDLEN				= 4;
 
     // ------------------------------------------------------------------------
 
@@ -260,12 +263,44 @@ public class NewAccount
                     return;
                 }
             }
+            
+            /* trying to create the accountID based on contactName */
+            String accID = StringTools.trim(contactName);
+            accID = StringTools.truncate(accID, NewAccount.ACCOUNT_ID_MAXLEN - NewAccount.ACCOUNT_ID_RNDLEN);
+            if(!StringTools.isAlphaNumeric(accID, false)) {
+//																	TODO: add translations            	
+                Track.writeErrorResponse(reqState, i18n.getString("NewAccount.alphaNumericOnlyInContactName",
+                        "Letters and numbers only can be used in Contact Name."));
+                    return;
+            }
+            Account.Key acctKey = new Account.Key(accID);
+            if (acctKey.exists()) { // may throw DBException
+//				Trying to add some random numbers to contactName to create unique accountID
+            	Random rndgen = new Random();
+            	int maxrnd = (int) Math.round (Math.pow ( 10, ACCOUNT_ID_RNDLEN ) ) ;
+            	String accIDrnd = "";
+            	boolean OKrnd = false;
+            	for(int i=0; i<5; i++) {
+            		int rnd = rndgen.nextInt(maxrnd);
+            		accIDrnd = accID + StringTools.toString(rnd);
+                    Account.Key acctKeyrnd = new Account.Key(accIDrnd);
+                    if (acctKeyrnd.exists()) continue;
+                    else { OKrnd=true; break; }
+            	}
+            	if(OKrnd) accID = accIDrnd;
+            	else {
+//										TODO: add translations            	
+            		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.tooManySimilarContactNames",
+            					"Too many similar contact names. Try to use another contact name."));
+            		return;
+            	}
+            }
 
             /* create account */
             String tempPrivateLabelName = privLabel.getDomainName();
             acctDecPass = Account.createRandomPassword(Account.TEMP_PASSWORD_LENGTH);
             account = Account.createTemporaryAccount(
-                tempAccountID, tempExpireDays, Account.encodePassword(privLabel,acctDecPass),
+            	accID, tempExpireDays, Account.encodePassword(privLabel,acctDecPass),
                 contactName, contactEmail, 
                 tempPrivateLabelName);
             if (account == null) {
@@ -275,12 +310,16 @@ public class NewAccount
             }
 
             /* create device */
-            // TODO: get default deviceID and description from private.xml
+            // TODO: get default deviceID and description from run-time config
+            // TODO: get number of permitted devices from run-time config
             String deviceID = "mobile";
             device = Device.getDevice(account, deviceID, true);
             device.setIsActive(true);
             device.setDescription("Mobile Device");
             device.save();
+            
+            /* create users */
+            // TODO: create 'admin' and 'guest' users with ACLs needed
 
         } catch (DBException dbe) {
 
