@@ -338,13 +338,13 @@ Notes:
          -->
 
         <!-- TopMenu properties -->
-        <Property key="topMenu.maximumIconsPerRow">15</Property>                 <!-- [#] (for 'menuType=icon') max icons per row -->
-        <Property key="topMenu.showHeader">false</Property>                   <!-- [true|false|default] show header -->
-        <Property key="topMenu.showMenuDescription">long</Property>             <!-- [none|short|long] show menu description -->
-        <Property key="topMenu.showMenuHelp">true</Property>                    <!-- [true|false] show menu help -->
+        <Property key="topMenu.maximumIconsPerRow">15</Property>          <!-- [#] (for 'menuType=icon') max icons per row -->
+        <Property key="topMenu.showHeader">false</Property>               <!-- [true|false|default] show header -->
+        <Property key="topMenu.showMenuDescription">long</Property>       <!-- [none|short|long] show menu description -->
+        <Property key="topMenu.showMenuHelp">true</Property>              <!-- [true|false] show menu help -->
 
-        <!-- TopMenu menu type -->
-        <Property key="navMenu.menuType">icon</Property>                  <!-- [fixed|expand|button] menu type -->
+        <!-- NavMenu menu type -->
+        <Property key="navMenu.menuType">icon</Property>                  <!-- [icon|text] menu type -->
         <!--
          ===  text        : Fixed text menu items (default)
          ===  icon        : Fixed menu items with icon representation (set by "IconImage" tag)
@@ -995,7 +995,7 @@ Notes:
         <Property key="google.addOpenStreetMap">false</Property>
         <Property key="google.addBingMap">false</Property>
 
-        <Property key="map.view">road</Property>                        <!-- [road|aerial|hybrid] map view/style -->
+        <Property key="map.view">hybrid</Property>                        <!-- [road|aerial|hybrid] map view/style -->
         <Property key="map.fillFrame">false</Property>
         <Property key="scrollWheelZoom">false</Property>                <!-- enable/disable scroll wheel zoom -->
         <!-- <Property key="map.width">680</Property>           -->     <!-- map width -->
@@ -1027,9 +1027,9 @@ Notes:
         <Property key="replay.singlePushpin">false</Property>           <!-- show only single pushpin during replay -->
 
         <!-- auto update -->
-        <Property key="auto.enable">false</Property>
-        <Property key="auto.interval">20</Property>
-        <Property key="auto.count">10</Property>
+        <Property key="auto.enable">true</Property>
+        <Property key="auto.interval">10</Property>
+        <Property key="auto.count">100</Property>
 
         <!-- use default pushpins -->
         <Pushpins includeDefault="true"/>
@@ -1261,28 +1261,28 @@ Notes:
         <Acl name="acl.map.fleet"                   values="0,1"     default="1" i18n="PrivateXML.acl.fleetMap"             >Fleet/Group Map Display</Acl>
         <Acl name="acl.map.fleet:auto"              values="0,1"     default="1" i18n="PrivateXML.acl.fleetMapAuto"         >Fleet/Group Map (Auto Update)</Acl>
         <!-- report groups -->
-        <Acl name="acl.reportGroup.detail"          values="0,1"     default="1" i18n="PrivateXML.acl.reportDetail"         >Report Group (Detail)</Acl>
-        <Acl name="acl.reportGroup.summary"         values="0,1"     default="1" i18n="PrivateXML.acl.reportSummary"        >Report Group (Summary)</Acl>
-        <Acl name="acl.reportGroup.performance"     values="0,1"     default="1" i18n="PrivateXML.acl.reportPerformance"    >Report Group (Performance)</Acl>
-        <Acl name="acl.reportGroup.ifta"            values="0,1"     default="1" i18n="PrivateXML.acl.reportOther"          >Report Group (I.F.T.A.)</Acl>
-        <Acl name="acl.reportGroup.sysadmin"        values="0,1"     default="1" i18n="PrivateXML.acl.reportSysAdmin"       >Report Group (SystemAdmin)</Acl>
+        <Acl name="acl.reportGroup.detail"          values="0,1"     default="0" i18n="PrivateXML.acl.reportDetail"         >Report Group (Detail)</Acl>
+        <Acl name="acl.reportGroup.summary"         values="0,1"     default="0" i18n="PrivateXML.acl.reportSummary"        >Report Group (Summary)</Acl>
+        <Acl name="acl.reportGroup.performance"     values="0,1"     default="0" i18n="PrivateXML.acl.reportPerformance"    >Report Group (Performance)</Acl>
+        <Acl name="acl.reportGroup.ifta"            values="0,1"     default="0" i18n="PrivateXML.acl.reportOther"          >Report Group (I.F.T.A.)</Acl>
+        <Acl name="acl.reportGroup.sysadmin"        values="0,1"     default="0" i18n="PrivateXML.acl.reportSysAdmin"       >Report Group (SystemAdmin)</Acl>
         <!-- report access -->
-        <Acl name="acl.report.eventDetail"          values="0,1"     default="1" i18n="PrivateXML.acl.report.eventDetail"   >Report (Event Detail)</Acl>
-        <Acl name="acl.report.eventSummary"         values="0,1"     default="1" i18n="PrivateXML.acl.report.fleetSummary"  >Report (Fleet/Group Summary)</Acl>
-        <Acl name="acl.report.eventCount"           values="0,1"     default="1" i18n="PrivateXML.acl.report.eventCount"    >Report (Event Count)</Acl>
-        <Acl name="acl.report.speedOption"          values="0,1"     default="1" i18n="PrivateXML.acl.report.speedOption"   >Report (Speeds over Selected Value)</Acl>
-        <Acl name="acl.report.speedPosted"          values="0,1"     default="1" i18n="PrivateXML.acl.report.speedPosted"   >Report (Speeds over Posted Limit)</Acl>
-        <Acl name="acl.report.excessSpeed"          values="0,1"     default="1" i18n="PrivateXML.acl.report.excessSpeed"   >Report (Excess Speed Status Code)</Acl>
-        <Acl name="acl.report.motionSummary"        values="0,1"     default="1" i18n="PrivateXML.acl.report.motionSummary" >Report (Driving/Idle Time Device Summary)</Acl>
-        <Acl name="acl.report.thermo"               values="0,1"     default="1" i18n="PrivateXML.acl.report.temperature"   >Report (Temperature)</Acl>
-        <Acl name="acl.report.j1708fault"           values="0,1"     default="1" i18n="PrivateXML.acl.report.j1708Fault"    >Report (J1708 Fault)</Acl>
-        <Acl name="acl.report.propertyValue"        values="0,1"     default="1" i18n="PrivateXML.acl.report.propertyValue" >Report (Property Value)</Acl>
-        <Acl name="acl.report.diagnosticValue"      values="0,1"     default="1" i18n="PrivateXML.acl.report.diagValue"     >Report (Error/Diagnostic Value)</Acl>
+        <Acl name="acl.report.eventDetail"          values="0,1"     default="0" i18n="PrivateXML.acl.report.eventDetail"   >Report (Event Detail)</Acl>
+        <Acl name="acl.report.eventSummary"         values="0,1"     default="0" i18n="PrivateXML.acl.report.fleetSummary"  >Report (Fleet/Group Summary)</Acl>
+        <Acl name="acl.report.eventCount"           values="0,1"     default="0" i18n="PrivateXML.acl.report.eventCount"    >Report (Event Count)</Acl>
+        <Acl name="acl.report.speedOption"          values="0,1"     default="0" i18n="PrivateXML.acl.report.speedOption"   >Report (Speeds over Selected Value)</Acl>
+        <Acl name="acl.report.speedPosted"          values="0,1"     default="0" i18n="PrivateXML.acl.report.speedPosted"   >Report (Speeds over Posted Limit)</Acl>
+        <Acl name="acl.report.excessSpeed"          values="0,1"     default="0" i18n="PrivateXML.acl.report.excessSpeed"   >Report (Excess Speed Status Code)</Acl>
+        <Acl name="acl.report.motionSummary"        values="0,1"     default="0" i18n="PrivateXML.acl.report.motionSummary" >Report (Driving/Idle Time Device Summary)</Acl>
+        <Acl name="acl.report.thermo"               values="0,1"     default="0" i18n="PrivateXML.acl.report.temperature"   >Report (Temperature)</Acl>
+        <Acl name="acl.report.j1708fault"           values="0,1"     default="0" i18n="PrivateXML.acl.report.j1708Fault"    >Report (J1708 Fault)</Acl>
+        <Acl name="acl.report.propertyValue"        values="0,1"     default="0" i18n="PrivateXML.acl.report.propertyValue" >Report (Property Value)</Acl>
+        <Acl name="acl.report.diagnosticValue"      values="0,1"     default="0" i18n="PrivateXML.acl.report.diagValue"     >Report (Error/Diagnostic Value)</Acl>
         <Acl name="acl.report.unassignedDevices"    values="0,1"     default="0" i18n="PrivateXML.acl.report.unassignedDev" >Report (Unassigned Devices)</Acl>
-        <Acl name="acl.report.periodicMaint"        values="0,1"     default="1" i18n="PrivateXML.acl.report.periodicMain"  >Report (Periodic Maintenance)</Acl>
-        <Acl name="acl.report.distanceTravel"       values="0,1"     default="1" i18n="PrivateXML.acl.report.distTravel"    >Report (Distance Traveled)</Acl>
-        <Acl name="acl.report.ignitionDetail"       values="0,1"     default="1" i18n="PrivateXML.acl.report.ignitionDetail">Report (Ignition Detail)</Acl>
-        <Acl name="acl.report.geozone"              values="0,1"     default="1" i18n="PrivateXML.acl.report.geozone"       >Report (Geozone)</Acl>
+        <Acl name="acl.report.periodicMaint"        values="0,1"     default="0" i18n="PrivateXML.acl.report.periodicMain"  >Report (Periodic Maintenance)</Acl>
+        <Acl name="acl.report.distanceTravel"       values="0,1"     default="0" i18n="PrivateXML.acl.report.distTravel"    >Report (Distance Traveled)</Acl>
+        <Acl name="acl.report.ignitionDetail"       values="0,1"     default="0" i18n="PrivateXML.acl.report.ignitionDetail">Report (Ignition Detail)</Acl>
+        <Acl name="acl.report.geozone"              values="0,1"     default="0" i18n="PrivateXML.acl.report.geozone"       >Report (Geozone)</Acl>
         <!-- not supported
         <Acl name="acl.report.tripReport"           values="0,1"     default="1" i18n="PrivateXML.acl.report.tripReport"    >Report (Trip Report Detail)</Acl>
         <Acl name="acl.report.bcrossDetail"         values="0,1"     default="1" i18n="PrivateXML.acl.report.bCrossDetail"  >Report (Border-Crossing Detail)</Acl>

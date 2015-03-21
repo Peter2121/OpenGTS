@@ -34,6 +34,7 @@ import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
 
+// TODO: copy roles with ACLs between accounts so we can use some pre-defined roles from one account in another account
 public class Role
     extends RoleRecord<Role>
 {

@@ -129,7 +129,6 @@ import java.security.*;
 import org.opengts.util.*;
 import org.opengts.dbtypes.*;
 import org.opengts.dbtools.*;
-
 import org.opengts.db.*;
 
 public class Account
@@ -297,6 +296,7 @@ public class Account
     private static String           PROP_TempAccount_Expiration_Days		= "Account.default.tempAccountExpireDays";
     private static String           PROP_TempAccount_Max_Expiration_Days	= "Account.default.tempAccountMaxExpireDays";
     private static String           PROP_TempAccount_Max_Uncorfirmed_Hours	= "Account.default.tempAccountMaxUnconfirmHours";
+    private static String           PROP_TempAccount_Max_Devices			= "Account.default.tempAccountMaxDevices";
     
     // ------------------------------------------------------------------------
     // Password attributes
@@ -3653,13 +3653,14 @@ public class Account
             }
         }
 
+        long maxDevices = (long) RTConfig.getInt(PROP_TempAccount_Max_Devices, 1);
         /* set/save account */
         if (account != null) {
             account.setCreationDefaultValues();
             account.setDescription(contactName);
             account.setContactEmail(contactEmail);
             account.setContactName(contactName);
-            account.setMaximumDevices(1L);
+            account.setMaximumDevices(maxDevices);
             account.setPasswdQueryTime(nowTime);
             account.setEncodedPassword(encPass);
             account.setExpirationTime(expireTime);

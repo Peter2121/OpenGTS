@@ -46,10 +46,10 @@ import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
-
 import org.opengts.war.tools.*;
 import org.opengts.war.track.*;
 
+// TODO: add captcha
 public class NewAccount
     extends WebPageAdaptor
     implements Constants
@@ -76,8 +76,11 @@ public class NewAccount
     public  static final String CSS_NEW_ACCOUNT_INSTRUCT    = "newAccountInstructions";
     public  static final String CSS_NEW_ACCOUNT_EXPIRE      = "newAccountExpire";
     
+    private static final String PROP_TempAccount_ID_From_Contact = "Account.default.tempAccountIDFromContact";
     private static final int ACCOUNT_ID_MAXLEN				= 20;
     private static final int ACCOUNT_ID_RNDLEN				= 4;
+    private static final String PROP_TempAccount_Default_Device_ID = "Account.default.tempAccountDeviceID";
+    private static final String PROP_TempAccount_Default_Device_Desc = "Account.default.tempAccountDeviceDesc";
 
     // ------------------------------------------------------------------------
 
@@ -263,37 +266,40 @@ public class NewAccount
                     return;
                 }
             }
-            
-            /* trying to create the accountID based on contactName */
-            String accID = StringTools.trim(contactName);
-            accID = StringTools.truncate(accID, NewAccount.ACCOUNT_ID_MAXLEN - NewAccount.ACCOUNT_ID_RNDLEN);
-            if(!StringTools.isAlphaNumeric(accID, false)) {
-//																	TODO: add translations            	
-                Track.writeErrorResponse(reqState, i18n.getString("NewAccount.alphaNumericOnlyInContactName",
-                        "Letters and numbers only can be used in Contact Name."));
-                    return;
-            }
-            Account.Key acctKey = new Account.Key(accID);
-            if (acctKey.exists()) { // may throw DBException
-//				Trying to add some random numbers to contactName to create unique accountID
-            	Random rndgen = new Random();
-            	int maxrnd = (int) Math.round (Math.pow ( 10, ACCOUNT_ID_RNDLEN ) ) ;
-            	String accIDrnd = "";
-            	boolean OKrnd = false;
-            	for(int i=0; i<5; i++) {
-            		int rnd = rndgen.nextInt(maxrnd);
-            		accIDrnd = accID + StringTools.toString(rnd);
-                    Account.Key acctKeyrnd = new Account.Key(accIDrnd);
-                    if (acctKeyrnd.exists()) continue;
-                    else { OKrnd=true; break; }
-            	}
-            	if(OKrnd) accID = accIDrnd;
-            	else {
-//										TODO: add translations            	
-            		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.tooManySimilarContactNames",
-            					"Too many similar contact names. Try to use another contact name."));
-            		return;
-            	}
+            String accID = tempAccountID;	// Probably blank
+            boolean tryAccIDFromName = RTConfig.getBoolean(PROP_TempAccount_ID_From_Contact,false);
+            if(tryAccIDFromName) {
+	            /* trying to create the accountID based on contactName */
+	            accID = StringTools.trim(contactName);
+	            accID = StringTools.truncate(accID, NewAccount.ACCOUNT_ID_MAXLEN - NewAccount.ACCOUNT_ID_RNDLEN);
+	            if(!StringTools.isAlphaNumeric(accID, false)) {
+	//																	TODO: add translations            	
+	                Track.writeErrorResponse(reqState, i18n.getString("NewAccount.alphaNumericOnlyInContactName",
+	                        "Letters and numbers only can be used in Contact Name."));
+	                    return;
+	            }
+	            Account.Key acctKey = new Account.Key(accID);
+	            if (acctKey.exists()) { // may throw DBException
+	//				Trying to add some random numbers to contactName to create unique accountID
+	            	Random rndgen = new Random();
+	            	int maxrnd = (int) Math.round (Math.pow ( 10, ACCOUNT_ID_RNDLEN ) ) ;
+	            	String accIDrnd = "";
+	            	boolean OKrnd = false;
+	            	for(int i=0; i<5; i++) {
+	            		int rnd = rndgen.nextInt(maxrnd);
+	            		accIDrnd = accID + StringTools.toString(rnd);
+	                    Account.Key acctKeyrnd = new Account.Key(accIDrnd);
+	                    if (acctKeyrnd.exists()) continue;
+	                    else { OKrnd=true; break; }
+	            	}
+	            	if(OKrnd) accID = accIDrnd;
+	            	else {
+	//										TODO: add translations            	
+	            		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.tooManySimilarContactNames",
+	            					"Too many similar contact names. Try to use another contact name."));
+	            		return;
+	            	}
+	            }
             }
 
             /* create account */
@@ -310,17 +316,42 @@ public class NewAccount
             }
 
             /* create device */
-            // TODO: get default deviceID and description from run-time config
-            // TODO: get number of permitted devices from run-time config
-            String deviceID = "mobile";
+            String deviceID = RTConfig.getString(PROP_TempAccount_Default_Device_ID,"mobile");;
             device = Device.getDevice(account, deviceID, true);
             device.setIsActive(true);
-            device.setDescription("Mobile Device");
+            String deviceDesc = RTConfig.getString(PROP_TempAccount_Default_Device_Desc,"Mobile Device");
+            device.setDescription(deviceDesc);
             device.save();
             
             /* create users */
             // TODO: create 'admin' and 'guest' users with ACLs needed
 
+            User adminUser = User.createNewUser(account, "admin", contactEmail, acctDecPass);
+            if(adminUser == null) {
+            	//										TODO: add translations            	
+        		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.cannotCreateAdmin",
+    				"Cannot create admin user. Manual account configuration maybe needed. Open session with blank username and create admin user."));
+            }
+            else {
+            	adminUser.setMaxAccessLevel(3);	// ALL
+            	adminUser.setFirstLoginPageID(PAGE_MENU_TOP);
+            	adminUser.save();
+            }
+            User guestUser = User.createNewUser(account, "guest", contactEmail, Account.BLANK_PASSWORD);
+            if(guestUser == null) {
+            	//										TODO: add translations            	
+        		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.cannotCreateGuest",
+    				"Cannot create guest user. Manual account configuration maybe needed. Open session with blank username and create guest user with read/view permissions and blank password."));
+            }
+            else {
+            	guestUser.setMaxAccessLevel(0);	// READ/VIEW
+            	// TODO: add more ACLs, maybe use roles
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:uniqueID",AclEntry.getAccessLevel(0));            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.password",AclEntry.getAccessLevel(0));            	
+            	guestUser.setFirstLoginPageID(PAGE_MAP_FLEETLIVE);
+            	guestUser.save();
+            	if(adminUser != null) { account.setDefaultUser("guest"); account.save(); }
+            }
         } catch (DBException dbe) {
 
             Print.logException("Creating Account", dbe);
@@ -352,6 +383,10 @@ public class NewAccount
         String expd = reqState.formatDateTime(account.getExpirationTime());
         if (StringTools.isBlank(expd)) { expd = "n/a"; }
 
+// TODO: modify translations        
+// TODO: put correct inactive expiration time
+// TODO: put device unique ID to the message
+// TODO: get admin mail from RTConfig        
         String subj = i18n.getString("NewAccount.newAccount", "New Account");
         String body = i18n.getString("NewAccount.emailBody",
             "Hello {0},\n" +
@@ -359,17 +394,17 @@ public class NewAccount
             "Your new temporary account has been created.\n" +
             "Your access information is as follows:\n" +
             "   AccountID: {1}\n" +
-            "   UserID   : (leave blank)\n" +
+            "   UserID   : admin\n" +
             "   Password : {2}\n" +
             "   DeviceID : {3}\n" +
             "\n" +
-            "Please note that this is a temporary account to be used only for testing and\n" +
-            "debug purposes.   This account is due to expire on {4},\n" +
-            "after which time the account and data will no longer be available.   Also note\n" +
-            "that this free service may become unavailable from time to time and may be\n" +
-            "discontinued at any time without advance notice.\n" +
+            "This account is due to expire on {4},\n" +
+            "after which time the account and data will no longer be available.\n" +
+            "Also note that this free service may become unavailable from time to time \n" +
+            "and may be discontinued at any time without advance notice.\n" +
+            "You can send an E-Mail to administrator to transform your account into the persistent one.\n" +
             "\n" +
-            "You must login within the next 6 hours to confirm your new account registration.\n" +
+            "You must login within the next 12 hours to confirm your new account registration.\n" +
             "You will then be able to change your password, and other account information.\n" +
             "\n" +
             "Thank you.\n",
