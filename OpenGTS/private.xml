@@ -1227,7 +1227,7 @@ Notes:
         <Acl name="acl.admin.user:acls"             values="0,1,2"   default="0" i18n="PrivateXML.acl.userAdminACL"         >User Administration (ACL access)</Acl>
         <Acl name="acl.admin.user:groups"           values="0,1,2"   default="1" i18n="PrivateXML.acl.userAdminGroups"      >User Administration (Group)</Acl>
         <Acl name="acl.admin.user:role"             values="0,1,2"   default="1" i18n="PrivateXML.acl.userAdminRole"        >User Administration (Role)</Acl>
-        <Acl name="acl.admin.role"                  values="0,1,2,3" default="0" i18n="PrivateXML.acl.roleAdmin"            >Role Administration</Acl>
+        <Acl name="acl.admin.role"                  values="0,1,2,3" default="1" i18n="PrivateXML.acl.roleAdmin"            >Role Administration</Acl>
         <Acl name="acl.admin.device"                values="0,1,2,3" default="1" i18n="PrivateXML.acl.deviceAdmin"          >Device Administration</Acl>
         <Acl name="acl.admin.device:uniqueID"       values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminUniqID"    >Device Administration (Device UniqueID)</Acl>
         <Acl name="acl.admin.device:active"         values="0,1,2"   default="1" i18n="PrivateXML.acl.deviceAdminActive"    >Device Administration (Device Active)</Acl>

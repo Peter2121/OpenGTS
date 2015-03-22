@@ -45,11 +45,11 @@ import javax.servlet.http.*;
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
+import org.opengts.db.AclEntry.AccessLevel;
 import org.opengts.db.tables.*;
 import org.opengts.war.tools.*;
 import org.opengts.war.track.*;
 
-// TODO: add captcha
 public class NewAccount
     extends WebPageAdaptor
     implements Constants
@@ -69,6 +69,11 @@ public class NewAccount
     public  static final String PARM_CONTACT_EMAIL          = "e_addr";
     public  static final String PARM_CONTACT_NAME           = "e_name";
     public  static final String PARM_AUTH_CODE              = "e_auth";
+
+    public  static final String PARM_TIMER	 	            = "e_timer";
+    public  static final String PARM_HIDDEN              	= "e_hdn";
+    public  static final int VAL_TIMER						= 6;
+    public  static final String VAL_HIDDEN					= " ";
 
     public  static final String CSS_NEW_ACCOUNT[]           = new String[] { "newAccountTable", "newAccountCell" };
     public  static final String CSS_NEW_ACCOUNT_TITLE       = "newAccountTitle";
@@ -324,8 +329,6 @@ public class NewAccount
             device.save();
             
             /* create users */
-            // TODO: create 'admin' and 'guest' users with ACLs needed
-
             User adminUser = User.createNewUser(account, "admin", contactEmail, acctDecPass);
             if(adminUser == null) {
             	//										TODO: add translations            	
@@ -345,10 +348,34 @@ public class NewAccount
             }
             else {
             	guestUser.setMaxAccessLevel(0);	// READ/VIEW
-            	// TODO: add more ACLs, maybe use roles
-            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:uniqueID",AclEntry.getAccessLevel(0));            	
-            	UserAcl.setAccessLevel(guestUser,"acl.admin.password",AclEntry.getAccessLevel(0));            	
             	guestUser.setFirstLoginPageID(PAGE_MAP_FLEETLIVE);
+
+            	//					Block some pages / parameters for guest            	
+            	AccessLevel level = AclEntry.getAccessLevel(0);
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:uniqueID",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.password",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.account",level);
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.role",level);
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:active",level);
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:serverID",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.user:acls",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.user:role",level);
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:rules",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:commands",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:sms",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:editSMS",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:editSIM",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:editEquipStat",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:editIMEI",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:editSerial",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.device:editDatKey",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.driver",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.zone",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.statusCode",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.rule",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.htmlWrapper",level);            	
+            	UserAcl.setAccessLevel(guestUser,"acl.admin.sysAdmin",level);
+            	
             	guestUser.save();
             	if(adminUser != null) { account.setDefaultUser("guest"); account.save(); }
             }
@@ -431,7 +458,7 @@ public class NewAccount
         }
 
     }
-    
+   
     // ------------------------------------------------------------------------
         
     public void writePage(
@@ -453,6 +480,8 @@ public class NewAccount
         String email = "";
         String name  = "";
         String auth  = "";
+        int timer = 0;
+        String hdn = "";
         if (reqState.getCommandName().equals(COMMAND_EMAIL_SUBMIT)) {
             HttpServletRequest request = reqState.getHttpServletRequest();
             String submitSend = AttributeTools.getRequestString(request, PARM_EMAIL_SUBMIT, "");
@@ -460,6 +489,16 @@ public class NewAccount
                 name  = AttributeTools.getRequestString(request, PARM_CONTACT_NAME ,"").trim();
                 email = AttributeTools.getRequestString(request, PARM_CONTACT_EMAIL,"").trim();
                 auth  = AttributeTools.getRequestString(request, PARM_AUTH_CODE    ,"").trim();
+                timer = AttributeTools.getRequestInt(request, PARM_TIMER    ,0);
+                hdn   = AttributeTools.getRequestString(request, PARM_HIDDEN       ,"");
+                if (timer != VAL_TIMER) {
+                    m = i18n.getString("NewAccount.accountError","Internal error occurred while creating account. Try again later."); // UserErrMsg
+                    timer = 0;
+                } else
+                if (!StringTools.equals(hdn, VAL_HIDDEN)) {
+                    m = i18n.getString("NewAccount.accountError","Internal error occurred while creating account. Try again later."); // UserErrMsg
+                    hdn = "";
+                } else
                 if (StringTools.isBlank(name)) {
                     m = i18n.getString("NewAccount.pleaseEnterName","Please enter a valid name"); // UserErrMsg
                     name = "";
@@ -494,6 +533,13 @@ public class NewAccount
             }
         };
 
+        /* JavaScript */
+        HTMLOutput HTML_JS = new HTMLOutput() {
+            public void write(PrintWriter out) throws IOException {
+                JavaScriptTools.writeJSInclude(out, JavaScriptTools.qualifyJSFileRef("NewAccount.js"), 0);
+            }
+        };
+        
         /* write frame */
         final String cn  = name;
         final String ce  = email;
@@ -535,6 +581,8 @@ public class NewAccount
                 }
                 */
 
+                out.println("  <div id='hdndiv'>&nbsp;</div>");
+
                 out.println("  <input type='submit' name='"+PARM_EMAIL_SUBMIT+"' value='"+i18n.getString("NewAccount.submit","Submit")+"'><br>");
                 out.println("</form>");
                 out.println("<hr>");
@@ -548,9 +596,9 @@ public class NewAccount
         /* write frame */
         CommonServlet.writePageFrame(
             reqState,
-            null,null,                  // onLoad/onUnload
+            "javascript:NewAccountOnLoad();","javascript:NewAccountOnUnload();",    // onLoad/onUnload
             HTML_CSS,                   // Style sheets
-            HTMLOutput.NOOP,            // JavaScript
+            HTML_JS,            // JavaScript
             null,                       // Navigation
             HTML_CONTENT);              // Content
 
