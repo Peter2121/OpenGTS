@@ -124,6 +124,8 @@ import org.opengts.war.track.*;
 import org.opengts.war.maps.JSMap;
 import org.opengts.war.track.page.devcmd.*;
 
+// TODO: add SHOW_IGNITION taken from config
+
 public class DeviceInfo
     extends WebPageAdaptor
     implements Constants

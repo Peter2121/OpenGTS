@@ -81,11 +81,13 @@ public class NewAccount
     public  static final String CSS_NEW_ACCOUNT_INSTRUCT    = "newAccountInstructions";
     public  static final String CSS_NEW_ACCOUNT_EXPIRE      = "newAccountExpire";
     
-    private static final String PROP_TempAccount_ID_From_Contact = "Account.default.tempAccountIDFromContact";
     private static final int ACCOUNT_ID_MAXLEN				= 20;
     private static final int ACCOUNT_ID_RNDLEN				= 4;
-    private static final String PROP_TempAccount_Default_Device_ID = "Account.default.tempAccountDeviceID";
-    private static final String PROP_TempAccount_Default_Device_Desc = "Account.default.tempAccountDeviceDesc";
+    private static final String PROP_TempAccount_ID_From_Contact 		= "Account.default.tempAccountIDFromContact";
+    private static final String PROP_TempAccount_Default_Device_ID 		= "Account.default.tempAccountDeviceID";
+    private static final String PROP_TempAccount_Default_Device_Desc 	= "Account.default.tempAccountDeviceDesc";
+    private static final String PROP_TempAccount_MaxUnconfirmHours 		= "Account.default.tempAccountMaxUnconfirmHours";
+    private static final String PROP_ServiceProvider_Mail 				= "ServiceProvider.email";
 
     // ------------------------------------------------------------------------
 
@@ -252,6 +254,8 @@ public class NewAccount
         Account account = null;
         Device device = null;
         String acctDecPass = null;
+        String uniqueID = "";
+
         try {
 
             /* already assigned? */
@@ -321,12 +325,14 @@ public class NewAccount
             }
 
             /* create device */
-            String deviceID = RTConfig.getString(PROP_TempAccount_Default_Device_ID,"mobile");;
+            String deviceID = RTConfig.getString(PROP_TempAccount_Default_Device_ID,"mobile");
             device = Device.getDevice(account, deviceID, true);
             device.setIsActive(true);
             String deviceDesc = RTConfig.getString(PROP_TempAccount_Default_Device_Desc,"Mobile Device");
             device.setDescription(deviceDesc);
             device.save();
+            device._reload(Device.FLD_uniqueID);
+            uniqueID = device.getUniqueID();
             
             /* create users */
             User adminUser = User.createNewUser(account, "admin", contactEmail, acctDecPass);
@@ -410,10 +416,10 @@ public class NewAccount
         String expd = reqState.formatDateTime(account.getExpirationTime());
         if (StringTools.isBlank(expd)) { expd = "n/a"; }
 
-// TODO: modify translations        
-// TODO: put correct inactive expiration time
-// TODO: put device unique ID to the message
-// TODO: get admin mail from RTConfig        
+        String unconf = StringTools.toString(RTConfig.getInt(PROP_TempAccount_MaxUnconfirmHours, 12));
+        String spmail = RTConfig.getString(PROP_ServiceProvider_Mail, "mail@domain.local");
+
+// TODO: modify translations (actually disabled)       
         String subj = i18n.getString("NewAccount.newAccount", "New Account");
         String body = i18n.getString("NewAccount.emailBody",
             "Hello {0},\n" +
@@ -423,15 +429,15 @@ public class NewAccount
             "   AccountID: {1}\n" +
             "   UserID   : admin\n" +
             "   Password : {2}\n" +
-            "   DeviceID : {3}\n" +
+            "   DeviceUniqueID : {3}\n" +
             "\n" +
             "This account is due to expire on {4},\n" +
             "after which time the account and data will no longer be available.\n" +
             "Also note that this free service may become unavailable from time to time \n" +
             "and may be discontinued at any time without advance notice.\n" +
-            "You can send an E-Mail to administrator to transform your account into the persistent one.\n" +
+            "You can send an E-Mail to {5} to transform your account into the persistent one.\n" +
             "\n" +
-            "You must login within the next 12 hours to confirm your new account registration.\n" +
+            "You must login within the next {6} hours to confirm your new account registration.\n" +
             "You will then be able to change your password, and other account information.\n" +
             "\n" +
             "Thank you.\n",
@@ -439,8 +445,10 @@ public class NewAccount
                 /*{0}*/ contactName,
                 /*{1}*/ account.getAccountID(),
                 /*{2}*/ acctDecPass,
-                /*{3}*/ device.getDeviceID(),
-                /*{4}*/ expd
+                /*{3}*/ uniqueID,
+                /*{4}*/ expd,
+                /*{5}*/ spmail,
+                /*{6}*/ unconf
             });
         //Print.logInfo("EMail body:\n" + body);
         String from = privLabel.getEMailAddress(PrivateLabel.EMAIL_TYPE_ACCOUNTS);
