@@ -433,8 +433,9 @@ Notes:
         <Property key="deviceInfo.showSimPhoneNumbers">false</Property>         <!-- [true|false]  -->
         <Property key="deviceInfo.showSmsEmail">false</Property>                <!-- [true|false]  -->
         <Property key="deviceInfo.showDriverID">false</Property>                <!-- [true|false]  -->
-        <Property key="deviceInfo.showFuelCap">false</Property>                <!-- [true|false]  -->
+        <Property key="deviceInfo.showFuelCap">false</Property>                 <!-- [true|false]  -->
         <Property key="deviceInfo.showFuelProf">false</Property>                <!-- [true|false]  -->
+        <Property key="deviceInfo.showIgnState">false</Property>                <!-- [true|false]  -->
 
         <!-- GroupInfo properties -->
         <Property key="groupInfo.showPropertiesButton">false</Property>         <!-- [true|false] show "Properties" button -->

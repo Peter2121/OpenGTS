@@ -171,6 +171,7 @@ public class DeviceInfo
     private static final boolean SHOW_DRIVER				= true;
     private static final boolean SHOW_FUEL_CAP				= true;
     private static final boolean SHOW_FUEL_PROF				= true;
+    private static final boolean SHOW_IGN_STA				= true;
     
     // ------------------------------------------------------------------------
 
@@ -1538,6 +1539,10 @@ public class DeviceInfo
         boolean editFuelCst  = sysadminLogin || privLabel.hasWriteAccess(currUser, this.getAclName(_ACL_FUEL_ECONOMY ));
         boolean viewFuelCst  = editFuelCst   || privLabel.hasReadAccess( currUser, this.getAclName(_ACL_FUEL_ECONOMY ));
 
+        /* show some GUI elements or not */
+        final boolean showIgnState = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showIgnState,SHOW_IGN_STA);
+        final boolean showSimPhone = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSimPhoneNumbers,SHOW_SIM_PHONE);
+        
         /* command */
         String  deviceCmd    = reqState.getCommandName();
       //boolean refreshList  = deviceCmd.equals(COMMAND_INFO_REFRESH);
@@ -1919,7 +1924,7 @@ public class DeviceInfo
 
             final boolean _viewUniqID  = viewUniqID;
             final boolean _viewServID  = viewServID;
-            final boolean _viewSIM     = viewSIM;
+            final boolean _viewSIM     = viewSIM && showSimPhone;
             final boolean _viewActive  = viewActive;
             HTML_CONTENT = new HTMLOutput(CommonServlet.CSS_CONTENT_FRAME, m) {
                 public void write(PrintWriter out) throws IOException {
@@ -2023,7 +2028,9 @@ public class DeviceInfo
                     if (_viewServID) {
                     out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.devServerID","Server ID"))+"</th>\n");
                     }
+                    if (showIgnState) {
                     out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.ignitionState","Ignition\nState"))+"</th>\n");
+                    }
                     if (!ListTools.isEmpty(inpStateList)) {
                         for (StateMaskBit smb : inpStateList) {
                             out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL +"' nowrap>"+FilterText(smb.getTitle())+"</th>\n");
@@ -2070,19 +2077,21 @@ public class DeviceInfo
                                 int     ignState    = dev.getCurrentIgnitionState(); // may update ignition state times
                                 String  ignDesc     = "";
                                 String  ignColor    = "black";
-                                switch (ignState) {
-                                    case  0: 
-                                        ignDesc  = FilterText(i18n.getString("DeviceInfo.ignitionOff"    , "Off"));
-                                        ignColor = ColorTools.BLACK.toString(true);
-                                        break;
-                                    case  1: 
-                                        ignDesc  = FilterText(i18n.getString("DeviceInfo.ignitionOn"     , "On"));
-                                        ignColor = ColorTools.GREEN.toString(true);
-                                        break;
-                                    default: 
-                                        ignDesc  = FilterText(i18n.getString("DeviceInfo.ignitionUnknown", "Unknown"));
-                                        ignColor = ColorTools.DARK_YELLOW.toString(true);
-                                        break;
+                                if (showIgnState) {
+	                                switch (ignState) {
+	                                    case  0: 
+	                                        ignDesc  = FilterText(i18n.getString("DeviceInfo.ignitionOff"    , "Off"));
+	                                        ignColor = ColorTools.BLACK.toString(true);
+	                                        break;
+	                                    case  1: 
+	                                        ignDesc  = FilterText(i18n.getString("DeviceInfo.ignitionOn"     , "On"));
+	                                        ignColor = ColorTools.GREEN.toString(true);
+	                                        break;
+	                                    default: 
+	                                        ignDesc  = FilterText(i18n.getString("DeviceInfo.ignitionUnknown", "Unknown"));
+	                                        ignColor = ColorTools.DARK_YELLOW.toString(true);
+	                                        break;
+	                                }
                                 }
                                 String pendingACK = FilterText(dev.isExpectingCommandAck()?ComboOption.getYesNoText(locale,true):"");
                                 String active     = FilterText(ComboOption.getYesNoText(locale,dev.isActive()));
@@ -2100,7 +2109,9 @@ public class DeviceInfo
                                 if (_viewServID) {
                                     out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+devCode+"</td>\n");
                                 }
-                                out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap style='color:"+ignColor+"'>"+ignDesc+"</td>\n");
+                                if (showIgnState) {
+                                	out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap style='color:"+ignColor+"'>"+ignDesc+"</td>\n");
+                                }
                                 if (!ListTools.isEmpty(inpStateList)) {
                                     for (StateMaskBit smb : inpStateList) {
                                         String state_val = smb.getStateDescription(dev.getLastInputState(smb.getBitIndex()));
@@ -2287,7 +2298,6 @@ public class DeviceInfo
                     boolean showEquipmentStatus  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showEquipmentStatus,SHOW_EQUIP_STA);
                     boolean showImei  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showImeiNumber,SHOW_IMEI);
                     boolean showSerial  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSerialNumber,SHOW_SERIAL);
-                    boolean showSimPhone  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSimPhoneNumbers,SHOW_SIM_PHONE);
                     boolean showSmsEmail = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSmsEmail,SHOW_SMS_MAIL);
                     boolean showDriver = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showDriverID,SHOW_DRIVER);
                     
