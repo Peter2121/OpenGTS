@@ -1,0 +1,111 @@
+
+BODY { 
+    background-color: #282828; /* #383838; */  
+    margin-top: 0px; 
+    margin-bottom: 0px; 
+    margin-left: 0px; 
+    margin-right: 0px; 
+    font-size: 8pt; /* ar: 13pt */
+    font-family: verdana,sans-serif;
+    color: #ffffff;
+	/* ar: direction:RTL; */
+}
+
+A { 
+    color: #3399ff;
+    text-decoration: underline;
+}
+
+A:hover { 
+    color: #399Fff;
+    text-decoration: underline;
+}
+
+TABLE {
+   border-color: #000000;
+}
+
+SPAN.spanLink {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
+SPAN.spanLink:hover { 
+    color: #00CC00;
+}
+
+H1 { 
+    font-family: Arial; 
+    font-size: 16pt; 
+    white-space: pre;
+    color: #3399ff;
+}
+
+H2 { 
+    font-family: Arial; 
+    font-size: 14pt; 
+    white-space: pre; 
+    color: #3399ff;
+}
+
+H3 { 
+    font-family: Arial; 
+    font-size: 12pt; 
+    white-space: pre; 
+    color: #3399ff;
+}
+
+H4 { 
+    font-family: Arial; 
+    font-size: 10pt; 
+    white-space: pre; 
+    color: #3399ff;
+}
+
+FORM {
+    margin-top: 0px; 
+    margin-bottom: 0px; 
+}
+
+HR {
+    margin-top: 2px; 
+    margin-bottom: 2px; 
+}
+HR.noMargin {
+    margin-top: 0px; 
+    margin-bottom: 0px; 
+}
+
+TD { 
+    font-size: 8pt; 
+    font-family: verdana,sans-serif;
+    color: #ffffff;
+    border-color: #000000;
+}
+
+INPUT { 
+    font-size: 8pt; 
+    font-family: verdana,sans-serif;
+}
+
+INPUT:focus { 
+    background-color: #FFFFC9; 
+}
+
+SELECT { 
+    font-size: 7pt; 
+    font-family: verdana,sans-serif; 
+}
+
+SELECT:focus { 
+    background-color: #FFFFC9; 
+}
+
+TEXTAREA { 
+    font-size: 8pt; 
+    font-family: verdana,sans-serif; 
+}
+
+TEXTAREA:focus {
+    background-color: #FFFFC9; 
+}

@@ -1338,9 +1338,9 @@ Notes:
      -->
     <WebPages rtPropPrefix="Domain.WebPages."
         jsp="default" 
-        cssDir="/css" 
-        iconDir="icons"
-        buttonDir="icons"
+        cssDir="/custom" 
+        iconDir="icons-blue"
+        buttonDir="icons-blue"
         >
         <!-- NewAccount: Uncomment to enable "New Account" button on login page -->
         <Page class="org.opengts.war.track.page.NewAccount">
