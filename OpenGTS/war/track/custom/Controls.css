@@ -4,7 +4,7 @@
     font-size: 9pt; 
     padding-bottom: 2px; 
     padding-top: 5px; 
-    background-color: #EFEFEF; 
+    background-color: #383838; 
     border-top: solid #555555 1px; 
     border-bottom: solid #555555 1px;
 }
@@ -20,36 +20,39 @@
 }
 
 /* Text input/display */
-.textInput { 
-    border-width: 1px; 
-    border-style: solid; 
-    border-color: #555588 #AAAABB #AAAABB #555588; 
-    padding-left: 2px; 
-    background-color: #FFFFFF; 
-}
+
 .textReadOnly { 
     border-width: 1px; 
     border-style: solid; 
     border-color: #555588 #AAAABB #AAAABB #555588; 
     padding-left: 2px; 
-    color: #555555;
-    background-color: #EFEFEF; 
+    color: #999999;
+    background-color: #282828; 
 }
+
 .textReadOnly:focus { 
-    color: #111111;
-    background-color: #E7E7E7; 
+    color: #999999;
+    background-color: #555555; 
 }
+
+.textInput { 
+    border-width: 1px; 
+    border-style: solid; 
+    border-color: #555588 #AAAABB #AAAABB #555588; 
+    padding-left: 2px; 
+    background-color: #282828; 
+}
+
+.textInput:focus { 
+    outline:solid 1px #3399ff;
+}
+
 .textOnClick { 
     border-width: 1px; 
     border-style: solid; 
     border-color: #444477 #9999AA #9999AA #444477; 
-    /*
-    border-width: 2px; 
-    border-style: inset; 
-    border-color: #DDDDDD #EEEEEE #EEEEEE #DDDDDD; 
-    */
     padding-left: 2px; 
-    background-color: #FFFFFF; 
+    background-color: #282828; 
     cursor: pointer;
 }
 
@@ -193,6 +196,10 @@
     text-align: center; 
     padding-bottom: 2px;
 }
+SPAN.copyrightText {
+    font: bold 7pt sans-serif;
+    color: #555555;  
+}
 
 /* --------------------------------------------- */
 
@@ -229,6 +236,7 @@ SPAN.adminSelectTitle {
     margin-top: 0px; 
     margin-bottom: 3px; 
 }
+
 TABLE.adminSelectTable { 
     border: 1px solid black; 
 }

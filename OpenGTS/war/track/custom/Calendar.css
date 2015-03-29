@@ -18,12 +18,13 @@ TD.calTitleDateCell {
     border-bottom-style: solid; 
     border-width: 1px; 
     border-color: #AAAAAA; 
+    background-color: #282828;
 }
 
 /* TABLE: The table containing the "title", date and time */
 TABLE.calTitleTable {
     width: 100%;
-    background-color: #FFFFFF; 
+    background-color: #282828;
     border-width: 0px; 
 }
 
@@ -77,7 +78,6 @@ SPAN.calDateField {
     /* height: 12; */
     font-family: sans-serif; 
     font-size: 8pt; 
-    color: blue;
     text-decoration: none;
     cursor: pointer; 
 }
@@ -85,12 +85,11 @@ SPAN.calDateField {
     /* height: 12;  */
     font-family: sans-serif; 
     font-size: 8pt; 
-    color: blue;
     text-decoration: none; /* underline; */
     cursor: pointer; 
 }
 .calTimeFieldExpanded:hover {
-    color: blue;
+    color: #3399ff;
 }
 .calTimeFieldCollapsed { 
     color: #1111BB;
@@ -106,7 +105,7 @@ SPAN.calDateField {
 
 /* TABLE: The table containing the Month name and previous/next links */
 TABLE.calMonthHeaderTable {
-    background-color: #D5D5F6; /* #B2CDF1; */
+    background-color: #282828;
     height: 16px;
 }
 
@@ -118,7 +117,7 @@ TD.calMonthAdvance {
 
 /* A: The previous/next year/month clickable links */
 A.calMonthAdvanceClick { 
-    color: blue; 
+    color: #3399ff;
     text-decoration: none;
 }
 
@@ -151,8 +150,8 @@ TD.calMonthDOW {
     font-size: 7pt; 
     width: 18px; 
     text-align: center; 
-    background-color: #EFFFFF; 
-    color: #000000; 
+    background-color: #282828; 
+    color: #3399ff; 
     border-top-style: solid; 
     border-bottom-style: solid; 
     border-width: 1px; 
@@ -164,7 +163,7 @@ TD.calPrevMonthDays {
     font-family: sans-serif; 
     font-size: 9pt; 
     text-align: center; 
-    background-color: #DDF0F0; /* #D2DBDB; */
+    background-color: #282828; 
     color: #777777; 
     border-bottom-style: solid; 
     border-right-style: solid; 
@@ -177,7 +176,7 @@ TD.calNextMonthDays {
     font-family: sans-serif; 
     font-size: 9pt; 
     text-align: center; 
-    background-color: #DDF0F0; /* #D2DBDB; */
+    background-color: #282828; 
     color: #777777; 
     border-bottom-style: solid; 
     border-right-style: solid; 
@@ -190,7 +189,7 @@ TD.calThisMonthDaysDisabled {
     font-family: sans-serif; 
     font-size: 9pt; 
     text-align: center; 
-    background-color: #EFFFFF; 
+    background-color: #282828; 
     color: #000033;
     border-bottom-style: solid;
     border-right-style: solid; 
@@ -203,8 +202,8 @@ TD.calThisMonthDaysEnabled {
     font-family: sans-serif; 
     font-size: 9pt; 
     text-align: center; 
-    background-color: #EFFFFF; 
-    color: #0000FF;
+    background-color: #282828; 
+    color: #3399ff; 
     cursor: pointer;
     border-bottom-style: solid;
     border-right-style: solid; 

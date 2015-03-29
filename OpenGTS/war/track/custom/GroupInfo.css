@@ -11,7 +11,8 @@
 
 TR.groupDevicesHeaderRow {
     width: 100%;
-    background-color: #E2E2E2;
+    background-color: #282828;
+    color: #3399ff; 
 }
 
 TH.groupDevicesHeaderCol {
@@ -23,17 +24,15 @@ TH.groupDevicesHeaderCol {
 }
 
 TR.groupDevicesDataRowOdd {
-    background-color: #FFFFFF;
+    background-color: #383838;
 }
 
 TR.groupDevicesDataRowEvn {
-    background-color: #F5F5F5;
+    background-color: #4F4F4F; 
 }
 
 TD.groupDevicesDataCol {
     white-space: nowrap;
     font: normal 8pt sans-serif; 
     text-align: center; 
-    border-right: 1px solid #CCCCCC; 
-    border-bottom: 1px solid #CCCCCC; 
 }

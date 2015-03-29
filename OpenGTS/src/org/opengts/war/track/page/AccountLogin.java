@@ -216,7 +216,8 @@ public class AccountLogin
       //final boolean legacy = this.getProperties().getBoolean(PROP_legacyLAF,false);
         final boolean legacy = privLabel.getBooleanProperty(PrivateLabel.PROP_AccountLogin_legacyLAF,false);
         final boolean borderedCss = legacy; // this.getProperties().getBoolean(PROP_boarderedLogin,true);
-        final String HR = legacy? "<hr>" : "<hr style='height: 5px;'/>";
+//        final String HR = legacy? "<hr>" : "<hr style='height: 5px;'/>";
+        final String HR = "<hr>";
 
         /* Style */
         HTMLOutput HTML_CSS = new HTMLOutput() {
@@ -283,7 +284,8 @@ public class AccountLogin
                 String enterLoginText = showPasswd?
                     i18n.getString("AccountLogin.enterLogin","Enter your Login ID and Password") :
                     i18n.getString("AccountLogin.enterLoginNoPass","Enter Login ID (No Password Required)");
-                out.println("<span style='font-size:11pt'>"+enterLoginText+"</span>");
+//                out.println("<span style='font-size:11pt'>"+enterLoginText+"</span>");
+                out.println("<H2>"+enterLoginText+"</H2>");
                 out.println(HR);
                 //out.println("<center>"); // necessary because "text-align:center" doesn't center the following form/table
                 out.println("<form name='"+FORM_LOGIN+"' method='post' action='"+baseURL+"' target='"+target+"'>");

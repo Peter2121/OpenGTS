@@ -1020,8 +1020,8 @@ Calendar.prototype._writeCalendar = function(expanded, calRows)
         var tooltip = this.drawClickBar && !inTransition? TOOLTIP_COLLAPSE : "";
         calendarHTML += "<td class='"+CLASS_CAL_TITLE_FIELD_EXP+"' style='"+styleCollapse+"' title=\""+tooltip+"\" onclick=\""+clickExpand+"\">"+this.title+"</td>\n";
         calendarHTML += "<td class='"+CLASS_CAL_DATE_TIME_EXP+"' style='"+styleCollapse+"' nowrap title=\""+tooltip+"\">";
-        calendarHTML += "<span class='"+CLASS_CAL_DATE_FIELD+"' id='"+dateID+"' onclick=\""+clickExpand+"\"></span>&nbsp;";
-        calendarHTML += "<span style='color:#999999'>|</span>&nbsp;";
+        calendarHTML += "<span class='"+CLASS_CAL_DATE_FIELD+"' id='"+dateID+"' onclick=\""+clickExpand+"\"></span>&nbsp;&nbsp;";
+//        calendarHTML += "<span style='color:#999999'>|</span>&nbsp;";
         if (!this.enabled) {
             calendarHTML += "<span class='"+CLASS_CAL_TIME_DISABLED+"' id='"+timeID+"'></span>";
         } else
@@ -1050,8 +1050,8 @@ Calendar.prototype._writeCalendar = function(expanded, calRows)
         var tooltip = !inTransition? TOOLTIP_EXPAND : "";
         calendarHTML += "<td class='"+CLASS_CAL_TITLE_FIELD_COLL+"' title=\""+tooltip+"\" onclick=\""+clickExpand+"\">"+this.title+"</td>\n";
         calendarHTML += "<td class='"+CLASS_CAL_DATE_TIME_COLL+"' title=\""+tooltip+"\">";
-        calendarHTML += "<span class='"+CLASS_CAL_DATE_FIELD+"' id='"+dateID+"' onclick=\""+clickExpand+"\"></span>&nbsp;";
-        calendarHTML += "<span style='color:#999999'>|</span>&nbsp;";
+        calendarHTML += "<span class='"+CLASS_CAL_DATE_FIELD+"' id='"+dateID+"' onclick=\""+clickExpand+"\"></span>&nbsp;&nbsp;";
+//        calendarHTML += "<span style='color:#999999'>|</span>&nbsp;";
         if (!this.enabled) {
             calendarHTML += "<span class='"+CLASS_CAL_TIME_DISABLED+"' id='"+timeID+"'></span>";
         } else {

@@ -36,7 +36,7 @@ SPAN.spanLink:hover {
 
 H1 { 
     font-family: Arial; 
-    font-size: 16pt; 
+    font-size: 20pt; 
     white-space: pre;
     color: #3399ff;
 }
@@ -70,7 +70,9 @@ FORM {
 HR {
     margin-top: 2px; 
     margin-bottom: 2px; 
+    border: 1px solid #3399ff;
 }
+
 HR.noMargin {
     margin-top: 0px; 
     margin-bottom: 0px; 
@@ -86,26 +88,38 @@ TD {
 INPUT { 
     font-size: 8pt; 
     font-family: verdana,sans-serif;
+    background-color: #282828; /* #383838; */  
+    color: #ffffff;
 }
 
 INPUT:focus { 
-    background-color: #FFFFC9; 
+    background-color: #383838;
+}
+
+INPUT [type="submit"] {
+  border: 3px double #000000;
+  color: #ffffff;
+  background-color: red;
 }
 
 SELECT { 
     font-size: 7pt; 
     font-family: verdana,sans-serif; 
+    background-color: #282828; /* #383838; */  
+    color: #ffffff;
 }
 
 SELECT:focus { 
-    background-color: #FFFFC9; 
+    background-color: #383838;
 }
 
 TEXTAREA { 
     font-size: 8pt; 
     font-family: verdana,sans-serif; 
+    background-color: #282828; /* #383838; */  
+    color: #ffffff;
 }
 
 TEXTAREA:focus {
-    background-color: #FFFFC9; 
+    background-color: #383838;
 }

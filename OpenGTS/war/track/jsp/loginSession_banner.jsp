@@ -63,19 +63,12 @@ response.setDateHeader("EXPIRES"  , 0         );
   <!-- local style -->
   <style type="text/css">
     BODY { 
-        background-color: #DBDEEB; 
 <gts:var if="isLocaleRTL" value="true">
         direction: RTL;
 </gts:var>
     }
     TD.titleText {
-        /* background: #DBDEEB url('./images/Banner_White90.png') center no-repeat; */
-        background: #DBDEEB url('./images/Banner_WhiteShadow.png') center no-repeat;
-        font-family: arial,verdana,sans-serif;
-        font-size: 28pt;
-        font-weight: bold;
         text-align: center;
-        color: #000000;
     }
   </style>
 
@@ -103,8 +96,7 @@ response.setDateHeader("EXPIRES"  , 0         );
 
       <gts:var>
       <td width="860" height="120" class="titleText" halign="center">
-        ${pageTitle}<br>
-        <font style="font-size: 9pt;"><i>(Powered by <a href="http://www.opengts.org" target="_blank" style="color:#444444;">OpenGTS</a>)</i></font>
+        <H1>${pageTitle}</H1>
       </td>
       </gts:var>
 
@@ -170,7 +162,7 @@ response.setDateHeader("EXPIRES"  , 0         );
       <td style="padding: 0px 0px 2px 5px;">&nbsp;</td>
       <td width="100%">
          &nbsp;
-         <gts:var>${copyright}</gts:var>
+         <span class="copyrightText"><gts:var>${copyright}</gts:var></span>
       </td>
       <td nowrap style="padding-bottom: 2px;">
          <span style="font-size: 7pt; font-style: oblique; color: #888888;"><gts:var ifTrue="login.showGTSVersion">${version}</gts:var></span>&nbsp;&nbsp;

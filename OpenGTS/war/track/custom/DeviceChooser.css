@@ -7,7 +7,7 @@ DIV.devSelectorDiv {
     overflow-y: auto; /* scroll */
     overflow-x: hidden;
     border: solid 1px black;
-    background-color: #FFFFFF;
+    background-color: #383838;
     left: 0px;
     top: 0px;
     position: absolute;
@@ -32,7 +32,8 @@ INPUT.deviceChooserInput {
 
 /* device selector header row/col */
 TR.devSelectorRowHeader {
-    background-color: #E2E2E2;
+    background-color: #282828;
+    color: #3399ff; 
 }
 TH.devSelectorColHeader {
     height: 12px;
@@ -45,16 +46,16 @@ TH.devSelectorColHeaderX:hover {
     font: bold 8pt sans-serif; 
     text-align: center;
     border-bottom: 3px double #770000;
-    background-color: #CCCCCC;
+    color: #3399ff; 
 }
 
 /* device selector data row */
 TR.devSelectorRowData {
-    background-color: #FFFFFF;
+    background-color: #383838;
     cursor: pointer;
 }
 TR.devSelectorRowData:hover {
-    background-color: #FFFFBB;
+    color: #3399ff; 
 }
 TR.devSelectorRow_hidden {
     visibility: collapse;
@@ -64,13 +65,14 @@ TR.devSelectorRow_hidden {
 
 /* device selector data col */
 TD.devSelectorColData {
+    background-color: #383838;
     font: normal 8pt sans-serif; 
     text-align: center; 
-    border-right: 1px solid #CCCCCC; 
-    border-bottom: 1px solid #CCCCCC; 
+/*    border-right: 1px solid #CCCCCC; */
+/*    border-bottom: 1px solid #CCCCCC; */
 }
 TD.devSelectorColData:hover {
-    background-color: #FFFFBB;
+    color: #3399ff; 
 }
 TD.devSelectorCol_hidden {
     visibility: collapse;

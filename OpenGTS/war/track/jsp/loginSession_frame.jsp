@@ -62,14 +62,13 @@ response.setDateHeader("EXPIRES"  , 0         );
   <!-- local style -->
   <style type="text/css">
     BODY { 
-        background-color: #DBDEEB; 
 <gts:var if="isLocaleRTL" value="true">
         direction: RTL;
 </gts:var>
     }
     TD.titleText {
         /* background: #DBDEEB url('./images/Banner_White90.png') center no-repeat; */
-        background: #DBDEEB url('./images/Banner_WhiteShadow.png') center no-repeat;
+        /* background: #DBDEEB url('./images/Banner_WhiteShadow.png') center no-repeat; */
         font-family: arial,verdana,sans-serif;
         font-size: 28pt;
         font-weight: bold;
