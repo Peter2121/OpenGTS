@@ -1276,7 +1276,7 @@ public abstract class TrackMap
                 out.println("\n");
                 if (TrackMap.this.showFromCalendar) {
                     out.println("<!-- 'From/To' Calendars -->");
-                    out.println("<tr><td style='font-size:9pt; font-weight:bold; border-top: solid #CCCCCC 1px;'>"+i18n.getString("TrackMap.selectDates","Select Date Range:")+"</td></tr>");
+//                  out.println("<tr><td style='font-size:9pt; font-weight:bold; border-top: solid #CCCCCC 1px;'>"+i18n.getString("TrackMap.selectDates","Select Date Range:")+"</td></tr>");
                     out.println("<tr><td align='center' valign='top'>\n");
                     out.println("<div   id='"+Calendar.ID_CAL_DIV+"' class='"+Calendar.CLASS_CAL_DIV+"' style='margin-top: 3px;'>");
                     out.println(  "<div id='"+CALENDAR_FROM+"' style='width:100%;'></div>");
@@ -1287,7 +1287,7 @@ public abstract class TrackMap
                 } 
             	if (TrackMap.this.showToCalendar) {
             		out.println("<!-- 'To' Calendar -->");
-                	out.println("<tr><td style='font-size:9pt; font-weight:bold; border-top: solid #CCCCCC 1px;'>"+i18n.getString("TrackMap.selectToDate","Select 'To' Date:")+"</td></tr>");
+//                	out.println("<tr><td style='font-size:9pt; font-weight:bold; border-top: solid #CCCCCC 1px;'>"+i18n.getString("TrackMap.selectToDate","Select 'To' Date:")+"</td></tr>");
                 	out.println("<tr><td valign='top'>");
                 	out.println("<div   id='"+Calendar.ID_CAL_DIV+"' class='"+Calendar.CLASS_CAL_DIV+"' style='margin-top: 3px;'>");
                 	out.println(  "<div id='"+CALENDAR_TO+"' class='"+Calendar.CLASS_CAL_DIV+"'></div>");
