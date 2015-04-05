@@ -2209,14 +2209,17 @@ function jsmSetReplayState(state)
         if (btn) {
             if (state == REPLAY_RUNNING) {
                 // Replay is running, option is "Pause"
-                btn.src = "images/Pause20.png";
+//                btn.src = "images/Pause20.png";
+                btn.innerHTML = "<span class='ctrlReplayMap' id='pause' style='font-size: 80%;'>&nbsp;||&nbsp;</span>";
             } else
             if (state == REPLAY_PAUSED) {
                 // Replay if paused, option is "Continue"
-                btn.src = "images/Continue20.png";
+//                btn.src = "images/Continue20.png";
+                btn.innerHTML = "►";
             } else {
                 // Replay is stopped, option is "Play"
-                btn.src = "images/Play20.png";
+//                btn.src = "images/Play20.png";
+                btn.innerHTML = "►";
             }
         }
     } catch (e) {

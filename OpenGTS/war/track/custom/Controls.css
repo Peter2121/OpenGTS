@@ -334,3 +334,47 @@ SPAN#lastEventDate:hover {
     color: #3399ff;
     text-shadow: 0px 0px 3px #3399ff;
 }
+
+SPAN.devChooserDD {
+	color: #3399ff; 
+	font-size: 10pt;
+	font-weight: bold;
+	padding-left: 0.3em;
+	padding-right: 0.38em;
+    border-style: solid;
+    border-color: #4a4a4a #4a4a4a #151515 #151515;
+    border-width: 2px;
+    border-radius: 0.15em; 
+    background-color: #282828;
+	cursor: pointer;
+}
+
+SPAN.devChooserDD:hover {
+	text-shadow: 0px 0px 3px #3399ff;
+}
+
+SPAN.ctrlReplayMap {
+	color: #3399ff; 
+	font-size: 11pt;
+	font-weight: bold;
+	padding-left: 0.15em;
+	padding-right: 0.20em;
+    border-style: solid;
+    border-color: #4a4a4a #4a4a4a #151515 #151515;
+    border-width: 2px;
+    border-radius: 0.15em; 
+    background-color: #282828;
+	cursor: pointer;
+	display: inline-block; 
+}
+
+SPAN.ctrlReplayMap:hover {
+	text-shadow: 0px 0px 3px #3399ff;
+}
+
+SPAN.ctrlReplayMap#pause {
+	padding-left: 0em;
+	padding-right: 0em;
+   	border: none;
+	margin-bottom: 0.15em;
+}

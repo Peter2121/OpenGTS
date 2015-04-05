@@ -1117,7 +1117,8 @@ public abstract class TrackMap
                             } break;
                     }
                     out.write("</td>");
-                    out.write("<td><img src='images/Pulldown.png' height='17' style='cursor:pointer;' onclick='javascript:trackMapShowSelector()'></td>");
+                    out.write("<td style='vertical-align: bottom;'><span class=devChooserDD onclick='"+chooserOnclick+"'>&nabla;</span></td>");
+//                    out.write("<td><img src='images/Pulldown.png' height='17' style='cursor:pointer;' onclick='"+chooserOnclick+"'></td>");
                     out.write("<td style='padding-left:12px;'>&nbsp;</td>");
                 } else {
                     OrderedSet<String> dgList = isFleet? reqState.getDeviceGroupIDList(true) : reqState.getDeviceIDList(false);
@@ -1379,9 +1380,10 @@ public abstract class TrackMap
                     String i18nInfoTip   = i18n.getString("TrackMap.showInfoBox.tooltip","Select to show Info-Box during replay"); 
                     out.println("<!-- 'Replay Map' -->");
                     out.println("<form id='ReplayMap' name='ReplayMap' method='get' action=\"javascript:trackMapClickedReplay(document.getElementById('ReplayMap')."+ID_MAP_SHOW_INFO+".checked);\" target='_self'>"); // target='_top'
-                    out.print  (  "<table cellpadding='0' cellspacing='0' border='0' style='margin-top: 2px;'><tr>"); // {
+                    out.print  (  "<table cellpadding='0' cellspacing='2' border='0' style='margin-top: 2px;'><tr>"); // {
                     out.print  (    "<td valign='center' style='padding-right: 3px'><b>"+i18nReplayBtn+"</b></td>");
-                    out.print  (    "<td valign='center'><input id='"+ID_MAP_REPLAY_BTN+"' type='image' name='replayMap' src='images/Play20.png' title=\""+i18nReplayTip+"\"></td>");
+//                    out.print  (    "<td valign='center'><input id='"+ID_MAP_REPLAY_BTN+"' type='image' name='replayMap' src='images/Play20.png' title=\""+i18nReplayTip+"\"></td>");
+                    out.print  (    "<td valign='center'><span id='"+ID_MAP_REPLAY_BTN+"' class='ctrlReplayMap' name='replayMap' title=\""+i18nReplayTip+"\" onclick=\"javascript:document.forms['ReplayMap'].submit();\">►</span></td>");
                     out.print  (    "<td valign='center' style='padding-left: 3px'>");
                     out.print  (       "<span title=\""+i18nInfoTip+"\">");
                     out.print  (         "<label for='"+ID_MAP_SHOW_INFO+"'>"+i18nInfoText+"</label>&nbsp;" + Form_CheckBox(ID_MAP_SHOW_INFO,ID_MAP_SHOW_INFO,true,false,null,null));
