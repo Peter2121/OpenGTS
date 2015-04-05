@@ -10,6 +10,8 @@ import org.opengts.Version;
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
+import org.opengts.db.tables.Account;
+import org.opengts.db.tables.User;
 import org.opengts.war.tools.*;
 import org.opengts.war.track.IconMenu;
 import org.opengts.war.track.page.TopMenu.MenuType;
@@ -49,7 +51,10 @@ public class NavMenu {
     
     public StringBuffer getStringBuffer(RequestProperties reqState) {
     	StringBuffer sb = new StringBuffer();
-    	
+    	Account account 		= reqState.getCurrentAccount();
+        PrivateLabel privLabel 	= reqState.getPrivateLabel();
+        User user    			= reqState.getCurrentUser();
+//	    	privLabel.hasReadAccess(user,wp.getAclName())    	
     	switch(navigationType) {
     	case TEXT:
             // <a href="/track/Track?page=menu.top">Main Menu</a> | 
@@ -58,7 +63,10 @@ public class NavMenu {
                 String pageName = pageNavNames[i];
                 WebPage page = privLabel.getWebPage(pageName);
                 if (page != null) {
-                    if (sb.length() > 0) { sb.append(" | "); }
+                	if (page.systemAdminOnly() && !Account.isSystemAdmin(account)) continue;
+                	if (!page.isOkToDisplay(reqState)) continue;
+                	if (!privLabel.hasReadAccess(user,page.getAclName())) continue;
+                	if (sb.length() > 0) { sb.append(" | "); }
                     String uri  = WebPageAdaptor.EncodeURL(reqState, page.getPageURI());
                     String desc = page.getNavigationDescription(reqState);
                     sb.append("<a href='"+uri+"'>").append(desc).append("</a>");
@@ -75,6 +83,9 @@ public class NavMenu {
                 String pageName = pageNavNames[i];
                 WebPage page = privLabel.getWebPage(pageName);
                 if (page != null) {
+                	if (page.systemAdminOnly() && !Account.isSystemAdmin(account)) continue;
+                	if (!page.isOkToDisplay(reqState)) continue;
+                	if (!privLabel.hasReadAccess(user,page.getAclName())) continue;
                     String uri  = WebPageAdaptor.EncodeURL(reqState, page.getPageURI());
                     String desc = page.getNavigationDescription(reqState);
                     String icon = page.getMenuIconImage();

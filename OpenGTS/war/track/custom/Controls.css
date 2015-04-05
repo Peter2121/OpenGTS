@@ -197,8 +197,10 @@
 .messageResponseCell {
     padding: 10px;
     border: solid #555555 1px;
-    background-color: #FBFBFB;
+    background-color: #383838;
     text-align: center;
+    color: #CC29A3;
+    text-shadow: 0px 0px 2px #CC29A3;
 }
 
 /* copyright */
