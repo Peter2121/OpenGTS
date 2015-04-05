@@ -109,6 +109,9 @@ function deviceShowChooserList(elemNameID, elemNameDesc, list)
         }
     }
 
+    /* get Drop-Down span ID */
+    var spanDD = document.getElementById(ID_DEVICE_DD);
+    
     /* save global vars */
     chooserRelativeElementID   = elemNameID;
     chooserRelativeElementDesc = elemNameDesc;
@@ -180,8 +183,9 @@ function deviceShowChooserList(elemNameID, elemNameDesc, list)
             return false;
         } else {
             for (;targ && (targ.nodeName != "BODY"); targ = targ.parentNode) {
-                if (targ == deviceSelectorView) { return false; }
-            }
+                if (targ == deviceSelectorView)  { return false; }
+                if (spanDD != null) { if (targ == spanDD) return false; }
+                }
             deviceCloseChooser();
             return true;
         }

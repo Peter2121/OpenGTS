@@ -112,6 +112,7 @@ public abstract class TrackMap
 
     private static final String  ID_DEVICE_ID                   = "deviceSelector";
     private static final String  ID_DEVICE_DESCR                = "deviceDescription";
+    private static final String  ID_DEVICE_DD					= "deviceDropDown";
 
     private static final boolean SORTABLE_LOCATION_DETAILS      = false;
 
@@ -1117,7 +1118,7 @@ public abstract class TrackMap
                             } break;
                     }
                     out.write("</td>");
-                    out.write("<td style='vertical-align: bottom;'><span class=devChooserDD onclick='"+chooserOnclick+"'>&nabla;</span></td>");
+                    out.write("<td style='vertical-align: bottom;'><span class=devChooserDD id='"+ID_DEVICE_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>");
 //                    out.write("<td><img src='images/Pulldown.png' height='17' style='cursor:pointer;' onclick='"+chooserOnclick+"'></td>");
                     out.write("<td style='padding-left:12px;'>&nbsp;</td>");
                 } else {

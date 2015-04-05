@@ -35,6 +35,7 @@
 var ID_DEVICE_ID        = "deviceSelector";
 var ID_DEVICE_DESCR     = "deviceDescription";
 var ID_GOTO_ADDRESS     = "gotoAddressFld";
+var ID_DEVICE_DD		= "deviceDropDown";
 
 var PAGE_ZONEGEOCODE    = "ZONEGEOCODE";
 var TAG_geocode         = "geocode";
