@@ -258,7 +258,7 @@ Notes:
     <!-- ========================================================================================== -->
 
     <!-- Copyright used in html head 'meta' tag -->
-    <Copyright>${Domain.Copyright=(C) GeoTelematic Solutions - Flytrace}</Copyright>
+    <Copyright>${Domain.Copyright=* OpenGTS Flytrace Edition v.1.0 beta * Based on OpenGTS 2.5.7 * (C) GeoTelematic Solutions - Flytrace}</Copyright>
 
     <!-- Title used in html head 'title' tag -->
     <PageTitle i18n="PrivateXML.pageTitle">${Domain.PageTitle=${ServiceAccount.Name=OpenGTS} GPS Tracking}</PageTitle>
