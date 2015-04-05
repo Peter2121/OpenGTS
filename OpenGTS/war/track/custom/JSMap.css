@@ -102,6 +102,7 @@ TD.mapControlCell {
     /* */
 }
 TD.mapControlCollapseBar_L {
+	display: none;
     background: #DDDDDD url(../images/arrowLt3.png) center no-repeat;
     background-color: #DDDDDD;
     width: 8px;
@@ -111,6 +112,7 @@ TD.mapControlCollapseBar_L {
     cursor: pointer;
 }
 TD.mapControlCollapseBar_R {
+	display: none;
     background: #DDDDDD url(../images/arrowRt3.png) center no-repeat;
     background-color: #DDDDDD;
     width: 8px;
@@ -210,4 +212,15 @@ DIV.GButton:hover {
 
 DIV.GButton-Sel {
     font-weight: bold;
+}
+
+SPAN#mapCollapseControl {
+    font-family: Arial; 
+    font-size: 16pt; 
+    color: #3399ff;
+    cursor: pointer;
+}
+
+SPAN#mapCollapseControl:hover {
+    text-shadow: 0px 0px 3px #3399ff;
 }

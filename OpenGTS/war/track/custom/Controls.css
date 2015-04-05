@@ -2,6 +2,10 @@
 /* Navigation bar */
 .navBar { 
     font-size: 9pt; 
+    font-family: Arial; 
+    white-space: pre; 
+    color: #3399ff;
+    text-shadow: 0px 0px 3px #3399ff;
     padding-bottom: 2px; 
     padding-top: 5px; 
     background-color: #383838; 
@@ -44,7 +48,10 @@
 }
 
 .textInput:focus { 
-    outline:solid 1px #3399ff;
+/*    outline:solid 1px #3399ff; */
+/*	border-color: #3399ff; */
+/*	border-width: 1px; */
+/*	border-style: solid; */
 }
 
 .textOnClick { 
@@ -61,15 +68,22 @@
     border-width: 1px; 
     border-style: solid; 
     border-color: #444477 #9999AA #9999AA #444477; 
-    /*
-    border-width: 2px; 
-    border-style: inset; 
-    border-color: #DDDDDD #EEEEEE #EEEEEE #DDDDDD; 
-    */
     padding-left: 2px; 
-    background-color: #FFFFFF; 
+    background-color: #282828; 
     font-family: monospace;
+    outline:none;
 }
+
+.textAreaInput:hover {
+	box-shadow: 0px 0px 5px #3399ff;
+}
+
+.textAreaInput:focus {
+	border-color: #3399ff;
+	border-width: 1px;
+	border-style: solid;
+}
+
 .textAreaReadOnly { 
     border-width: 1px; 
     border-style: solid; 
@@ -91,9 +105,11 @@
 
 /* menu */
 .menuTitle { 
-    font-size: 12pt; 
-    font-weight: bold; 
+    font-family: Arial; 
+    font-size: 10pt; 
+    white-space: pre; 
     color: #3399ff;
+    text-shadow: 0px 0px 3px #3399ff;
 }
 .menuInstructions { 
     font-size: 10pt; 
@@ -132,10 +148,11 @@
 
 .contentMessage {
     margin-top: 5px;
-    font: bold 10pt sans-serif; 
+    font: bold 9pt sans-serif; 
     font-style: oblique;
     text-align: center;
-    color: #DD0000;
+    color: #CC29A3;
+    text-shadow: 0px 0px 2px #CC29A3;
 }
 
 /* Map page content */
@@ -253,14 +270,17 @@ TH.adminTableHeaderCol_sort {
     text-align: center; 
     padding: 3px 5px 3px 5px; 
     border-bottom: 3px double black; 
+    color: #3399ff;
 }
 TH.adminTableHeaderCol_sort:hover { 
     white-space: nowrap;
     font: bold 8pt sans-serif; 
     text-align: center; 
     padding: 3px 5px 3px 5px; 
-    border-bottom: 3px double #770000; 
-    background-color: #CCCCCC;
+    border-bottom: 3px double #3399ff; 
+    background-color: #383838;
+    color: #3399ff;
+    text-shadow: 0px 0px 3px #3399ff;
 }
 TH.adminTableHeaderCol_nosort { 
     white-space: nowrap;
@@ -301,4 +321,14 @@ TD.adminViewTableTextArea {
 SELECT.adminComboBox {
     font-size: 8pt;
     height: 19px;
+}
+
+SPAN#lastEventDate {
+    color: #3399ff;
+    cursor: pointer;
+}
+
+SPAN#lastEventDate:hover {
+    color: #3399ff;
+    text-shadow: 0px 0px 3px #3399ff;
 }

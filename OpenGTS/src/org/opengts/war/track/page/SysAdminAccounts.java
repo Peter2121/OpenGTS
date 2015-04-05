@@ -984,8 +984,9 @@ public class SysAdminAccounts
                         }
                         //if (prvLabelName.equals("*")) { prvLabelName = "default"; }
                         String checked      = _selAccountID.equals(acctID)? " checked" : "";
-                        String viewStyle    = currAcctID.equals(acctID)? "background-color:#E5E5E5;" : "background-color:#FFFFFF;";
-                        out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+u+"' style='"+viewStyle+"'><input type='radio' name='"+PARM_ACCOUNT_SELECT+"' id='"+acctID+"' value='"+acctID+"' "+checked+"></td>\n");
+//                        String viewStyle    = currAcctID.equals(acctID)? "background-color:#E5E5E5;" : "background-color:#FFFFFF;";
+//                        out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+u+"' style='"+viewStyle+"'><input type='radio' name='"+PARM_ACCOUNT_SELECT+"' id='"+acctID+"' value='"+acctID+"' "+checked+"></td>\n");
+                        out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+u+"'><input type='radio' name='"+PARM_ACCOUNT_SELECT+"' id='"+acctID+"' value='"+acctID+"' "+checked+"></td>\n");
                         out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap><label for='"+acctID+"'>"+filter(acctID)+"</label></td>\n");
                         out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+filter(acctDesc)+"</td>\n");
                         out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+filter(active)+"</td>\n");

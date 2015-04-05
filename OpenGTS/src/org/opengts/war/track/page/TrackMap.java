@@ -175,6 +175,7 @@ public abstract class TrackMap
     private static final String  ID_GOTO_ADDR_BTN               = "gotoAddressButton";
     private static final String  ID_MAP_CONTROL                 = "mapControlCell";
     private static final String  ID_MAP_CONTROL_BAR             = "mapControlBar";
+    private static final String  ID_MAP_COLLAPSE				= "mapCollapseControl";
 
     // ------------------------------------------------------------------------
     // property values
@@ -416,6 +417,8 @@ public abstract class TrackMap
         boolean collapseCtlOnLoad = this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_mapControlCollapseOnLoad,false);
         JavaScriptTools.writeJSVar(out, "ID_MAP_CONTROL"            , ID_MAP_CONTROL);
         JavaScriptTools.writeJSVar(out, "ID_MAP_CONTROL_BAR"        , ID_MAP_CONTROL_BAR);
+        JavaScriptTools.writeJSVar(out, "ID_MAP_COLLAPSE"        	, ID_MAP_COLLAPSE);
+        
         if (mapControlsOnLeft) {
         JavaScriptTools.writeJSVar(out, "CLASS_CONTROL_BAR"         , new String[] {"mapControlCollapseBar_L","mapControlCollapseBar_R"});
         } else {
@@ -1222,8 +1225,9 @@ public abstract class TrackMap
                     out.print  (i18n.getString("TrackMap.lastGpsEvent","Last Event:") + "&nbsp;");
                     String dateTooltip = i18n.getString("TrackMap.lastGpsDate.tooltip", "Click to reset calendars to this date");
                     String dateOnclick = "javascript:trackMapGotoLastEventDate();";
-                    String dateStyle   = "color: #0000CC; cursor: pointer;";
-                    out.print  ("<span id='"+MapProvider.ID_LATEST_EVENT_DATE+"' onclick=\""+dateOnclick+"\" title='"+dateTooltip+"' style='"+dateStyle+"'>"+_date+"</span>&nbsp;");
+//                    String dateStyle   = "color: #0000CC; cursor: pointer;";
+//                    out.print  ("<span id='"+MapProvider.ID_LATEST_EVENT_DATE+"' onclick=\""+dateOnclick+"\" title='"+dateTooltip+"' style='"+dateStyle+"'>"+_date+"</span>&nbsp;");
+                    out.print  ("<span id='"+MapProvider.ID_LATEST_EVENT_DATE+"' onclick=\""+dateOnclick+"\" title='"+dateTooltip+"'>"+_date+"</span>&nbsp;");
                     out.print  ("<span id='"+MapProvider.ID_LATEST_EVENT_TIME+"'>"+_time+"</span>&nbsp;");
                     out.print  ("<span id='"+MapProvider.ID_LATEST_EVENT_TMZ +"'>"+_tmz +"</span>");
                     out.print  (")</span>");
@@ -1269,6 +1273,14 @@ public abstract class TrackMap
                 //boolean sameMonth = (fr != null) && (fr.getYear() == to.getYear()) && (fr.getMonth1() == to.getMonth1());
                 //String prevMoURL, nextMoURL;
                 out.println("\n<!-- Begin Map Controls -->");
+                out.println("<td style='padding-top: 0px; vertical-align: top;'><table><tr><td>");
+// 																																						TODO: Update translations
+                if (!mapControlsOnLeft) { 
+                	out.println("<span id='"+ID_MAP_COLLAPSE+"' onclick='javascript:jsmCtrlToggleCollapse();' style='text-align: left;' title='"+i18n.getString("TrackMap.controls.show-hide" ,"Click to Hide/Show controls")+"'>►</span><br>");
+                } else {
+                	out.println("<span id='"+ID_MAP_COLLAPSE+"' onclick='javascript:jsmCtrlToggleCollapse();' style='text-align: right;' title='"+i18n.getString("TrackMap.controls.show-hide" ,"Click to Hide/Show controls")+"'>◄</span><br>");
+                }
+                out.println("</td></tr><tr>");
                 out.println("<td id='"+ID_MAP_CONTROL+"' class='mapControlCell' align='left' valign='top' style='"+controlCellPaddingStye+"'>"); // style='height:100%;'>");
                 out.println("<table border='0' cellspacing='0' cellpadding='0'>"); //  style='height:100%;'>"); // {
 
@@ -1566,6 +1578,7 @@ public abstract class TrackMap
 
                 out.println("</table>"); // }
                 out.println("</td>"); // end of map control cell
+                out.println("</tr></table></td>");
                 out.println("<!-- End Map Controls -->\n");
 
                 // Map cell on right, controls on left

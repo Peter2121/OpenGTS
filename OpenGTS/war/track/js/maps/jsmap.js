@@ -174,6 +174,11 @@ var SPEED_SLOW					= 40;// yellow
 var SPEED_NORMAL				= 80;// green
 //										blue
 
+/* UPDATE button colors (overrides all styles) */
+var UPD_SUCCESS = "#FFFFFF";
+var UPD_ERROR = "#CC29A3";
+var UPD_PENDING = "#3399ff";
+
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 // --- JSMapPoint
@@ -1574,9 +1579,9 @@ function jsmSetLoadingPointsState(state)
     var elem = ID_MAP_UPDATE_BTN? document.getElementById(ID_MAP_UPDATE_BTN) : null;
     if (elem != null) {
         switch (state) {
-            case 0 : elem.style.color = '#000000'; break;
-            case 1 : elem.style.color = '#338833'; break;
-            default: elem.style.color = '#FF0000'; break;
+            case 0 : elem.style.color = UPD_SUCCESS; break;
+            case 1 : elem.style.color = UPD_PENDING; break;
+            default: elem.style.color = UPD_ERROR; break;
         }
     }
 
@@ -2414,6 +2419,7 @@ function jsmControlToggleCollapse()
 {
     var mapCtl    = (ID_MAP_CONTROL    )? document.getElementById(ID_MAP_CONTROL)     : null;
     var mapCtlBar = (ID_MAP_CONTROL_BAR)? document.getElementById(ID_MAP_CONTROL_BAR) : null;
+    
     if ((mapCtl != null) && (CLASS_CONTROL_BAR)) {
         if (mapControlVisible) {
             // is visible, make invisible
@@ -2424,6 +2430,39 @@ function jsmControlToggleCollapse()
             // is invisible, make visible
             mapCtl.style.display = "";
             if (mapCtlBar) { mapCtlBar.className = CLASS_CONTROL_BAR[0]; }
+            mapControlVisible = true;
+        }
+    }
+};
+
+/**
+*** Toggle Map Control display
+**/
+function jsmCtrlToggleCollapse()
+{
+    var mapCtl     = (ID_MAP_CONTROL    )? document.getElementById(ID_MAP_CONTROL)     : null;
+    var mapCollCtl = (ID_MAP_COLLAPSE)? document.getElementById(ID_MAP_COLLAPSE) : null;
+    var ctlHtml = "";
+    var ctlHtmlRight = "►";
+    var ctlHtmlLeft = "◄";
+    if (mapCollCtl != null) ctlHtml = mapCollCtl.innerHTML;
+    
+    if ((mapCtl != null) && (mapCollCtl != null)) {
+        if (mapControlVisible) {
+            // is visible, make invisible
+            mapCtl.style.display = "none";
+            if (ctlHtml != "") { 
+            	if (ctlHtml == ctlHtmlRight) mapCollCtl.innerHTML=ctlHtmlLeft;
+            	if (ctlHtml == ctlHtmlLeft) mapCollCtl.innerHTML=ctlHtmlRight;
+            	}
+            mapControlVisible = false;
+        } else {
+            // is invisible, make visible
+            mapCtl.style.display = "";
+            if (ctlHtml != "") { 
+            	if (ctlHtml == ctlHtmlRight) mapCollCtl.innerHTML=ctlHtmlLeft;
+            	if (ctlHtml == ctlHtmlLeft) mapCollCtl.innerHTML=ctlHtmlRight;
+            	}
             mapControlVisible = true;
         }
     }

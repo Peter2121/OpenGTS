@@ -141,6 +141,7 @@ public class ZoneInfo
     // point index
     private static final int    DEFAULT_POINT_INDEX             = 0;
 
+    private static final String DEFAULT_TYPECOLOR []			= { "white", "red" };
     // ------------------------------------------------------------------------
     // WebPage interface
     
@@ -762,7 +763,7 @@ public class ZoneInfo
                         String styleClass  = ((r++ & 1) == 0)? CommonServlet.CSS_ADMIN_TABLE_BODY_ROW_ODD : CommonServlet.CSS_ADMIN_TABLE_BODY_ROW_EVEN;
 
                         int pointCount     = ZoneInfo.getGeozoneSupportedPointCount(reqState, zoneTypeInt);
-                        String typeColor   = (pointCount > 0)? "black" : "red";
+                        String typeColor   = (pointCount > 0)? DEFAULT_TYPECOLOR[0] : DEFAULT_TYPECOLOR[1];
 
                         out.write("  <tr class='" + styleClass + "'>\n");
                         out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+z+"'>");

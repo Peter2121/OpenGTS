@@ -61,7 +61,7 @@ DIV.zoneLatLon {
     border-style: solid; 
     border-color: #555588 #AAAABB #AAAABB #555588; 
     padding-left: 2px; 
-    background-color: #FFFFFF; 
+/*    background-color: #FFFFFF; */ 
 }
 .zoneLatLonText_ro {
     font-size: 9pt;
