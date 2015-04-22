@@ -354,8 +354,8 @@ public class AccountLogin
                 // end forn
                 out.println("</form>");
                 // "Cookies/JavaScript must be enabled"
-                out.println("<br/>");
-                out.println("<span style='font-size:8pt'><i>"+i18n.getString("AccountLogin.cookiesJavaScript","(Cookies and JavaScript must be enabled)")+"</i></span>");
+//                out.println("<br/>");
+//                out.println("<span style='font-size:8pt'><i>"+i18n.getString("AccountLogin.cookiesJavaScript","(Cookies and JavaScript must be enabled)")+"</i></span>");
                 //out.println("<br/>");
                 out.println("<br/>");
                 // demo
