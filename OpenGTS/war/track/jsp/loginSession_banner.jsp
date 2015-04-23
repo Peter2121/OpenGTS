@@ -95,8 +95,9 @@ response.setDateHeader("EXPIRES"  , 0         );
     <tr>
 
       <gts:var>
-      <td width="860" height="120" class="titleText" halign="center">
-        <H1>${pageTitle}</H1>
+      <td class="titleText" halign="center">
+        <H1><br>${pageTitle}<br></H1>
+		<!-- <a href="/"><img src='/track/images/flytrace-banner.png' alt='${pageTitle}'/></a> -->
       </td>
       </gts:var>
 
