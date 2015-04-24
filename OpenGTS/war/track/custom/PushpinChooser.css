@@ -8,18 +8,19 @@ DIV.PushpinChooser {
     /* height: expression("83px"); */ /* IE */
     overflow-x: hidden;
     overflow-y: scroll; /* visible|hidden|scroll|auto */
-    background-color: #FFFFFF;
+ 	background-color: #282828;    
     border: ridge 4px #5555AA;
     border: expression("ridge 2px #5555AA");
     /* border: outset 4px #5555AA; */
 }
 
 TABLE.PushpinChooser {
-    /* width: 100%; */
+	background-color: #282828;    
+	/* width: 100%; */
 }
 
 TR.PushpinChooser {
-    background-color: #FFFFFF;
+	background-color: #282828;    
 }
 
 TD.PushpinChooser_icon {
@@ -27,13 +28,14 @@ TD.PushpinChooser_icon {
     vertical-align: top;
     font-size: 9pt;
     padding: 3px 3px 3px 3px;
+	background-color: #282828;    
 }
 TD.PushpinChooser_icon:hover {
     text-align: center;
     vertical-align: top;
     font-size: 9pt;
     padding: 3px 3px 3px 3px;
-    background-color: #EEEEFF;
+    background-color: #383838;
     cursor: pointer;
 }
 
@@ -42,14 +44,14 @@ TD.PushpinChooser_eval {
     vertical-align: top;
     font-size: 9pt;
     padding: 3px 3px 3px 3px;
-    background-color: #EEEEEE;
+	background-color: #282828;    
 }
 TD.PushpinChooser_eval:hover {
     text-align: center;
     vertical-align: top;
     font-size: 9pt;
     padding: 3px 3px 3px 3px;
-    background-color: #EEEEFF;
+    background-color: #383838;
     cursor: pointer;
 }
 

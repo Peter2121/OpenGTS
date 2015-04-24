@@ -614,7 +614,7 @@ Notes:
         <Pushpin key="all"      eval="evHeadingMarkerURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>
         <!- - -->
 <!--        <Pushpin key="fleet"    icon="pin30_blue_dot.png"    shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>	-->
-        <Pushpin key="fleet" eval="evDeviceNameIconURL(e)" iconSize="47,24" iconOffset="9,24" image="images/pp/label47_fill.png"/>
+        <Pushpin key="fleet" eval="evDeviceNameIconURL(e)" iconSize="47,24" iconOffset="9,24" image="label47_fill.png"/>
 <!--        <Pushpin key="stop"     icon="pin30_red_dot.png"     shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30"/>	-->
 <!--        <Pushpin key="slow"     eval="evHeadingYellowURL(e)" shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_yellow_h1.png"/>	-->
 <!--        <Pushpin key="moving"   eval="evHeadingGreenURL(e)"  shadow="pin30_shadow.png" iconSize="18,30" iconOffset="9,30" shadowSize="30,30" image="pin30_green_h1.png"/>	-->
@@ -1003,9 +1003,9 @@ Notes:
         <!-- <Property key="map.height">470</Property>          -->     <!-- map width -->
 
         <!-- default zoom/location -->
-        <Property key="default.zoom">4</Property>                       <!-- default zoom when no pushpins are displayed -->
-        <Property key="default.lat">39.0000</Property>                  <!-- default latitude when no pushpins are displayed -->
-        <Property key="default.lon">-96.5000</Property>                 <!-- default longitude when no pushpins are displayed -->
+        <Property key="default.zoom">7</Property>                       <!-- default zoom when no pushpins are displayed -->
+        <Property key="default.lat">44.31942</Property>                  <!-- default latitude when no pushpins are displayed -->
+        <Property key="default.lon">5.79332</Property>                 <!-- default longitude when no pushpins are displayed -->
 
         <!-- Geozone map size/config -->
         <!-- <Property key="zone.map.width">630</Property> -->
@@ -1029,7 +1029,7 @@ Notes:
 
         <!-- auto update -->
         <Property key="auto.enable">true</Property>
-        <Property key="auto.interval">10</Property>
+        <Property key="auto.interval">9</Property>
         <Property key="auto.count">100</Property>
 
         <!-- use default pushpins -->
