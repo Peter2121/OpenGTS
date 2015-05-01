@@ -103,21 +103,21 @@
  === property "accountLogin.showLocaleSelection" is set to true.
  -->
 <SupportedLocales>
-    <Locale id="nl" i18n="PrivateXML.locale.dutch"     >Dutch</Locale>
+<!--    <Locale id="nl" i18n="PrivateXML.locale.dutch"     >Dutch</Locale> -->
     <Locale id="en" i18n="PrivateXML.locale.english"   >English</Locale>
     <Locale id="fr" i18n="PrivateXML.locale.french"    >French</Locale>
-    <Locale id="de" i18n="PrivateXML.locale.german"    >German</Locale>
-    <Locale id="el" i18n="PrivateXML.locale.greek"     >Greek</Locale>
-    <Locale id="hu" i18n="PrivateXML.locale.hungarian" >Hungarian</Locale>
-    <Locale id="it" i18n="PrivateXML.locale.italian"   >Italian</Locale>
-    <Locale id="pl" i18n="PrivateXML.locale.polish"    >Polish</Locale>
-    <Locale id="pt" i18n="PrivateXML.locale.portuguese">Portuguese</Locale>
-    <Locale id="ro" i18n="PrivateXML.locale.romanian"  >Romanian</Locale>
+<!--    <Locale id="de" i18n="PrivateXML.locale.german"    >German</Locale> -->
+<!--    <Locale id="el" i18n="PrivateXML.locale.greek"     >Greek</Locale> -->
+<!--    <Locale id="hu" i18n="PrivateXML.locale.hungarian" >Hungarian</Locale> -->
+<!--    <Locale id="it" i18n="PrivateXML.locale.italian"   >Italian</Locale> -->
+<!--    <Locale id="pl" i18n="PrivateXML.locale.polish"    >Polish</Locale> -->
+<!--    <Locale id="pt" i18n="PrivateXML.locale.portuguese">Portuguese</Locale> -->
+<!--    <Locale id="ro" i18n="PrivateXML.locale.romanian"  >Romanian</Locale> -->
     <Locale id="ru" i18n="PrivateXML.locale.russian"   >Russian</Locale>
-    <Locale id="sk" i18n="PrivateXML.locale.slovak"    >Slovak</Locale>
-    <Locale id="sr" i18n="PrivateXML.locale.serbian"   >Serbian</Locale>
+<!--    <Locale id="sk" i18n="PrivateXML.locale.slovak"    >Slovak</Locale> -->
+<!--    <Locale id="sr" i18n="PrivateXML.locale.serbian"   >Serbian</Locale> -->
     <Locale id="es" i18n="PrivateXML.locale.spanish"   >Spanish</Locale>
-    <Locale id="tr" i18n="PrivateXML.locale.turkish"   >Turkish</Locale>
+<!--    <Locale id="tr" i18n="PrivateXML.locale.turkish"   >Turkish</Locale> -->
 </SupportedLocales>
 
 <!-- TimeZones  ========================================================================= -->
@@ -307,6 +307,19 @@ Notes:
         <Property key="MapProvider.active">googleMaps</Property>
         <Property key="zoneInfo.showShapeColor">true</Property> 
         -->
+
+        <!-- TrackerConfig properties -->
+        <Property key="trackerConfig.enable">true</Property>          			<!-- [true|false] -->
+        <Property key="trackerConfig.tmplFileName">gpslogger.tmpl</Property>    <!-- template file name -->
+        <Property key="trackerConfig.nParams">7</Property>          			<!-- number of parameters to fill -->
+        <Property key="trackerConfig.param.0">RTKey.ServerName</Property>
+        <Property key="trackerConfig.param.1">RTKey.ServerPath</Property>
+        <Property key="trackerConfig.param.2">RTKey.ServerPort</Property>
+        <Property key="trackerConfig.param.3">DB.Device.uniqueID</Property>
+        <Property key="trackerConfig.param.4">DB.Device.description</Property>
+        <Property key="trackerConfig.param.5">DB.Device.deviceID</Property>
+        <Property key="trackerConfig.param.6">DB.Account.accountID</Property>
+        
 
         <!-- Override HTMLTools "http.userAgent" (see RTKey.HTTP_USER_AGENT) -->
         <Property key="http.userAgent">GTS/${%version} [${session.locale=EN}] ${session.name=}</Property>

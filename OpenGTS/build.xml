@@ -787,6 +787,7 @@ File     : build.xml
             <include name="common.conf"/>
             <include name="system.conf"/>
             <include name="custom.conf"/>           <!-- may not be present -->
+            <include name="gpslogger.tmpl"/>        <!-- may not be present -->
             <include name="custom_gts.conf"/>       <!-- may not be present -->
             <include name="config.conf"/>
             <include name="config_old.conf"/>       <!-- may not be present -->
