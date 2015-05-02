@@ -85,9 +85,9 @@ public class NewAccount
     private static final int ACCOUNT_ID_RNDLEN				= 4;
     private static final String PROP_TempAccount_ID_From_Contact 		= "Account.default.tempAccountIDFromContact";
     private static final String PROP_TempAccount_Default_Device_ID 		= "Account.default.tempAccountDeviceID";
-    private static final String PROP_TempAccount_Default_Device_Desc 	= "Account.default.tempAccountDeviceDesc";
     private static final String PROP_TempAccount_MaxUnconfirmHours 		= "Account.default.tempAccountMaxUnconfirmHours";
     private static final String PROP_ServiceProvider_Mail 				= "ServiceProvider.email";
+    public static final String	PROP_Config_mail_subj					= "trackerConfig.mailSubj";
 
     // ------------------------------------------------------------------------
 
@@ -255,6 +255,9 @@ public class NewAccount
         Device device = null;
         String acctDecPass = null;
         String uniqueID = "";
+        String userID = "";
+        String accountID = "";
+        String deviceID = "";
 
         try {
 
@@ -323,12 +326,14 @@ public class NewAccount
                 this.offline(reqState, pageMsg);
                 return;
             }
-
+            
+            accountID = account.getAccountID();
+            
             /* create device */
-            String deviceID = RTConfig.getString(PROP_TempAccount_Default_Device_ID,"mobile");
+            deviceID = RTConfig.getString(PROP_TempAccount_Default_Device_ID,"mobile") + "1";
             device = Device.getDevice(account, deviceID, true);
             device.setIsActive(true);
-            String deviceDesc = RTConfig.getString(PROP_TempAccount_Default_Device_Desc,"Mobile Device");
+            String deviceDesc = accountID + " " + deviceID;
             device.setDescription(deviceDesc);
             device.save();
             device._reload(Device.FLD_uniqueID);
@@ -353,6 +358,7 @@ public class NewAccount
     				"Cannot create guest user. Manual account configuration maybe needed. Open session with blank username and create guest user with read/view permissions and blank password."));
             }
             else {
+            	userID = guestUser.getUserID();
             	guestUser.setMaxAccessLevel(0);	// READ/VIEW
             	guestUser.setFirstLoginPageID(PAGE_MAP_FLEETLIVE);
 
@@ -443,7 +449,7 @@ public class NewAccount
             "Thank you.\n",
             new Object[] {
                 /*{0}*/ contactName,
-                /*{1}*/ account.getAccountID(),
+                /*{1}*/ accountID,
                 /*{2}*/ acctDecPass,
                 /*{3}*/ uniqueID,
                 /*{4}*/ expd,
@@ -456,15 +462,27 @@ public class NewAccount
         if (!StringTools.isBlank(from) && !StringTools.isBlank(to)) {
             String cc   = null;
             String bcc  = null;
+            String resp = "";
             SendMail.SmtpProperties smtpProps = privLabel.getSmtpProperties();
             EMail.send(from, to, cc, bcc, subj, body, smtpProps);
-            Track.writeMessageResponse(reqState, 
-                i18n.getString("NewAccount.emailSent","An email was sent to the specified email address with your new account information."));
+            resp += i18n.getString("NewAccount.emailSent","An email was sent to the specified email address with your new account information.");
+//            Track.writeMessageResponse(reqState, 
+//                i18n.getString("NewAccount.emailSent","An email was sent to the specified email address with your new account information."));
+            /* send config file */
+            subj = RTConfig.getString(PROP_Config_mail_subj, "");
+//																TODO: add translations            
+            body = i18n.getString("trackerConfig.MailBody", "Import this file to GPSLogger");
+            TrackerConfig tk = new TrackerConfig(accountID, userID, deviceID);
+            if( tk.isInitialized() ) {
+            	if( tk.Send(from, to, subj, body, smtpProps) ) 
+//																					TODO: add translations            	
+            		resp += "<br>" + i18n.getString("trackerConfig.emailSent","An email was sent to the specified email address with your tracker configuration file.");
+            }
+            Track.writeMessageResponse(reqState, resp);
         } else {
             Track.writeMessageResponse(reqState, 
                 i18n.getString("NewAccount.emailError","Due to an internal error, we were unable to email your new account information."));
         }
-
     }
    
     // ------------------------------------------------------------------------

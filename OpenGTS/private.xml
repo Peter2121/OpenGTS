@@ -311,6 +311,9 @@ Notes:
         <!-- TrackerConfig properties -->
         <Property key="trackerConfig.enable">true</Property>          			<!-- [true|false] -->
         <Property key="trackerConfig.tmplFileName">gpslogger.tmpl</Property>    <!-- template file name -->
+        <Property key="trackerConfig.confFileName">gpslogger.csv</Property>     <!-- result config file name -->
+        <Property key="trackerConfig.confFileNameMime">text/plain</Property>    <!-- result config file mime type -->
+        <Property key="trackerConfig.mailSubj">GPSLogger config file</Property>	<!-- mail subject -->
         <Property key="trackerConfig.nParams">7</Property>          			<!-- number of parameters to fill -->
         <Property key="trackerConfig.param.0">RTKey.ServerName</Property>
         <Property key="trackerConfig.param.1">RTKey.ServerPath</Property>

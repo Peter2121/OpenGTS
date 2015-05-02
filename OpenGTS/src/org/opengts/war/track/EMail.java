@@ -48,6 +48,22 @@ public class EMail
         }
     }
 
+    /* send an email  with attachment */
+    public static boolean send(
+            String from, String to, String cc, String bcc, 
+            String subject, String msgBody,
+            SendMail.SmtpProperties smtpProps,
+            SendMail.Attachment attach)
+        {
+            try {
+                return SendMail.send(from,to,cc,bcc,subject,msgBody,attach,smtpProps);
+            } catch (Throwable t) { // NoClassDefFoundException, ClassNotFoundException
+                // this will fail if JavaMail support for SendMail is not available.
+                Print.logWarn("SendMail error: " + t);
+                return false;
+            }
+        }
+
     /* validate the syntax of the specified single email address */
     public static boolean validateAddress(String addr)
     {
