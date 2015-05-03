@@ -764,7 +764,7 @@ Notes:
         <Property key="mapQuest.enableLayer.arial">false</Property>     <!-- show MapQuest Arial map layer -->
 
         <!-- miscellaneous -->
-        <Property key="map.fillFrame">false</Property>                  <!-- expand map to fill page frame -->
+        <Property key="map.fillFrame">true</Property>                  <!-- expand map to fill page frame -->
         <!-- <Property key="map.width">-1</Property> -->
         <!-- <Property key="map.height">-1</Property> -->
         <Property key="info.showAltitude">true</Property>               <!-- show altitude in info-balloon -->
@@ -1013,7 +1013,7 @@ Notes:
         <Property key="google.addBingMap">false</Property>
 
         <Property key="map.view">hybrid</Property>                        <!-- [road|aerial|hybrid] map view/style -->
-        <Property key="map.fillFrame">false</Property>
+        <Property key="map.fillFrame">true</Property>
         <Property key="scrollWheelZoom">false</Property>                <!-- enable/disable scroll wheel zoom -->
         <!-- <Property key="map.width">680</Property>           -->     <!-- map width -->
         <!-- <Property key="map.height">470</Property>          -->     <!-- map width -->
