@@ -1055,6 +1055,10 @@ Notes:
         <Legend type="device" includeDefault="true"/>
         <Legend type="fleet"  includeDefault="true"/>
 
+        <!-- info -->
+        <Property key="info.showAltitude">true</Property>
+        <Property key="info.inclBlankAddress">false</Property>
+
     </MapProvider>
 
     <!-- ========================================================================================== -->
