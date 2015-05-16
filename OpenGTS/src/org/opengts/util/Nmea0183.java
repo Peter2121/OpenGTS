@@ -512,6 +512,17 @@ public class Nmea0183
 
     // ------------------------------------------------------------------------
 
+    /**
+    *** Returns true if the number of satellites used in fix has been defined
+    *** @return True if the number of satellites used in fix has been defined
+    **/
+    public boolean hasNumberOfSatellites()
+    {
+        return this.hasField(FIELD_NUMBER_SATS);
+    }
+
+    // ------------------------------------------------------------------------
+
     /** 
     *** Gets the number of satellites used in fix
     *** @return The number of satellites used in fix

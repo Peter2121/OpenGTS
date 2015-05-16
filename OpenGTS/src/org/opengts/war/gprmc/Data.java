@@ -1157,12 +1157,14 @@ public class Data
             Nmea0183 gprmc = new Nmea0183(gprmcStr, ignoreChecksum);
             fixtime    = gprmc.getFixtime();
             isValidGPS = gprmc.isValidGPS();
-            latitude   = isValidGPS? gprmc.getLatitude()           : 0.0;
-            longitude  = isValidGPS? gprmc.getLongitude()          : 0.0;
-            speedKPH   = isValidGPS? gprmc.getSpeedKPH()           : 0.0;
-            headingDeg = isValidGPS? gprmc.getHeading()            : 0.0;
-            numSats    = isValidGPS? gprmc.getNumberOfSatellites() :   0;
-            altitudeM  = isValidGPS? gprmc.getAltitudeMeters()     : 0.0;
+// ****** Nmea record values have the priority under values parsed from query string ******            
+// ******       but we should not overwhrite correct values with empty ones            ******            
+            if(gprmc.hasLatitude())           latitude   = isValidGPS? gprmc.getLatitude()           : 0.0;
+            if(gprmc.hasLongitude())          longitude  = isValidGPS? gprmc.getLongitude()          : 0.0;
+            if(gprmc.hasSpeed())              speedKPH	 = isValidGPS? gprmc.getSpeedKPH()           : 0.0;
+            if(gprmc.hasHeading())            headingDeg = isValidGPS? gprmc.getHeading()            : 0.0;
+            if(gprmc.hasNumberOfSatellites()) numSats    = isValidGPS? gprmc.getNumberOfSatellites() : 0;
+            if(gprmc.hasAltitude())           altitudeM  = isValidGPS? gprmc.getAltitudeMeters()     : 0.0;
             if (!isValidGPS) {
                 Data.logWarn("Invalid latitude/longitude");
             }
