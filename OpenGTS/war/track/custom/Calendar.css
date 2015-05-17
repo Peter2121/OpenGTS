@@ -61,6 +61,7 @@ TD.calDateTimeFieldExpanded {
     font-family: sans-serif; 
     font-size: 8pt; 
     padding-right: 1px;
+    width: 15px;
 }
 TD.calDateTimeFieldCollapsed { 
     font-family: sans-serif; 
@@ -93,6 +94,7 @@ SPAN.calDateField:hover {
     font-size: 8pt; 
     text-decoration: none; /* underline; */
     cursor: pointer; 
+    width: 11.2pt;
 }
 .calTimeFieldExpanded:hover {
     color: #3399ff;

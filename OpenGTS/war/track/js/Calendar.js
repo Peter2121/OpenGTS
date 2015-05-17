@@ -1029,16 +1029,15 @@ Calendar.prototype._writeCalendar = function(expanded, calRows)
             calendarHTML += "<span class='"+CLASS_CAL_TIME_EXP+"' id='"+timeID+"'></span>";
         } else
         if (calTextTimeEntry) {
-            var tw = 13; // pixel width: 12 for FF
             calendarHTML += "<input class='"+CLASS_CAL_TIME_EXP+"' id='"+hourID+"' title='"+TOOLTIP_SET_HOUR+"'" +
                 "onkeypress=\"javascript:return "+this.calVarName+".timeDigitKey(event,0);\" " +
                 "onchange=\"javascript:"+this.calVarName+".setInputHour();\" " + 
-                "size='2' maxlength='2' style='border:0; margin:0; padding:0; width:"+tw+"px;'></input>";
+            	"size='2' maxlength='2' style='border:0; margin:0; padding:0;'></input>";
             calendarHTML += "<span class='"+CLASS_CAL_TIME_EXP_COLON+"'>:</span>";
             calendarHTML += "<input class='"+CLASS_CAL_TIME_EXP+"' id='"+minuteID+"' title='"+TOOLTIP_SET_MINUTE+"'" +
                 "onkeypress=\"javascript:return "+this.calVarName+".timeDigitKey(event,1);\" " +
                 "onchange=\"javascript:"+this.calVarName+".setInputMinute();\" " + 
-                "size='2' maxlength='2' style='border:0; margin:0; padding:0; width:"+tw+"px;'></input>";
+            	"size='2' maxlength='2' style='border:0; margin:0; padding:0;'></input>";
         } else {
             calendarHTML += "<a class='"+CLASS_CAL_TIME_EXP+"' id='"+hourID+"' href=\"javascript:"+this.calVarName+".advanceHour(1);\" title='"+TOOLTIP_SET_HOUR+"'></a>";
             calendarHTML += "<span class='"+CLASS_CAL_TIME_EXP_COLON+"'>:</span>";

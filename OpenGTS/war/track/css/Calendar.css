@@ -88,6 +88,7 @@ SPAN.calDateField {
     color: blue;
     text-decoration: none; /* underline; */
     cursor: pointer; 
+    width: 11.2pt;
 }
 .calTimeFieldExpanded:hover {
     color: blue;
