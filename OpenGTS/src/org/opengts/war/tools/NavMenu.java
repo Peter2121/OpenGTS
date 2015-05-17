@@ -69,7 +69,7 @@ public class NavMenu {
                 	if (sb.length() > 0) { sb.append(" | "); }
                     String uri  = WebPageAdaptor.EncodeURL(reqState, page.getPageURI());
                     String desc = page.getNavigationDescription(reqState);
-                    sb.append("<a href='"+uri+"'>").append(desc).append("</a>");
+                    sb.append("&nbsp;<a href='"+uri+"'>").append(desc).append("</a>");
                 } else {
                     String vers   = Version.getVersion();
                     String plName = privLabel.getName();
@@ -91,8 +91,8 @@ public class NavMenu {
                     String icon = page.getMenuIconImage();
                     String menuHelp = StringTools.trim(page.getMenuHelp(reqState, null));
                     if (!StringTools.isBlank(icon))
-                    	sb.append("<a href='"+uri+"' title='"+menuHelp+"'>").append("<img class='"+leafIconClass+"' src='"+icon+"' alt='"+desc+"'/>").append("</a>&nbsp;");
-                    else sb.append("<a href='"+uri+"'>").append(desc).append("</a>&nbsp;");
+                    	sb.append("&nbsp;<a href='"+uri+"' title='"+menuHelp+"'>").append("<img class='"+leafIconClass+"' src='"+icon+"' alt='"+desc+"'/>").append("</a>&nbsp;");
+                    else sb.append("&nbsp;<a href='"+uri+"'>").append(desc).append("</a>&nbsp;");
                 } else {
                     String vers   = Version.getVersion();
                     String plName = privLabel.getName();
