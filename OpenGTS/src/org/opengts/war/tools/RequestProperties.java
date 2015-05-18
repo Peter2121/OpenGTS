@@ -527,6 +527,14 @@ public class RequestProperties
     }
 
     // ------------------------------------------------------------------------
+
+    /* return referred page from pageNavHTML */
+    public String getRefPage()
+    {
+    	return this.request.getHeader("Referer");
+    }
+    
+    // ------------------------------------------------------------------------
     
     /* set page frame sections written to client */
     public void setPageFrameSections(int pfs)

@@ -562,6 +562,12 @@ public abstract class TrackMap
         String  tzStr    = (String)AttributeTools.getRequestAttribute(request, Calendar.PARM_TIMEZONE, "");
         String  cmdName  = reqState.getCommandName();
         String  cmdArg   = reqState.getCommandArg();
+        String  _refPage = reqState.getRefPage();
+        String  refPage  = "";
+        String  currPage = reqState.getPageName();
+
+        String [] buf = StringTools.split(_refPage,'=');
+        if(buf.length > 1) refPage = buf[1]; 
 
         /* limit info */
         long   limitCnt  = AttributeTools.getRequestLong(  request, PARM_MAP_LIMIT     , -1L);
@@ -708,49 +714,66 @@ public abstract class TrackMap
 
         /* range 'from' [keywords: frDate, startDate, dateRange] */
         // "YYYY/MM[/DD[/hh[:mm[:ss]]]]"  ie "YYYY/MM/DD/hh:mm:ss"
-        DateTime dateFr; // initialized below
+        DateTime dateFr = null; // initialized below
         
         String rangeFrFld[] = !StringTools.isBlank(rangeFr)? StringTools.parseStringArray(rangeFr, "/:") : null;
-        if (!this.showFromCalendar) {
-            if(!useDateFr) dateFr = null;
-            else {
-            	dateFr=new DateTime(DateTime.getCurrentTimeSec()-60*minsFleetLive,tz);
-            }
-        } else
-        if (ListTools.isEmpty(rangeFrFld)) {
-            if (isFleet) {
-                // one month ago
-                // (only save if displaying the 'From' Calendar
-                dateFr = new DateTime(now.getMonthDelta(tz,-1), tz);	// TODO: change to days, get this period (X days) from parameter
-            } else {
-                // beginning of today
-                dateFr = new DateTime(now.getDayStart(tz), tz);
-            }
-        } else
-        if (rangeFrFld.length == 1) {
-            // parse as 'Epoch' time
-            long epoch = StringTools.parseLong(rangeFrFld[0], now.getTimeSec());
-            dateFr = new DateTime(epoch, tz);
-        } else {
-            // (rangeFrFld.length >= 2)
-            int YY = StringTools.parseInt(rangeFrFld[0], now.getYear());
-            int MM = StringTools.parseInt(rangeFrFld[1], now.getMonth1());
-            int DD;     // initialized below
-            int hh = 0; // default to beginning of day
-            int mm = 0;
-            int ss = 0;
-            if (rangeFrFld.length >= 3) {
-                // at least YYYY/MM/DD provided
-                DD = StringTools.parseInt(rangeFrFld[2], now.getDayOfMonth());
-                if (rangeFrFld.length > 3) { hh = StringTools.parseInt(rangeFrFld[3], hh); }
-                if (rangeFrFld.length > 4) { mm = StringTools.parseInt(rangeFrFld[4], mm); }
-                if (rangeFrFld.length > 5) { ss = StringTools.parseInt(rangeFrFld[5], ss); }
-            } else {
-                // only YYYY/MM provided
-                DD = 1;
-            }
-            dateFr = new DateTime(tz, YY, MM, DD, hh, mm, ss);
-            //Print.logInfo("Fr: YY="+YY+", MM="+MM+", DD="+DD+", hh="+hh+", mm="+mm+", ss="+ss);
+
+        int YY = 0;
+        int MM = 0;
+        int DD = 0;
+        int hh = 0; 
+        int mm = 0;
+        int ss = 0;
+
+        if (!this.showFromCalendar && !useDateFr) dateFr = null;
+        else {
+	        switch(currPage) {
+		        case Constants.PAGE_MAP_DEVICE:
+		        	switch(refPage) {
+		        		case Constants.PAGE_MAP_FLEETLIVE:	// Need to reinitialize dateFr
+		                    dateFr = new DateTime(now.getDayStart(tz), tz);
+		        			break;
+		        		case Constants.PAGE_MAP_FLEET:	// Need to reinitialize dateFr
+		                    dateFr = new DateTime(now.getDayStart(tz), tz);
+		        			break;
+		        		default:	// Trying to get request data
+		        	        if (ListTools.isEmpty(rangeFrFld)) {	// No data - initialize dateFr
+		        	        	dateFr = new DateTime(now.getDayStart(tz), tz);
+		        	        } else {	// Decoding data
+		        	            if (rangeFrFld.length == 1) { // parse as 'Epoch' time
+		        	                long epoch = StringTools.parseLong(rangeFrFld[0], now.getTimeSec());
+		        	                dateFr = new DateTime(epoch, tz);
+		        	            } else { // (rangeFrFld.length >= 2)
+		        	                YY = StringTools.parseInt(rangeFrFld[0], now.getYear());
+		        	                MM = StringTools.parseInt(rangeFrFld[1], now.getMonth1());
+		        	                hh = 0; // default to beginning of day
+		        	                mm = 0;
+		        	                ss = 0;
+		        	                if (rangeFrFld.length >= 3) {
+		        	                    // at least YYYY/MM/DD provided
+		        	                    DD = StringTools.parseInt(rangeFrFld[2], now.getDayOfMonth());
+		        	                    if (rangeFrFld.length > 3) { hh = StringTools.parseInt(rangeFrFld[3], hh); }
+		        	                    if (rangeFrFld.length > 4) { mm = StringTools.parseInt(rangeFrFld[4], mm); }
+		        	                    if (rangeFrFld.length > 5) { ss = StringTools.parseInt(rangeFrFld[5], ss); }
+		        	                } else { // only YYYY/MM provided
+		        	                    DD = 1;
+		        	                	}
+		        	                dateFr = new DateTime(tz, YY, MM, DD, hh, mm, ss);
+		        	                //Print.logInfo("Fr: YY="+YY+", MM="+MM+", DD="+DD+", hh="+hh+", mm="+mm+", ss="+ss);
+		        	            }
+		        	        }
+		        			break;	// End of 'default' (decoding request data)
+		        	}	// End of switch(refPage)
+		        	break;	// end of currPage==PAGE_MAP_DEVICE
+		        case Constants.PAGE_MAP_FLEET:
+	                dateFr = new DateTime(now.getMonthDelta(tz,-1), tz); // TODO: change to days, get this period (X days) from parameter
+		        	break;
+		        case Constants.PAGE_MAP_FLEETLIVE:
+	            	dateFr=new DateTime(DateTime.getCurrentTimeSec()-60*minsFleetLive,tz); // TODO: get minsFleetLive (X mins) from parameter
+		        	break;
+		        default:
+		        	break;
+	        }
         }
 
         /* range 'to'  [keywords: toDate, endDate, dateRange] */
@@ -772,12 +795,11 @@ public abstract class TrackMap
             dateTo = new DateTime(epoch, tz);
         } else {
             // (rangeToFld.length >= 2)
-            int YY = StringTools.parseInt(rangeToFld[0], now.getYear());
-            int MM = StringTools.parseInt(rangeToFld[1], now.getMonth1());
-            int DD;      // initialized below
-            int hh = 23; // default to end of day
-            int mm = 59;
-            int ss = 59;
+            YY = StringTools.parseInt(rangeToFld[0], now.getYear());
+            MM = StringTools.parseInt(rangeToFld[1], now.getMonth1());
+            hh = 23; // default to end of day
+            mm = 59;
+            ss = 59;
             if (rangeToFld.length >= 3) {
                 // at least YYYY/MM/DD provided
                 DD = StringTools.parseInt(rangeToFld[2], now.getDayOfMonth());
@@ -1264,9 +1286,9 @@ public abstract class TrackMap
                     } else {
                         out.println("<td style='width:5px; min-width:5px;'>&nbsp;</td>\n");
                     }
-                    controlCellPaddingStye = "padding-left:5px";
+                    controlCellPaddingStye = "padding-left:2px";
                 } else {
-                    controlCellPaddingStye = "padding-right:5px";
+                    controlCellPaddingStye = "padding-right:2px";
                 }
 
                 // Date Range Selector
