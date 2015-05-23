@@ -2706,6 +2706,35 @@ public class DateTime
     // ------------------------------------------------------------------------
 
     /**
+    *** Returns the Epoch timestamp representing the current date, plus the number of
+    *** days offset.
+    *** @param tz       The overriding TimeZone
+    *** @param deltaDays  The delta days (added to the days represented by this DateTime instance)
+    *** @return The Epoch timestamp
+    **/
+    public long getDaysDelta(TimeZone tz, int deltaDays)
+    {
+        if (tz == null) { tz = _timeZone(tz); }
+
+        Calendar c  = this.getCalendar(tz);
+       	c.add(Calendar.DAY_OF_YEAR, deltaDays);
+       	
+        int YY = c.get(Calendar.YEAR);
+        int MM = c.get(Calendar.MONTH); // 0..11
+        int DD = c.get(Calendar.DAY_OF_MONTH); // 1..31
+       	
+       	if (deltaDays <= 0) {
+            c.set(YY, MM, DD,  0,  0,  0);
+        } else {
+            c.set(YY, MM, DD, 23, 59, 59);
+        }
+
+        return c.getTime().getTime() / 1000L;
+    }
+    
+    // ------------------------------------------------------------------------
+
+    /**
     *** Returns the Epoch timestamp representing the start of the current day represented
     *** by this DateTime instance, based on the GMT TimeZone.
     *** @return The Epoch timestamp

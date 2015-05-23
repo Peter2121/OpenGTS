@@ -396,6 +396,9 @@ Notes:
         <Property key="trackMap.lastDevicePushpin.fleet">true</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
         <Property key="trackMap.lastDevicePushpin.device">true</Property>       <!-- [true|false] show device pushpin for last pushpin on device map -->
         <Property key="trackMap.showAllDevices">true</Property>                 <!-- [true|false] show Devices from ALL accounts on fleet map if 'All' group is selected (attention, no security AT ALL) -->
+        <Property key="trackMap.showFleetDays">365</Property>          			<!-- [#] number of days before current date to show devices on "fleet" map -->
+        <Property key="trackMap.showFleetLiveMins">180</Property>             	<!-- [#] number of minutes before current time to show devices on "fleetLive" map -->
+        
 
         <!-- GoogleKML properties -->
         <Property key="googleKML.lastPushpinID">blue</Property>                 <!-- Color ID of the last event pushpin -->
