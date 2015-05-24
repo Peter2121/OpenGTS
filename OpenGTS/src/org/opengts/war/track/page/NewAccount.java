@@ -83,6 +83,7 @@ public class NewAccount
     
     private static final int ACCOUNT_ID_MAXLEN				= 20;
     private static final int ACCOUNT_ID_RNDLEN				= 4;
+    private static final int DEV_NAME_MAXLEN				= 6;
     private static final String PROP_TempAccount_ID_From_Contact 		= "Account.default.tempAccountIDFromContact";
     private static final String PROP_TempAccount_Default_Device_ID 		= "Account.default.tempAccountDeviceID";
     private static final String PROP_TempAccount_MaxUnconfirmHours 		= "Account.default.tempAccountMaxUnconfirmHours";
@@ -285,7 +286,7 @@ public class NewAccount
 	            accID = StringTools.trim(contactName);
 	            accID = StringTools.truncate(accID, NewAccount.ACCOUNT_ID_MAXLEN - NewAccount.ACCOUNT_ID_RNDLEN);
 	            if(!StringTools.isAlphaNumeric(accID, false)) {
-	//																	TODO: add translations            	
+	//																	TODO: add translations es ru-OK fr-OK            	
 	                Track.writeErrorResponse(reqState, i18n.getString("NewAccount.alphaNumericOnlyInContactName",
 	                        "Letters and numbers only can be used in Contact Name."));
 	                    return;
@@ -306,7 +307,7 @@ public class NewAccount
 	            	}
 	            	if(OKrnd) accID = accIDrnd;
 	            	else {
-	//										TODO: add translations            	
+	//										TODO: add translations es ru-OK fr-OK           	
 	            		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.tooManySimilarContactNames",
 	            					"Too many similar contact names. Try to use another contact name."));
 	            		return;
@@ -335,6 +336,7 @@ public class NewAccount
             device.setIsActive(true);
             String deviceDesc = accountID + " " + deviceID;
             device.setDescription(deviceDesc);
+            device.setDisplayName(StringTools.truncate(accountID, DEV_NAME_MAXLEN));
             device.save();
             device._reload(Device.FLD_uniqueID);
             uniqueID = device.getUniqueID();
@@ -342,7 +344,7 @@ public class NewAccount
             /* create users */
             User adminUser = User.createNewUser(account, "admin", contactEmail, acctDecPass);
             if(adminUser == null) {
-            	//										TODO: add translations            	
+            	//										TODO: add translations es ru-OK fr-OK           	
         		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.cannotCreateAdmin",
     				"Cannot create admin user. Manual account configuration maybe needed. Open session with blank username and create admin user."));
             }
@@ -353,7 +355,7 @@ public class NewAccount
             }
             User guestUser = User.createNewUser(account, "guest", contactEmail, Account.BLANK_PASSWORD);
             if(guestUser == null) {
-            	//										TODO: add translations            	
+            	//										TODO: add translations es ru-OK fr-OK           	
         		Track.writeErrorResponse(reqState, i18n.getString("NewAccount.cannotCreateGuest",
     				"Cannot create guest user. Manual account configuration maybe needed. Open session with blank username and create guest user with read/view permissions and blank password."));
             }
@@ -425,7 +427,7 @@ public class NewAccount
         String unconf = StringTools.toString(RTConfig.getInt(PROP_TempAccount_MaxUnconfirmHours, 12));
         String spmail = RTConfig.getString(PROP_ServiceProvider_Mail, "mail@domain.local");
 
-// TODO: modify translations (actually disabled)       
+// TODO: modify translations (actually disabled) es ru-OK fr-OK       
         String subj = i18n.getString("NewAccount.newAccount", "New Account");
         String body = i18n.getString("NewAccount.emailBody",
             "Hello {0},\n" +
@@ -470,12 +472,12 @@ public class NewAccount
 //                i18n.getString("NewAccount.emailSent","An email was sent to the specified email address with your new account information."));
             /* send config file */
             subj = RTConfig.getString(PROP_Config_mail_subj, "");
-//																TODO: add translations            
+//																TODO: add translations es ru-OK fr-OK           
             body = i18n.getString("trackerConfig.MailBody", "Import this file to GPSLogger");
             TrackerConfig tk = new TrackerConfig(accountID, userID, deviceID);
             if( tk.isInitialized() ) {
             	if( tk.Send(from, to, subj, body, smtpProps) ) 
-//																					TODO: add translations            	
+//																					TODO: add translations es ru-OK fr-OK            	
             		resp += "<br>" + i18n.getString("trackerConfig.emailSent","An email was sent to the specified email address with your tracker configuration file.");
             }
             Track.writeMessageResponse(reqState, resp);
