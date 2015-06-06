@@ -139,8 +139,7 @@ public class TrackerConfig {
 		byte[] byteAtt;
         String cc   = null;
         String bcc  = null;
-		
-		byteAtt=confData.getBytes(Charset.forName("UTF-8"));
+		byteAtt=confData.getBytes(Charset.forName(StringTools.CharEncoding_UTF_8));
 		SendMail.Attachment att = new SendMail.Attachment(byteAtt, confFileName, confFileNameMime);
 
 		return EMail.send(srcEmailAddr, destEmailAddr, cc, bcc, subj, body, smtpProps, att);

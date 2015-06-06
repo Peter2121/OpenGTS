@@ -862,6 +862,7 @@ public class SendMail
             if ((attach != null) && (attach.getSize() > 0)) {
                 sb.append("---- attachment ----\n");
                 sb.append(StringTools.toHexString(attach.getBytes())).append("\n");
+//                sb.append(Base64.encode(attach.getBytes())).append("\n");
             }
             sb.append("\n");
             return sb.toString();

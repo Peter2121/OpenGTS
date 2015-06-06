@@ -45,6 +45,7 @@ public class SendMailArgs
     // ------------------------------------------------------------------------
 
     public static final boolean USE_AUTHENTICATOR   = true;
+    private static final boolean FORCE_BASE64_ENCODING = true;
 
     public static final String SSL_FACTORY          = "javax.net.ssl.SSLSocketFactory";
 
@@ -348,13 +349,17 @@ public class SendMailArgs
                 multipart.addBodyPart(attachBodyPart);
                 // set content 
                 msg.setContent(multipart);
+                msg.saveChanges();
+                if(FORCE_BASE64_ENCODING) {
+                	attachBodyPart.setHeader("Content-Transfer-Encoding", "base64");
+                }
             } else {
                 msg.setText(msgBody, StringTools.CharEncoding_UTF_8);
+                msg.saveChanges(); 
                 //msg.setText(msgBody); // setContent(msgBody, CONTENT_TYPE_PLAIN);
             }
 
             /* send email */
-            msg.saveChanges(); // implicit with send()
             if (!USE_AUTHENTICATOR && !StringTools.isBlank(smtpUser)) {
                 Transport transport = session.getTransport("smtp");
                 transport.connect(smtpHost, smtpUser, (smtpPass!=null?smtpPass:""));
