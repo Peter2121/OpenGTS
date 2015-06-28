@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------------
 package org.opengts.war.track.page;
 
+import java.util.Locale;
 import java.util.Random;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,7 +64,9 @@ public class NewAccount
     // ------------------------------------------------------------------------
     
     public  static final String COMMAND_EMAIL_SUBMIT        = "e_submit";
+    public  static final String COMMAND_CREATE_SUBMIT       = "cr_submit";
 
+//    public  static final String PARM_LOCALE_SUBMIT          = "locale";
     public  static final String PARM_EMAIL_SUBMIT           = "e_submit";
 
     public  static final String PARM_CONTACT_EMAIL          = "e_addr";
@@ -249,7 +252,8 @@ public class NewAccount
         throws IOException
     {
         final PrivateLabel privLabel = reqState.getPrivateLabel();
-        final I18N i18n = privLabel.getI18N(NewAccount.class);
+        final Locale       locale    = reqState.getLocale();
+        final I18N i18n = privLabel.getI18N(NewAccount.class, locale);
         
         Print.logInfo("EMail address submitted: '" + contactName + "' : " + contactEmail);
         Account account = null;
@@ -494,8 +498,10 @@ public class NewAccount
         String pageMsg)
         throws IOException
     {
+    	
         final PrivateLabel privLabel = reqState.getPrivateLabel();
-        final I18N i18n = privLabel.getI18N(NewAccount.class);
+        final Locale       locale    = reqState.getLocale();
+        final I18N i18n = privLabel.getI18N(NewAccount.class, locale);
         String m = pageMsg;
         
         /* offline */
@@ -551,6 +557,17 @@ public class NewAccount
                     }
                 }
             }
+        }
+        else if (reqState.getCommandName().equals(COMMAND_CREATE_SUBMIT)) {
+            HttpServletRequest request = reqState.getHttpServletRequest();
+            String submitSend = AttributeTools.getRequestString(request, CommonServlet.PARM_LOCALE, "");
+/*
+        String localeStr = AttributeTools.getRequestString(request, Constants.PARM_LOCALE, null);           // query only
+        if (StringTools.isBlank(localeStr)) {
+            localeStr = (String)AttributeTools.getSessionAttribute(request, Constants.PARM_LOCALE, "");     // session only
+        }
+        reqState.setLocaleString(localeStr);
+*/
         }
 
         /* Style */
@@ -610,7 +627,7 @@ public class NewAccount
                 */
 
                 out.println("  <div id='hdndiv'>&nbsp;</div>");
-
+                out.println("  <input type='hidden' name='"+CommonServlet.PARM_LOCALE +"' value='"+locale.getLanguage()+"'/>");
                 out.println("  <input type='submit' name='"+PARM_EMAIL_SUBMIT+"' value='"+i18n.getString("NewAccount.submit","Submit")+"'><br>");
                 out.println("</form>");
                 out.println("<hr>");

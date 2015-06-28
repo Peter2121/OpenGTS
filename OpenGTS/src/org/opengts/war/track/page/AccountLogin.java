@@ -51,7 +51,6 @@ import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
-
 import org.opengts.war.tools.*;
 import org.opengts.war.track.*;
 
@@ -69,6 +68,7 @@ public class AccountLogin
 
     private static       String FORM_LOGIN                  = "Login";
     private static       String FORM_DEMO                   = "Demo";
+    private static       String FORM_NEW_ACCT               = "NewAcct";
 
     // ------------------------------------------------------------------------
 
@@ -92,6 +92,7 @@ public class AccountLogin
     public  static final String PROP_VSeparatorImage_W      = "VSeparatorImage.width";
     public  static final String PROP_VSeparatorImage_H      = "VSeparatorImage.height";
   //public  static final String PROP_legacyLAF              = "legacyLAF";
+    public  static final String JS_ONCHANGE_LOCALE			= "onChangeLocale()";
 
     // ------------------------------------------------------------------------
     // WebPage interface
@@ -227,6 +228,13 @@ public class AccountLogin
             }
         };
 
+        /* JavaScript */
+        HTMLOutput HTML_JS = new HTMLOutput() {
+            public void write(PrintWriter out) throws IOException {
+                JavaScriptTools.writeJSInclude(out, JavaScriptTools.qualifyJSFileRef("AccountLogin.js"), 0);
+            }
+        };
+
         /* write frame */
         String cssAccountLogin[] = borderedCss? CSS_ACCOUNT_LOGIN_BORDER : CSS_ACCOUNT_LOGIN_NOBORD;
         HTMLOutput HTML_CONTENT = new HTMLOutput(cssAccountLogin, pageMsg) {
@@ -241,8 +249,8 @@ public class AccountLogin
                 String  userID     = StringTools.trim(AccountRecord.getFilteredID(AttributeTools.getRequestString(req,Constants.PARM_USER   ,"")));
                 // other args
                 String  newURL     = reqState.getPrivateLabel().hasWebPage(PAGE_ACCOUNT_NEW )? 
-                    //EncodeMakeURL(reqState,RequestProperties.TRACK_BASE_URI(),PAGE_ACCOUNT_NEW ) : null;
-                    privLabel.getWebPageURL(reqState,PAGE_ACCOUNT_NEW) : null;
+                    EncodeMakeURL(reqState,RequestProperties.TRACK_BASE_URI(),PAGE_ACCOUNT_NEW,NewAccount.COMMAND_CREATE_SUBMIT,null) : null;
+//                    privLabel.getWebPageURL(reqState,PAGE_ACCOUNT_NEW) : null;
                 String  forgotURL  = reqState.getPrivateLabel().hasWebPage(PAGE_PASSWD_EMAIL)? 
                     //EncodeMakeURL(reqState,RequestProperties.TRACK_BASE_URI(),PAGE_PASSWD_EMAIL) : null;
                     privLabel.getWebPageURL(reqState,PAGE_PASSWD_EMAIL) : null;
@@ -292,6 +300,7 @@ public class AccountLogin
                 String cssLoginFormTable = borderedCss? CSS_LOGIN_FORM_PAD : CSS_LOGIN_FORM_NOPAD;
                 out.println("  <table class='"+cssLoginFormTable+"' cellpadding='0' cellspacing='0' border='0'>");
                 String focusFieldID = "";
+                String dftLocale = privLabel.getLocaleString();
                 // account login field
                 if (acctLogin) {
                     String fldID = "accountLoginField";
@@ -331,13 +340,12 @@ public class AccountLogin
                 }
                 // language selection
                 if (showLocale) {
-                    String dftLocale = privLabel.getLocaleString();
                     Map<String,String> localeMap = BasicPrivateLabel.GetSupportedLocaleMap(privLabel.getLocale());
                     ComboMap comboLocaleMap = new ComboMap(localeMap);
                     out.print("  <tr>");
                     out.print(    "<td class='accountLoginFieldLabel'>"+i18n.getString("AccountLogin.language","Language:")+"</td>");
                     out.print(    "<td class='accountLoginFieldValue'>");
-                    out.write(      Form_ComboBox(CommonServlet.PARM_LOCALE, CommonServlet.PARM_LOCALE, true, comboLocaleMap, dftLocale, null/*onchange*/));
+                    out.write(      Form_ComboBox(CommonServlet.PARM_LOCALE, CommonServlet.PARM_LOCALE, true, comboLocaleMap, dftLocale, JS_ONCHANGE_LOCALE));
                     out.print(    "</td>");
                     out.print(  "</tr>\n");
                 }
@@ -351,13 +359,19 @@ public class AccountLogin
                    if (legacy) { out.println("<br>"); }
                    out.println("  <span style='font-size:8pt;padding-left:10px;'><i><a href='"+forgotURL+"'>"+i18n.getString("AccountLogin.forgotPassword","Forgot your password?")+"</a></i></span>");
                 }
-                // end forn
+                // end form
                 out.println("</form>");
                 // "Cookies/JavaScript must be enabled"
 //                out.println("<br/>");
 //                out.println("<span style='font-size:8pt'><i>"+i18n.getString("AccountLogin.cookiesJavaScript","(Cookies and JavaScript must be enabled)")+"</i></span>");
                 //out.println("<br/>");
                 out.println("<br/>");
+// FORM_NEW_ACCT
+                if (newURL != null) {
+                	out.println("<form name='"+FORM_NEW_ACCT+"' method='post' action='"+newURL+"' target='"+target+"'>");
+                    out.println("  <input type='hidden' name='"+CommonServlet.PARM_LOCALE +"' value='"+dftLocale+"'/>");
+                    out.println("</form>");
+                }
                 // demo
                 if (showDemo) {
                     out.println(HR);
@@ -374,7 +388,8 @@ public class AccountLogin
                 // New Account
                 if (newURL != null) {
                     out.println(HR);
-                    out.println("<span style='font-size:8pt'><i><a href='"+newURL+"'>"+i18n.getString("AccountLogin.freeAccount","Sign up for a free account")+"</a></i></span>");
+                    String submitNewAcct = "javascript:submitNewAccount();";
+                    out.println("<span style='font-size:8pt'><i><a href='"+submitNewAcct+"'>"+i18n.getString("AccountLogin.freeAccount","Sign up for a free account")+"</a></i></span>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -401,7 +416,7 @@ public class AccountLogin
             reqState,
             onload,null,                // onLoad/onUnload
             HTML_CSS,                   // Style sheets
-            HTMLOutput.NOOP,            // JavaScript
+            HTML_JS,		            // JavaScript
             null,                       // Navigation
             HTML_CONTENT);              // Content
 

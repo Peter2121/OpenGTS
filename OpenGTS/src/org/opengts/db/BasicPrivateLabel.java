@@ -966,6 +966,17 @@ public class BasicPrivateLabel
     }
     
     /**
+    *** Gets the I18N instance for the specified class using the giving Locale
+    *** @param clazz  The class for which the I18N instance will be returned
+    *** @param locale Locale to use
+    *** @return The I18N instance for the specified class
+    **/
+    public I18N getI18N(Class clazz, Locale locale)
+    {
+        return I18N.getI18N(clazz, locale);
+    }
+    
+    /**
     *** Gets the I18N instance for the specified package using the Locale associated with this BasicPrivateLabel
     *** @param pkg  The package for which the I18N instance will be returned
     *** @return The I18N instance for the specified package
