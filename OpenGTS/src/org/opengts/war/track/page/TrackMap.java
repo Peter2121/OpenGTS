@@ -178,6 +178,14 @@ public abstract class TrackMap
     private static final String  ID_MAP_CONTROL_BAR             = "mapControlBar";
     private static final String  ID_MAP_COLLAPSE				= "mapCollapseControl";
 
+    // Dygraphs area
+    
+    private static final String  ID_DYG_DIV		                = "dygAreaDiv";
+    private static final String  ID_DYG_CELL	                = "dygAreaCell";
+    private static final String  ID_DYG_COLLAPSE				= "dygCollapseControl";
+    private static final String  VAR_DYG_COLLAPSE_STATUS		= "dygCollapseStatus";
+
+    
     // ------------------------------------------------------------------------
     // property values
 
@@ -215,7 +223,7 @@ public abstract class TrackMap
     private boolean         showFromCalendar        = false;
     private boolean			useDateFr				= false;
     private boolean         showToCalendar        	= true;
-    private boolean			useDateTo				= true;
+    private boolean			useDateTo				= true;    
 
     public TrackMap()
     {
@@ -258,7 +266,7 @@ public abstract class TrackMap
         	this.showFromCalendar = false;
         	this.useDateFr = true;
         }
-
+        
     }
 
     // ------------------------------------------------------------------------
@@ -526,6 +534,15 @@ public abstract class TrackMap
         if(this.useDateTo && !this.showToCalendar) {
         	JavaScriptTools.writeJSVar(out, CALENDAR_TO_ST, Calendar.formatArgDateTime(reqState.getEventDateTo()));
         }
+        /* Dygraphs area vars */
+        out.write("// Dygraphs area vars\n");
+        JavaScriptTools.writeJSVar(out, "ID_DYG_DIV"         , ID_DYG_DIV);
+        JavaScriptTools.writeJSVar(out, "ID_DYG_CELL"        , ID_DYG_CELL);
+        JavaScriptTools.writeJSVar(out, "ID_DYG_COLLAPSE"    , ID_DYG_COLLAPSE);
+        if((!isFleet) && this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_enableDygraphs,false)) { 
+        	if(this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_defaultDygraphsOpen,false)) JavaScriptTools.writeJSVar(out, VAR_DYG_COLLAPSE_STATUS, 1);
+        	else JavaScriptTools.writeJSVar(out, VAR_DYG_COLLAPSE_STATUS, 0);
+        	}
         /* end JavaScript */
         JavaScriptTools.writeEndJavaScript(out);
 
@@ -1061,6 +1078,9 @@ public abstract class TrackMap
         final boolean showLocationDetails       = 
             this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_showLocationDetails,true);
 
+        final boolean isDygEnabled = this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_enableDygraphs,false);
+        final boolean isDygOpen = this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_defaultDygraphsOpen,false);
+
         /* Style Sheets */
         HTMLOutput HTML_CSS = new HTMLOutput() {
             public void write(PrintWriter out) throws IOException {
@@ -1176,7 +1196,6 @@ public abstract class TrackMap
                     }
                     out.write("</td>");
                     out.write("<td style='vertical-align: bottom;'><span class=devChooserDD id='"+ID_DEVICE_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>");
-//                    out.write("<td><img src='images/Pulldown.png' height='17' style='cursor:pointer;' onclick='"+chooserOnclick+"'></td>");
                     out.write("<td style='padding-left:12px;'>&nbsp;</td>");
                 } else {
                     OrderedSet<String> dgList = isFleet? reqState.getDeviceGroupIDList(true) : reqState.getDeviceIDList(false);
@@ -1639,7 +1658,7 @@ public abstract class TrackMap
                 out.println("</table>"); // }
                 out.println("</td>"); // end of map control cell
                 out.println("</tr></table></td>");
-                out.println("<!-- End Map Controls -->\n");
+                out.println("<!-- End Map Controls Here-->\n");
 
                 // Map cell on right, controls on left
                 if (mapControlsOnLeft) { // controlsOnLeft/mapOnRight
@@ -1658,6 +1677,13 @@ public abstract class TrackMap
                 }
 
                 out.println("</tr>");
+                String dygIdOnclick = "javascript:dygCollapseControl()";
+                if( (!isFleet) && isDygEnabled ) { 
+                	if(isDygOpen) out.println("<tr><td id='"+ID_DYG_CELL+"'><div id='"+ID_DYG_DIV+"'><img src=\"images/Banner_White.png\"></div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&Delta;</span></td></tr>");/*&nabla; &Delta;*/
+// TODO: create additional css class                                                                                                                                                              ^^^^^^^^^^^^
+                	else out.println("<tr><td id='"+ID_DYG_CELL+"'><div style=\"display:none\" id='"+ID_DYG_DIV+"'><img src=\"images/Banner_White.png\"></div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&nabla;</span></td></tr>");/*&nabla; &Delta;*/
+                }	
+               	else out.println("<tr><td></td><td></td></tr>");
                 out.println("</table>");
                 out.println("</td>");
                 // --- end map/control

@@ -281,6 +281,8 @@ public class BasicPrivateLabel
     public  static final String PROP_TrackMap_showAllDevices                = "trackMap.showAllDevices";            // true|false
     public  static final String PROP_TrackMap_showFleetDays                 = "trackMap.showFleetDays";             // days before current date
     public  static final String PROP_TrackMap_showFleetLiveMins             = "trackMap.showFleetLiveMins";         // minutes before current time
+    public  static final String PROP_TrackMap_enableDygraphs                = "trackMap.enableDygraphs";            // enable Dygraphs graphs
+    public  static final String PROP_TrackMap_defaultDygraphsOpen           = "trackMap.defaultDygraphsOpen";       // open Dygraphs graphs on page load
 
     /* FullMap properties */
     // calendar properties

@@ -2501,6 +2501,33 @@ function jsmControlDisplay(expand)
     }
 };
 
+/**
+*** Toggle Dygraphs area display
+**/
+function dygCollapseControl()
+{
+    var dygDiv     = (ID_DYG_DIV)      ? document.getElementById(ID_DYG_DIV)      : null;
+    var dygCollCtl = (ID_DYG_COLLAPSE) ? document.getElementById(ID_DYG_COLLAPSE) : null;
+    var ctlHtml    = (dygCollCtl)      ? dygCollCtl.innerHTML : "";
+    var ctlHtmlOpen  = "&nabla;";
+    var ctlHtmlClose = "&Delta;";
+//    if (dygCollCtl != null) ctlHtml = dygCollCtl.innerHTML;
+    
+    if ((dygDiv != null) && (dygCollCtl != null)) {
+        if (dygCollapseStatus>0) {
+            // is visible, make invisible
+        	dygDiv.style.display = "none";
+            if (ctlHtml != "") dygCollCtl.innerHTML=ctlHtmlOpen;
+            dygCollapseStatus = 0;
+        } else {
+            // is invisible, make visible
+        	dygDiv.style.display = "";
+            if (ctlHtml != "") dygCollCtl.innerHTML=ctlHtmlClose;              	
+            dygCollapseStatus = 1;
+        }
+    }
+};
+
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
