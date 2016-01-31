@@ -211,3 +211,19 @@ DIV.GButton:hover {
 DIV.GButton-Sel {
     font-weight: bold;
 }
+
+/* Dygraph styles */
+.dygraph-ylabel { 
+	color: rgba(255,255,0,0.8);
+	font-size: 10pt; 
+}
+.dygraph-y2label { 
+	color: rgba(255,0,0,0.8);
+	font-size: 10pt; 
+}
+.dygraph-legend {
+    color: #3399ff;
+}
+.dygraph-axis-label {
+	font-size: 8pt;
+}

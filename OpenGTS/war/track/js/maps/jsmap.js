@@ -682,6 +682,104 @@ function jsmCenterOnLastPushpin(showLastPointOnly)
 
 };
 
+/*
+ * Create Dygraph chart 
+ */
+
+function jsmCreateDygraph(Data)
+{
+	if(dygEnable==null) return;
+	if(dygEnable==0) return;
+	if(dygCollapseStatus==0) return;
+	
+	var DYG_DIV_HEIGHT = 0.18;
+	var docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+	var dygDivHeight = DYG_DIV_HEIGHT * docHeight;
+	
+	var langAlt = "Altitude";
+	var langSpeed = "Speed";
+	var colorAlt = "rgba(255,255,0,0.8)";
+	var colorSpeed = "rgba(255,0,0,0.8)";
+	var colorTime = "#3399ff";
+	var dygDiv = document.getElementById(ID_DYG_DIV);
+	dygDiv.style.height = dygDivHeight;
+	
+	if(Data==null) {
+		Data =
+            [
+             [new Date("2009/07/29 00:00:57"),300,0],
+             [new Date("2009/07/29 01:30:55"),350,30],
+             [new Date("2009/07/29 02:15:10"),450,40],
+             [new Date("2009/07/29 04:30:55"),600,50],
+             [new Date("2009/07/29 08:15:10"),500,60],
+             [new Date("2009/07/29 15:30:55"),1000,80],
+             [new Date("2009/07/30 00:15:10"),1500,60],
+             [new Date("2009/07/30 01:30:55"),3000,80],
+             [new Date("2009/07/30 02:15:10"),1000,40],
+             [new Date("2009/07/30 03:30:55"),500,50],
+             [new Date("2009/07/30 04:15:10"),300,60],
+             [new Date("2009/07/30 05:02:01"),100,30]
+           ]
+	}
+	
+	new Dygraph (
+		dygDiv,
+		Data,	
+		{
+			labels: ["","Altitude","Speed"],
+			ylabel: langAlt,
+			y2label: langSpeed,
+			legend: "follow",
+			labelsDivStyles: {
+				'background-color': '#282828',
+				'padding': '2px 2px 2px 2px',
+				'margins': '0px 0px 0px 0px',
+				'font-size': '8pt'
+			},
+			series: {
+				Altitude: {
+					axis: 'y',
+					color: colorAlt,
+					strokeWidth: 1,
+					drawPoints: false,
+					pointSize: 2
+	            },
+	            Speed: {
+	              axis: 'y2',
+	              color: colorSpeed,
+	              strokeWidth: 1,
+	              drawPoints: false,
+	              pointSize: 2
+	            }
+			},
+			axes: {
+				x: {
+					axisLabelColor: colorTime,
+					axisLineWidth: 2,
+					axisLineColor: colorTime,
+					drawGrid: true,
+					labelsKMB: false	
+				},
+				y: {
+					axisLabelWidth: 40,
+					axisLabelColor: colorAlt,
+					axisLineWidth: 2,
+					axisLineColor: colorAlt,
+					drawGrid: true,
+					labelsKMB: false
+				},
+				y2: {
+					axisLabelWidth: 40,
+					axisLabelColor: colorSpeed,
+					axisLineWidth: 2,
+					axisLineColor: colorSpeed,
+					drawGrid: true,
+					labelsKMB: false
+				}
+			}
+		}
+		);
+}
 // ----------------------------------------------------------------------------
 
 /**
@@ -724,6 +822,8 @@ function _jsmSetMap(recenterMode, /*JSMapDataSet[]*/mapDataSets, poiPins, replay
 
         }
     }
+    
+    jsmCreateDygraph(null);
 
 };
 

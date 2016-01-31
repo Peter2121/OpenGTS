@@ -184,6 +184,7 @@ public abstract class TrackMap
     private static final String  ID_DYG_CELL	                = "dygAreaCell";
     private static final String  ID_DYG_COLLAPSE				= "dygCollapseControl";
     private static final String  VAR_DYG_COLLAPSE_STATUS		= "dygCollapseStatus";
+    private static final String  VAR_DYG_ENABLE					= "dygEnable";
 
     
     // ------------------------------------------------------------------------
@@ -540,9 +541,11 @@ public abstract class TrackMap
         JavaScriptTools.writeJSVar(out, "ID_DYG_CELL"        , ID_DYG_CELL);
         JavaScriptTools.writeJSVar(out, "ID_DYG_COLLAPSE"    , ID_DYG_COLLAPSE);
         if((!isFleet) && this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_enableDygraphs,false)) { 
+        	JavaScriptTools.writeJSVar(out, VAR_DYG_ENABLE, 1);
         	if(this.getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_defaultDygraphsOpen,false)) JavaScriptTools.writeJSVar(out, VAR_DYG_COLLAPSE_STATUS, 1);
         	else JavaScriptTools.writeJSVar(out, VAR_DYG_COLLAPSE_STATUS, 0);
         	}
+        else JavaScriptTools.writeJSVar(out, VAR_DYG_ENABLE, 0);
         /* end JavaScript */
         JavaScriptTools.writeEndJavaScript(out);
 
@@ -1103,6 +1106,8 @@ public abstract class TrackMap
                     DeviceChooser.writeJavaScript(out, locale, reqState,
                         privLabel.getWebPageURL(reqState, pageName, Track.COMMAND_DEVICE_LIST));
                 }
+                if(getBooleanProperty(privLabel,PrivateLabel.PROP_TrackMap_enableDygraphs,false))
+                	JavaScriptTools.writeJSInclude(out, JavaScriptTools.qualifyJSFileRef("Dygraph.js"), reqState.getHttpServletRequest());
                 int devicePushpinNdx = -99;
                 if (!isFleet && (device != null) && device.hasPushpinID()) {
                     String devIcon = device.getPushpinID();
@@ -1679,9 +1684,9 @@ public abstract class TrackMap
                 out.println("</tr>");
                 String dygIdOnclick = "javascript:dygCollapseControl()";
                 if( (!isFleet) && isDygEnabled ) { 
-                	if(isDygOpen) out.println("<tr><td id='"+ID_DYG_CELL+"'><div id='"+ID_DYG_DIV+"'><img src=\"images/Banner_White.png\"></div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&Delta;</span></td></tr>");/*&nabla; &Delta;*/
+                	if(isDygOpen) out.println("<tr><td id='"+ID_DYG_CELL+"'><div style=\"margin:5px; height:100px\" id='"+ID_DYG_DIV+"'>Update map to show graph</div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&Delta;</span></td></tr>");/*&nabla; &Delta;*/
 // TODO: create additional css class                                                                                                                                                              ^^^^^^^^^^^^
-                	else out.println("<tr><td id='"+ID_DYG_CELL+"'><div style=\"display:none\" id='"+ID_DYG_DIV+"'><img src=\"images/Banner_White.png\"></div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&nabla;</span></td></tr>");/*&nabla; &Delta;*/
+                	else out.println("<tr><td id='"+ID_DYG_CELL+"'><div style=\"margin:5px; height:100px; display:none\" id='"+ID_DYG_DIV+"'>Update map to show graph</div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&nabla;</span></td></tr>");/*&nabla; &Delta;*/
                 }	
                	else out.println("<tr><td></td><td></td></tr>");
                 out.println("</table>");
