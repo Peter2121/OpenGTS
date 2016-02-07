@@ -670,18 +670,17 @@ var DygraphLayout = (function() {
 
 /**
  * Creates a new DygraphLayout object.
- *
- * This class contains all the data to be charted.
- * It uses data coordinates, but also records the chart range (in data
- * coordinates) and hence is able to calculate percentage positions ('In this
- * view, Point A lies 25% down the x-axis.')
- *
- * Two things that it does not do are:
- * 1. Record pixel coordinates for anything.
+ * 
+ * This class contains all the data to be charted. It uses data coordinates, but
+ * also records the chart range (in data coordinates) and hence is able to
+ * calculate percentage positions ('In this view, Point A lies 25% down the
+ * x-axis.')
+ * 
+ * Two things that it does not do are: 1. Record pixel coordinates for anything.
  * 2. (oddly) determine anything about the layout of chart elements.
- *
+ * 
  * The naming is a vestige of Dygraph's original PlotKit roots.
- *
+ * 
  * @constructor
  */
 var DygraphLayout = function(dygraph) {

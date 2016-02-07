@@ -180,7 +180,6 @@ var UPD_ERROR = "#CC29A3";
 var UPD_PENDING = "#3399ff";
 
 // ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
 // --- JSMapPoint
 
 /**
@@ -683,10 +682,34 @@ function jsmCenterOnLastPushpin(showLastPointOnly)
 };
 
 /*
+ * Helper function to format Dygraph chart data
+ */
+
+function formatDate(d) {
+    var YYYY = d.getFullYear();
+    var MM = d.getMonth() + 1;
+    var DD = d.getDate();
+    var hh = d.getHours();
+    var mm = d.getMinutes();
+    var ss = d.getSeconds();
+    var sep = "/";
+    
+    var result = "";
+    result += (DD < 10 ? "0" : "") + DD;
+    result += sep + (MM < 10 ? "0" : "") + MM;
+    result += sep + YYYY + " ";
+    result += (hh < 10 ? "0" : "") + hh + ":";
+    result += (mm < 10 ? "0" : "") + mm + ":";
+    result += (ss < 10 ? "0" : "") + ss;
+    
+    return result;
+};
+
+/*
  * Create Dygraph chart 
  */
 
-function jsmCreateDygraph(Data)
+function _jsmCreateDygraph(Data)
 {
 	if(dygEnable==null) return;
 	if(dygEnable==0) return;
@@ -707,17 +730,8 @@ function jsmCreateDygraph(Data)
 	if(Data==null) {
 		Data =
             [
-             [new Date("2009/07/29 00:00:57"),300,0],
              [new Date("2009/07/29 01:30:55"),350,30],
-             [new Date("2009/07/29 02:15:10"),450,40],
-             [new Date("2009/07/29 04:30:55"),600,50],
-             [new Date("2009/07/29 08:15:10"),500,60],
-             [new Date("2009/07/29 15:30:55"),1000,80],
-             [new Date("2009/07/30 00:15:10"),1500,60],
-             [new Date("2009/07/30 01:30:55"),3000,80],
-             [new Date("2009/07/30 02:15:10"),1000,40],
-             [new Date("2009/07/30 03:30:55"),500,50],
-             [new Date("2009/07/30 04:15:10"),300,60],
+             [new Date("2009/07/29 22:15:10"),450,40],
              [new Date("2009/07/30 05:02:01"),100,30]
            ]
 	}
@@ -754,6 +768,12 @@ function jsmCreateDygraph(Data)
 			},
 			axes: {
 				x: {
+	                valueFormatter: function(ms) {
+	                    return formatDate(new Date(ms));
+	                },
+	                axisLabelFormatter: function(d) {
+	                    return formatDate(d);
+	                },
 					axisLabelColor: colorTime,
 					axisLineWidth: 2,
 					axisLineColor: colorTime,
@@ -766,6 +786,7 @@ function jsmCreateDygraph(Data)
 					axisLineWidth: 2,
 					axisLineColor: colorAlt,
 					drawGrid: true,
+					digitsAfterDecimal: 0,
 					labelsKMB: false
 				},
 				y2: {
@@ -774,6 +795,7 @@ function jsmCreateDygraph(Data)
 					axisLineWidth: 2,
 					axisLineColor: colorSpeed,
 					drawGrid: true,
+					digitsAfterDecimal: 0,
 					labelsKMB: false
 				}
 			}
@@ -823,8 +845,6 @@ function _jsmSetMap(recenterMode, /*JSMapDataSet[]*/mapDataSets, poiPins, replay
         }
     }
     
-    jsmCreateDygraph(null);
-
 };
 
 /**
@@ -973,6 +993,9 @@ function jsmParseAJAXPoints_JSON(jsonText, recenterMode, replay) // tmz
     /* "Location Detail" report */
     var detailList  = []; // detailed report table
 
+    /* Dygraph data */
+    var dygData = [];
+
     /* parse Shape tags [MapShape] */
     var shapes      = [];
     var Shapes = JMapData.Shapes; // JSON_Shapes
@@ -1107,6 +1130,9 @@ function jsmParseAJAXPoints_JSON(jsonText, recenterMode, replay) // tmz
                     //alert("[JSON] Created Pushpin: " + ppNdx);
                 }
                 detailList.push(new JSDetailPoint(rcdNdx, dsNdx, ppNdx, evRcd, textColor));
+                var ddate = new Date(0);
+                ddate.setUTCSeconds(evRcd.timestamp);
+                dygData.push(new Array(ddate,evRcd.altitude,evRcd.speedKPH));
             } else {
                 detailList.push(new JSDetailPoint(rcdNdx,    -1,    -1, evRcd, textColor));
             }
@@ -1172,6 +1198,7 @@ function jsmParseAJAXPoints_JSON(jsonText, recenterMode, replay) // tmz
 
     /* update map */
     _jsmSetMap(recenterMode, dsList, poiPinList, replay);
+    _jsmCreateDygraph(dygData);    
 
     /* draw shapes */
     if (shapes && (shapes.length > 0)) {
@@ -1337,6 +1364,9 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
 
     /* "Location Detail" report */
     var detailList  = []; // detailed report table
+    
+    /* Dygraph data */
+    var dygData = [];
 
     /* parse Shape tags [Shape] */
     var shapes      = [];
@@ -1472,6 +1502,9 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
                     //alert("[XML] Created Pushpin: " + ppNdx);
                 }
                 detailList.push(new JSDetailPoint(rcdNdx, dsNdx, ppNdx, evRcd, textColor));
+                var ddate = new Date(0);
+                ddate.setUTCSeconds(evRcd.timestamp);
+                dygData.push(new Array(ddate,evRcd.altitude,evRcd.speedKPH));
             } else {
                 detailList.push(new JSDetailPoint(rcdNdx,    -1,    -1, evRcd, textColor));
             }
@@ -1537,6 +1570,7 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
 
     /* update map */
     _jsmSetMap(recenterMode, dsList, poiPinList, replay);
+    _jsmCreateDygraph(dygData);    
 
     /* draw shapes */
     if (shapes && (shapes.length > 0)) {

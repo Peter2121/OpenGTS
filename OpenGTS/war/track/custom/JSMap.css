@@ -216,9 +216,18 @@ DIV.GButton-Sel {
 
 SPAN#mapCollapseControl {
     font-family: Arial; 
-    font-size: 16pt; 
+    font-size: 14pt; 
     color: #3399ff;
     cursor: pointer;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	padding-top: 0em;
+	padding-bottom: 0.1em;
+    border-style: solid;
+    border-color: #4a4a4a #4a4a4a #151515 #151515;
+    border-width: 2px;
+    border-radius: 0.15em; 
+    background-color: #282828;
 }
 
 SPAN#mapCollapseControl:hover {
