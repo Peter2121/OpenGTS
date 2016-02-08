@@ -777,6 +777,7 @@ function _jsmCreateDygraph(Data)
 					axisLabelColor: colorTime,
 					axisLineWidth: 2,
 					axisLineColor: colorTime,
+					axisLabelWidth: 65,
 					drawGrid: true,
 					labelsKMB: false	
 				},
