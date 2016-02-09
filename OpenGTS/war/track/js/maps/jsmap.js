@@ -179,6 +179,20 @@ var UPD_SUCCESS = "#FFFFFF";
 var UPD_ERROR = "#CC29A3";
 var UPD_PENDING = "#3399ff";
 
+/* Timer ID (used in Dygraph callbask) */
+var ID_DYG_TIMER = -1;
+
+/* Dygraph axes legend */
+var LANG_ALTITUDE = "Altitude";
+var LANG_SPEED = "Speed";
+
+/* Some Dygraph parameters */
+/* TODO: read from xlm file */
+var DYG_DIV_HEIGHT = 0.18;
+var DYG_COLOR_ALT = "rgba(255,255,0,0.8)";
+var DYG_COLOR_SPEED = "rgba(255,0,0,0.8)";
+var DYG_COLOR_TIME = "#3399ff";
+
 // ----------------------------------------------------------------------------
 // --- JSMapPoint
 
@@ -706,28 +720,63 @@ function formatDate(d) {
 };
 
 /*
+ * Callback functions to show/hide info about curently selected point on Dygraph
+ */
+
+function timerShowPushPin(pp) {
+    if (!jsmap) return; 
+    jsmap.JSShowPushpinNC(pp,false);	
+};
+
+function gmoCallBack(event, x, points, row, seriesName, pushPinList) {
+//	infoDiv=document.getElementById("info");
+//    if (!jsmap) return; 
+//    jsmap.JSShowPushpinNC(pushPinList[row],false);
+//	infoDiv.innerHTML=ptsInfo(points)+"<br>"+routeList[row].lat+"<br>"+routeList[row].lon;
+	if(ID_DYG_TIMER!=-1) clearTimeout(ID_DYG_TIMER);
+	ID_DYG_TIMER = setTimeout(timerShowPushPin, 300, pushPinList[row]);
+};
+
+function ugmoCallBack(event, x, points, row, seriesName) {
+//	infoDiv=document.getElementById("info");
+//	infoDiv.innerHTML="";
+	if(ID_DYG_TIMER!=-1) {
+		clearTimeout(ID_DYG_TIMER);
+		ID_DYG_TIMER = -1;
+	}
+};
+/*
+function ptsInfo(pts) {
+    var str = "";
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      if(i>0) str += ", ";
+      str += p.name + ": " + p.yval;
+    }
+    return str;
+};
+*/
+/*
  * Create Dygraph chart 
  */
 
-function _jsmCreateDygraph(Data)
+function _jsmCreateDygraph(Data,pushPinList)
 {
 	if(dygEnable==null) return;
 	if(dygEnable==0) return;
 	if(dygCollapseStatus==0) return;
 	
-	var DYG_DIV_HEIGHT = 0.18;
 	var docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
 	var dygDivHeight = DYG_DIV_HEIGHT * docHeight;
 	
-	var langAlt = "Altitude";
-	var langSpeed = "Speed";
-	var colorAlt = "rgba(255,255,0,0.8)";
-	var colorSpeed = "rgba(255,0,0,0.8)";
-	var colorTime = "#3399ff";
 	var dygDiv = document.getElementById(ID_DYG_DIV);
 	dygDiv.style.height = dygDivHeight;
+	if(ID_DYG_TIMER!=-1) {
+		clearTimeout(ID_DYG_TIMER);
+		ID_DYG_TIMER = -1;
+	}
 	
-	if(Data==null) {
+	if(Data==null) {	/* Just for debug without real data */
 		Data =
             [
              [new Date("2009/07/29 01:30:55"),350,30],
@@ -738,11 +787,14 @@ function _jsmCreateDygraph(Data)
 	
 	new Dygraph (
 		dygDiv,
-		Data,	
+		Data,
+		pushPinList,
 		{
+			highlightCallback: gmoCallBack,
+			unhighlightCallback: ugmoCallBack,
 			labels: ["","Altitude","Speed"],
-			ylabel: langAlt,
-			y2label: langSpeed,
+			ylabel: LANG_ALTITUDE,
+			y2label: LANG_SPEED,
 			legend: "follow",
 			labelsDivStyles: {
 				'background-color': '#282828',
@@ -753,14 +805,14 @@ function _jsmCreateDygraph(Data)
 			series: {
 				Altitude: {
 					axis: 'y',
-					color: colorAlt,
+					color: DYG_COLOR_ALT,
 					strokeWidth: 1,
 					drawPoints: false,
 					pointSize: 2
 	            },
 	            Speed: {
 	              axis: 'y2',
-	              color: colorSpeed,
+	              color: DYG_COLOR_SPEED,
 	              strokeWidth: 1,
 	              drawPoints: false,
 	              pointSize: 2
@@ -774,27 +826,27 @@ function _jsmCreateDygraph(Data)
 	                axisLabelFormatter: function(d) {
 	                    return formatDate(d);
 	                },
-					axisLabelColor: colorTime,
+					axisLabelColor: DYG_COLOR_TIME,
 					axisLineWidth: 2,
-					axisLineColor: colorTime,
+					axisLineColor: DYG_COLOR_TIME,
 					axisLabelWidth: 65,
 					drawGrid: true,
 					labelsKMB: false	
 				},
 				y: {
 					axisLabelWidth: 40,
-					axisLabelColor: colorAlt,
+					axisLabelColor: DYG_COLOR_ALT,
 					axisLineWidth: 2,
-					axisLineColor: colorAlt,
+					axisLineColor: DYG_COLOR_ALT,
 					drawGrid: true,
 					digitsAfterDecimal: 0,
 					labelsKMB: false
 				},
 				y2: {
 					axisLabelWidth: 40,
-					axisLabelColor: colorSpeed,
+					axisLabelColor: DYG_COLOR_SPEED,
 					axisLineWidth: 2,
-					axisLineColor: colorSpeed,
+					axisLineColor: DYG_COLOR_SPEED,
 					drawGrid: true,
 					digitsAfterDecimal: 0,
 					labelsKMB: false
@@ -1199,7 +1251,7 @@ function jsmParseAJAXPoints_JSON(jsonText, recenterMode, replay) // tmz
 
     /* update map */
     _jsmSetMap(recenterMode, dsList, poiPinList, replay);
-    _jsmCreateDygraph(dygData);    
+    _jsmCreateDygraph(dygData,pushPinList);    
 
     /* draw shapes */
     if (shapes && (shapes.length > 0)) {
@@ -1571,7 +1623,7 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
 
     /* update map */
     _jsmSetMap(recenterMode, dsList, poiPinList, replay);
-    _jsmCreateDygraph(dygData);    
+    _jsmCreateDygraph(dygData,pushPinList);    
 
     /* draw shapes */
     if (shapes && (shapes.length > 0)) {

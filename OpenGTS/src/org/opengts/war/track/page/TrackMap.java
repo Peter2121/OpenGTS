@@ -1684,9 +1684,9 @@ public abstract class TrackMap
                 out.println("</tr>");
                 String dygIdOnclick = "javascript:dygCollapseControl()";
                 if( (!isFleet) && isDygEnabled ) { 
-                	if(isDygOpen) out.println("<tr><td id='"+ID_DYG_CELL+"' style=\" padding-bottom:10px\"><div style=\"margin:5px; height:100px\" id='"+ID_DYG_DIV+"'>Update map to show graph</div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&Delta;</span></td></tr>");/*&nabla; &Delta;*/
+                	if(isDygOpen) out.println("<tr><td id='"+ID_DYG_CELL+"' style=\" padding-bottom:10px\"><div style=\"margin:5px; height:100px\" id='"+ID_DYG_DIV+"'>Update map to show graph</div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&Delta;</span><div id='info'></div></td></tr>");/*&nabla; &Delta;*/
 // TODO: create additional css class                                                                                                                                                              ^^^^^^^^^^^^
-                	else out.println("<tr><td id='"+ID_DYG_CELL+"' style=\" padding-bottom:10px\"><div style=\"margin:5px; height:100px; display:none\" id='"+ID_DYG_DIV+"'>Update map to show graph</div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&nabla;</span></td></tr>");/*&nabla; &Delta;*/
+                	else out.println("<tr><td id='"+ID_DYG_CELL+"' style=\" padding-bottom:10px\"><div style=\"margin:5px; height:100px; display:none\" id='"+ID_DYG_DIV+"'>Update map to show graph</div></td><td style=\"vertical-align:top\"><span class=devChooserDD id='"+ID_DYG_COLLAPSE+"' onclick='"+dygIdOnclick+"'>&nabla;</span><div id='info'></td></tr>");/*&nabla; &Delta;*/
                 }	
                	else out.println("<tr><td></td><td></td></tr>");
                 out.println("</table>");

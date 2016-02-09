@@ -287,6 +287,17 @@ google.maps.Map.prototype.showPushpinPopup = function(pp/*JSMapPushpin*/)
     }
 };
 
+/* display the specified pushpin popup without cleaning ALL popups */
+google.maps.Map.prototype.showPushpinPopupNC = function(pp/*JSMapPushpin*/)
+{
+    this.hideLastOpenPushpinPopup();
+    if (pp && pp.marker) {
+        pp.marker.openPushpinPopup();
+        this.activePopup = pp;
+        jsmHighlightDetailRow(pp.rcdNdx, true);
+    }
+};
+
 /* hide all visible popups */
 google.maps.Map.prototype.hidePushpinPopups = function()
 {
@@ -295,6 +306,16 @@ google.maps.Map.prototype.hidePushpinPopups = function()
     }
     if (this.activePopup) {
         jsmHighlightDetailRow(this.activePopup.rcdNdx, false);
+        this.activePopup = null;
+    }
+};
+
+/* hide one visible popup */
+google.maps.Map.prototype.hideLastOpenPushpinPopup = function()
+{
+    if (this.activePopup) {
+    	this.pushpinMarkers[this.activePopup.ppNdx].marker.closePushpinPopup();
+    	jsmHighlightDetailRow(this.activePopup.rcdNdx, false);
         this.activePopup = null;
     }
 };
@@ -1322,6 +1343,23 @@ JSMap.prototype.JSShowPushpin = function(pp, center)
             this.JSSetCenter(new JSMapPoint(pp.lat, pp.lon));
         }
         this.gmapGoogleMap.showPushpinPopup(pp);
+    }
+};
+
+//----------------------------------------------------------------------------
+
+/**
+*** This method should cause the info-bubble popup for the specified pushpin to display
+*** In contrast to JSShowPushpin it will not try to close ALL shown popups, but only the last one shown
+*** @param pushPin   The JSMapPushpin object which popup its info-bubble
+**/
+JSMap.prototype.JSShowPushpinNC = function(pp, center)
+{
+    if (pp) {
+        if (center) {
+            this.JSSetCenter(new JSMapPoint(pp.lat, pp.lon));
+        }
+        this.gmapGoogleMap.showPushpinPopupNC(pp);
     }
 };
 

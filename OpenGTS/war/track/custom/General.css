@@ -131,12 +131,12 @@ INPUT[type="submit"]:focus {
 
 INPUT[type="button"] {
     color: #ffffff;
-     border-style: solid;
-     border-color: #4a4a4a #4a4a4a #151515 #151515;
-     border-width: 2px;
-     border-radius: 0.4em; 
-	padding-left: 1em;
-	padding-right: 1em;
+    border-style: solid;
+    border-color: #4a4a4a #4a4a4a #151515 #151515;
+    border-width: 2px;
+    border-radius: 0.4em; 
+	padding-left: 0.7em;
+	padding-right: 0.7em;
 }
 
 INPUT[type="button"]:focus {

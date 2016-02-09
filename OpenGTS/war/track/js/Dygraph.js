@@ -2032,7 +2032,7 @@ var Dygraph = (function() {
  * whether the input data contains error ranges. For a complete list of
  * options, see http://dygraphs.com/options.html.
  */
-var Dygraph = function(div, data, opts, opt_fourth_param) {
+var Dygraph = function(div, data, optdata, opts, opt_fourth_param) {
   // These have to go above the "Hack for IE" in __init__ since .ready() can be
   // called as soon as the constructor returns. Once support for OldIE is
   // dropped, this can go down with the rest of the initializers.
@@ -2044,9 +2044,9 @@ var Dygraph = function(div, data, opts, opt_fourth_param) {
     // parameter. This doesn't make sense anymore, but it's easy to continue
     // to support this usage.
     console.warn("Using deprecated four-argument dygraph constructor");
-    this.__old_init__(div, data, opts, opt_fourth_param);
+    this.__old_init__(div, data, optdata, opts, opt_fourth_param);
   } else {
-    this.__init__(div, data, opts);
+    this.__init__(div, data, optdata, opts);
   }
 };
 
@@ -2369,7 +2369,7 @@ Dygraph.PLUGINS = [
 // Used for initializing annotation CSS rules only once.
 Dygraph.addedAnnotationCSS = false;
 
-Dygraph.prototype.__old_init__ = function(div, file, labels, attrs) {
+Dygraph.prototype.__old_init__ = function(div, file, optdata, labels, attrs) {
   // Labels is no longer a constructor parameter, since it's typically set
   // directly from the data source. It also conains a name for the x-axis,
   // which the previous constructor form did not.
@@ -2378,7 +2378,7 @@ Dygraph.prototype.__old_init__ = function(div, file, labels, attrs) {
     for (var i = 0; i < labels.length; i++) new_labels.push(labels[i]);
     Dygraph.update(attrs, { 'labels': new_labels });
   }
-  this.__init__(div, file, attrs);
+  this.__init__(div, file, optdata, attrs);
 };
 
 /**
@@ -2390,7 +2390,7 @@ Dygraph.prototype.__old_init__ = function(div, file, labels, attrs) {
  * @param {Object} attrs Miscellaneous other options
  * @private
  */
-Dygraph.prototype.__init__ = function(div, file, attrs) {
+Dygraph.prototype.__init__ = function(div, file, optdata, attrs) {
   // Hack for IE: if we're using excanvas and the document hasn't finished
   // loading yet (and hence may not have initialized whatever it needs to
   // initialize), then keep calling this routine periodically until it has.
@@ -2398,7 +2398,7 @@ Dygraph.prototype.__init__ = function(div, file, attrs) {
       typeof(G_vmlCanvasManager) != 'undefined' &&
       document.readyState != 'complete') {
     var self = this;
-    setTimeout(function() { self.__init__(div, file, attrs); }, 100);
+    setTimeout(function() { self.__init__(div, file, optdata, attrs); }, 100);
     return;
   }
 
@@ -2422,6 +2422,7 @@ Dygraph.prototype.__init__ = function(div, file, attrs) {
   // TODO(danvk): most of these should just stay in the attrs_ dictionary.
   this.maindiv_ = div;
   this.file_ = file;
+  this.cbdata_ = optdata;
   this.rollPeriod_ = attrs.rollPeriod || Dygraph.DEFAULT_ROLL_PERIOD;
   this.previousVerticalX_ = -1;
   this.fractions_ = attrs.fractions || false;
@@ -3981,7 +3982,8 @@ Dygraph.prototype.mouseMove_ = function(event) {
         this.lastx_,
         this.selPoints_,
         this.lastRow_,
-        this.highlightSet_);
+        this.highlightSet_,
+        this.cbdata_);
   }
 };
 
