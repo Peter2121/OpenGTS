@@ -843,6 +843,7 @@ function _jsmCreateDygraph(Data,pushPinList)
 					labelsKMB: false
 				},
 				y2: {
+					valueRange: [0, null],
 					axisLabelWidth: 40,
 					axisLabelColor: DYG_COLOR_SPEED,
 					axisLineWidth: 2,
