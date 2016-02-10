@@ -107,6 +107,7 @@ public class DBField
     public static String TYPE_ACCT_ID()             { return DBField.TYPE_STRING("accountID"    , 32); }
     public static String TYPE_USER_ID()             { return DBField.TYPE_STRING("userID"       , 32); }
     public static String TYPE_DEV_ID()              { return DBField.TYPE_STRING("deviceID"     , 32); }
+    public static String TYPE_DEV_ACCT_ID()         { return DBField.TYPE_STRING("devaccID"     , 32); }
     public static String TYPE_XPORT_ID()            { return DBField.TYPE_STRING("transportID"  , 32); }
     public static String TYPE_GROUP_ID()            { return DBField.TYPE_STRING("groupID"      , 32); }
     public static String TYPE_ROLE_ID()             { return DBField.TYPE_STRING("roleID"       , 32); }

@@ -644,4 +644,36 @@ This table contains Device specific diagnostic information collected from client
    5 timestamp              Timestamp                      INT UNSIGNED                 PRIMARY 
    6 binaryValue            Binary Value                   BLOB                                 
 
+================================================================================================
 
+Trigger 'before insert' for Device table
+This is a trigger to automatically create an ID from accountID and deviceID
+Used to identify devices from 'foreign' accounts
+
+-- Trigger DDL Statements
+DELIMITER $$
+
+USE `gts`$$
+
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `gts`.`device_before_insert`
+BEFORE INSERT ON `gts`.`Device`
+FOR EACH ROW
+SET NEW.uniqueID=concat('gprmc_',md5(concat(NEW.accountID,NEW.deviceID)))$$
+
+
+================================================================================================
+
+Additional table for Universal Groups support
+This is just DeviceList table with one additional column - to identify the account of device
+
+CREATE TABLE `DeviceUList` (
+  `accountID` varchar(32) NOT NULL,
+  `groupID` varchar(32) NOT NULL,
+  `devaccID` varchar(32) NOT NULL,
+  `deviceID` varchar(32) NOT NULL,
+  `lastUpdateTime` int(10) unsigned DEFAULT NULL,
+  `creationTime` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`accountID`,`groupID`,`deviceaccID`,`deviceID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
