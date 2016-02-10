@@ -119,6 +119,7 @@ public interface Constants
     public  static final String PAGE_DEVICE_PROPS           = "dev.props";              // Device properties
 
     public  static final String PAGE_GROUP_INFO             = "group.info";             // DeviceGroup admin/information
+    public  static final String PAGE_UGROUP_INFO            = "ugroup.info";            // Universal DeviceGroup admin/information
     
     public  static final String PAGE_DEVICE_ALERTS          = "dev.alerts";             // Device alerts
     public  static final String PAGE_ALERT_PANEL            = "alert.panel";            // Alert Monitor

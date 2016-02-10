@@ -44,7 +44,6 @@ import java.sql.*;
 
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
-
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
 
@@ -339,7 +338,7 @@ public class DeviceGroup
     
     // ------------------------------------------------------------------------
 
-    /* return true if the specified account/group/device exists */
+    /* return true if the specified device exists in the normal group of the account*/
     public boolean isDeviceInDeviceGroup(String deviceID)
     {
         if (deviceID != null) {
@@ -351,17 +350,67 @@ public class DeviceGroup
         }
     }
 
-    /* return true if the specified account/group/device exists */
-    public boolean isDeviceInDeviceGroup(Device device)
+    /* return true if the specified device exists in the universal group of the account*/
+    public boolean isDeviceInDeviceGroup(String devaccID, String deviceID)
     {
-        if (device != null) {
-            return this.isDeviceInDeviceGroup(device.getDeviceID());
+        if( (deviceID != null) || (devaccID != null) ) {
+            String accountID = this.getAccountID();
+            String groupID   = this.getGroupID();
+            return DeviceGroup.isDeviceInDeviceGroup(accountID, groupID, devaccID, deviceID);
         } else {
             return false;
         }
     }
+
+    /* return true if the specified device exists in normal or universal group of the account */
+    public boolean isDeviceInDeviceGroup(Device device)
+    {
+        if (device != null) {
+        	String devaccID = device.getAccountID();
+        	String deviceID = device.getDeviceID();
+        	String accountID = this.getAccountID();
+        	String groupID   = this.getGroupID();
+            return DeviceGroup.isDeviceInDeviceGroup(accountID, groupID, devaccID, deviceID);
+        } else {
+            return false;
+        }
+    }
+
+    /* return true if the specified device exists in the normal group of the account */
+    public static boolean isDeviceInDeviceGroup(String acctID, String groupID, String deviceID)
+    {
+        if ((acctID == null) || (groupID == null) || (deviceID == null)) {
+            return false;
+        } else
+        if (groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
+            return true;
+        } else {
+            try {
+                return DeviceGroup.exists(acctID, groupID, deviceID);
+            } catch (DBException dbe) {
+                return false;
+            }
+        }
+    }
     
-    /* add device to this group */
+    /* return true if the specified device exists in the universal group of the account */
+    public static boolean isDeviceInDeviceGroup(String acctID, String groupID, String devaccID, String deviceID)
+    {
+        if ((acctID == null) || (groupID == null) || (devaccID == null) || (deviceID == null)) {
+            return false;
+        } else
+        if (groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
+            return true;
+        } else {
+            try {
+                return DeviceGroup.exists(acctID, groupID, devaccID, deviceID);
+            } catch (DBException dbe) {
+                return false;
+            }
+        }
+    }
+    
+    /* add device to this normal group */
     public void addDeviceToDeviceGroup(String deviceID)
         throws DBException
     {
@@ -372,12 +421,31 @@ public class DeviceGroup
         }
     }
 
-    /* add device to this group */
+    /* add device to this universal group */
+    public void addDeviceToDeviceGroup(String devaccID, String deviceID)
+        throws DBException
+    {
+    	if (devaccID == null)
+    	if (deviceID != null) {
+            String accountID = this.getAccountID();
+            String groupID   = this.getGroupID();
+        	if (devaccID == null) { 
+        		devaccID = accountID; 
+        	}
+            DeviceGroup.addDeviceToDeviceGroup(accountID, groupID, devaccID, deviceID);
+        }
+    }
+
+    /* add device to this normal/universal group */
     public void addDeviceToDeviceGroup(Device device)
         throws DBException
     {
         if (device != null) {
-            this.addDeviceToDeviceGroup(device.getDeviceID());
+        	String devaccID = device.getAccountID();
+        	String deviceID = device.getDeviceID();
+        	String accountID = this.getAccountID();
+        	String groupID   = this.getGroupID();       	
+        	DeviceGroup.addDeviceToDeviceGroup(accountID, groupID, devaccID, deviceID);
         }
     }
     
@@ -692,7 +760,7 @@ public class DeviceGroup
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    /* return true if specified account/group exists */
+    /* return true if specified group exists in the account */
     public static boolean exists(String acctID, String groupID)
         throws DBException // if error occurs while testing existance
     {
@@ -713,9 +781,9 @@ public class DeviceGroup
         }
     }
 
-    /* return true if specified account/group/device exists */
+    /* return true if specified device exists in the normal group of the account */
     public static boolean exists(String acctID, String groupID, String deviceID)
-        throws DBException // if error occurs while testing existance
+        throws DBException // if error occurs while testing existence
     {
         if ((acctID != null) && (groupID != null) && (deviceID != null)) {
             DeviceList.Key deviceListKey = new DeviceList.Key(acctID, groupID, deviceID);
@@ -724,26 +792,20 @@ public class DeviceGroup
         return false;
     }
 
-    /* return true if the specified account/group/device exists */
-    public static boolean isDeviceInDeviceGroup(String acctID, String groupID, String deviceID)
+    /* return true if specified account/device exists in the universal group of the account*/
+    public static boolean exists(String acctID, String groupID, String devaccID, String deviceID)
+        throws DBException // if error occurs while testing existence
     {
-        if ((acctID == null) || (groupID == null) || (deviceID == null)) {
-            return false;
-        } else
-        if (groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
-            return true;
-        } else {
-            try {
-                return DeviceGroup.exists(acctID, groupID, deviceID);
-            } catch (DBException dbe) {
-                return false;
-            }
+        if ((acctID != null) && (groupID != null) && (devaccID != null) && (deviceID != null)) {
+            DeviceUList.Key deviceUListKey = new DeviceUList.Key(acctID, groupID, devaccID, deviceID);
+            return deviceUListKey.exists();
         }
+        return false;
     }
 
     // ------------------------------------------------------------------------
 
-    /* add device to device group */
+    /* add device to normal device group */
     public static void addDeviceToDeviceGroup(String accountID, String groupID, String deviceID)
         throws DBException
     {
@@ -766,6 +828,33 @@ public class DeviceGroup
             DeviceList devListEntry = devListKey.getDBRecord();
             // no other data fields/columns required
             devListEntry.save();
+        }
+
+    }
+
+    /* add device to universal device group */
+    public static void addDeviceToDeviceGroup(String accountID, String groupID, String devaccID, String deviceID)
+        throws DBException
+    {
+
+        /* device exists? */
+        if (!Device.exists(devaccID,deviceID)) {
+            throw new DBException("Device does not exist: " + devaccID + "/" + deviceID);
+        }
+
+        /* group exists? */
+        if (!DeviceGroup.exists(accountID,groupID)) {
+            throw new DBException("DeviceGroup does not exist: " + accountID + "/" + groupID);
+        }
+
+        /* create/save record */
+        DeviceUList.Key devUListKey = new DeviceUList.Key(accountID, groupID, devaccID, deviceID);
+        if (devUListKey.exists()) {
+            // already exists
+        } else {
+            DeviceUList devUListEntry = devUListKey.getDBRecord();
+            // no other data fields/columns required
+            devUListEntry.save();
         }
 
     }
