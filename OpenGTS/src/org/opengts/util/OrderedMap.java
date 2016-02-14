@@ -48,7 +48,11 @@ public class OrderedMap<K,V>
 
     // ------------------------------------------------------------------------
 
-    private OrderedSet<K>       keyOrder = null;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1000L;
+	private OrderedSet<K>       keyOrder = null;
     private Map<String,String>  ignoredCaseMap = null;
 
     /**

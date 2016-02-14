@@ -209,10 +209,8 @@ import java.io.*;
 import java.sql.*;
 
 import org.opengts.util.*;
-
 import org.opengts.geocoder.*;
 import org.opengts.cellid.*;
-
 import org.opengts.dbtools.*;
 import org.opengts.dbtypes.*;
 import org.opengts.db.*;
@@ -11416,7 +11414,7 @@ public class Device // Asset
     }
 
     /**
-    *** Gets a set of Device IDs for all Accounts (oes not return null)
+    *** Gets a set of Device IDs for all Accounts (does not return null)
     *** @param inclInactv  True to include inactive Devices
     *** @param limit  The maximum number of Device IDs to return
     *** @return A set of Device IDs
@@ -11467,6 +11465,70 @@ public class Device // Asset
         return devList;
     }
     
+    /**
+    *** Gets a set of Device IDs for all Accounts (does not return null)
+    *** @param inclInactv  True to include inactive Devices
+    *** @return A set of Devices [accountID, deviceID]
+    *** @throws DBExeption
+    **/
+    public static OrderedSet<String[]> getAllDevices(boolean inclInactv)
+            throws DBException
+    {
+    		return Device.getAllDevices(inclInactv, -1L);
+    }
+    
+    /**
+    *** Gets a set of Device IDs for all Accounts (does not return null)
+    *** @param inclInactv  True to include inactive Devices
+    *** @param limit  The maximum number of Device IDs to return
+    *** @return A set of Devices  [accountID, deviceID]
+    *** @throws DBExeption
+    **/
+    public static OrderedSet<String[]> getAllDevices(boolean inclInactv, long limit)
+        throws DBException
+    {
+        /* read devices for all accounts */
+        OrderedSet<String[]> devList = new OrderedSet<String[]>();
+        DBConnection dbc = null;
+        Statement   stmt = null;
+        ResultSet     rs = null;
+        try {
+            /* select */
+            // DBSelect: SELECT accountID,deviceID FROM Device ORDER BY accountID,deviceID
+            DBSelect<Device> dsel = new DBSelect<Device>(Device.getFactory());
+            dsel.setSelectedFields(AccountRecord.FLD_accountID,Device.FLD_uniqueID);
+            DBWhere dwh = dsel.createDBWhere();
+            if (!inclInactv) {
+                dsel.setWhere(dwh.WHERE(
+                        dwh.NE(Device.FLD_isActive,0)
+                ));
+            }
+            dsel.setOrderByFields(AccountRecord.FLD_accountID,Device.FLD_uniqueID);
+            dsel.setLimit(limit);
+
+            /* get records */
+            dbc  = DBConnection.getDefaultConnection();
+            stmt = dbc.execute(dsel.toString());
+            rs = stmt.getResultSet();
+            while (rs.next()) {
+                String accId = rs.getString(AccountRecord.FLD_accountID);
+                String devId = rs.getString(Device.FLD_uniqueID);
+                String[] device = new String[] { accId, devId };
+                devList.add(device);
+            }
+
+        } catch (SQLException sqe) {
+            throw new DBException("Getting All Devices", sqe);
+        } finally {
+            if (rs   != null) { try { rs.close();   } catch (Throwable t) {} }
+            if (stmt != null) { try { stmt.close(); } catch (Throwable t) {} }
+            DBConnection.release(dbc);
+        }
+
+        /* return list */
+        return devList;
+    }
+
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // This section supports a method for obtaining human readable information from

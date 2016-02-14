@@ -1191,6 +1191,7 @@ public class RequestProperties
 
     /* get the description of a specific device */
     private Device descLastDeviceDescription = null; // last device-description cache
+    // TODO: add accountID argument to deal with 'foreign' devices
     public String getDeviceDescription(String devID, boolean rtnDispName)
     {
         String devDescFields[] = new String[] {

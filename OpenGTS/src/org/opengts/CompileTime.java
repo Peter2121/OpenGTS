@@ -1,9 +1,9 @@
 package org.opengts;
 public class CompileTime
 {
-    // 2016/02/10 22:06:34 CET
-    public static final long   COMPILE_TIMESTAMP    = 1455138394L;
-    public static final String COMPILE_DATETIME     = "2016/02/10 22:06:34 CET";
+    // 2016/02/14 01:09:09 CET
+    public static final long   COMPILE_TIMESTAMP    = 1455408549L;
+    public static final String COMPILE_DATETIME     = "2016/02/14 01:09:09 CET";
     public static final String SERVICE_ACCOUNT_ID   = "opengts";
     public static final String SERVICE_ACCOUNT_NAME = "Open Source OpenGTS";
     public static final String SERVICE_ACCOUNT_KEY  = "";

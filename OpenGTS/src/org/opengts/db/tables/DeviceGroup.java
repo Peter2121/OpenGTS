@@ -184,7 +184,7 @@ public class DeviceGroup
         I18N i18n = I18N.getI18N(DeviceGroup.class, loc);
         return i18n.getString("DeviceGroup.description", 
             "This table defines " +
-            "Account specific Device Groups."
+            "Account specific Device Groups (normal and universal)."
             );
     }
 
@@ -448,26 +448,130 @@ public class DeviceGroup
         	DeviceGroup.addDeviceToDeviceGroup(accountID, groupID, devaccID, deviceID);
         }
     }
+
+    /* add device to normal device group */
+    public static void addDeviceToDeviceGroup(String accountID, String groupID, String deviceID)
+        throws DBException
+    {
+
+        /* device exists? */
+        if (!Device.exists(accountID,deviceID)) {
+            throw new DBException("Device does not exist: " + accountID + "/" + deviceID);
+        }
+
+        /* group exists? */
+        if (!DeviceGroup.exists(accountID,groupID)) {
+            throw new DBException("DeviceGroup does not exist: " + accountID + "/" + groupID);
+        }
+
+        /* create/save record */
+        DeviceList.Key devListKey = new DeviceList.Key(accountID, groupID, deviceID);
+        if (devListKey.exists()) {
+            // already exists
+        } else {
+            DeviceList devListEntry = devListKey.getDBRecord();
+            // no other data fields/columns required
+            devListEntry.save();
+        }
+
+    }
+
+    /* add device to universal device group */
+    public static void addDeviceToDeviceGroup(String accountID, String groupID, String devaccID, String deviceID)
+        throws DBException
+    {
+
+        /* device exists? */
+        if (!Device.exists(devaccID,deviceID)) {
+            throw new DBException("Device does not exist: " + devaccID + "/" + deviceID);
+        }
+
+        /* group exists? */
+        if (!DeviceGroup.exists(accountID,groupID)) {
+            throw new DBException("DeviceGroup does not exist: " + accountID + "/" + groupID);
+        }
+
+        /* create/save record */
+        DeviceUList.Key devUListKey = new DeviceUList.Key(accountID, groupID, devaccID, deviceID);
+        if (devUListKey.exists()) {
+            // already exists
+        } else {
+            DeviceUList devUListEntry = devUListKey.getDBRecord();
+            // no other data fields/columns required
+            devUListEntry.save();
+        }
+
+    }
+
+    // ------------------------------------------------------------------------
     
-    /* remove device from this group */
+    /* remove device from this normal group */
     public void removeDeviceFromDeviceGroup(String deviceID)
         throws DBException
     {
         if (deviceID != null) {
             String accountID = this.getAccountID();
             String groupID   = this.getGroupID();
-            DeviceGroup.removeDeviceFromDeviceGroup(accountID, deviceID, groupID);
+            DeviceGroup.removeDeviceFromDeviceGroup(accountID, groupID, deviceID);
         }
     }
     
-    /* remove device from this group */
+    /* remove device from this universal group */
+    public void removeDeviceFromDeviceGroup(String devaccID, String deviceID)
+        throws DBException
+    {
+        if (deviceID != null) {
+            String accountID = this.getAccountID();
+            String groupID   = this.getGroupID();
+            DeviceGroup.removeDeviceFromDeviceGroup(accountID, groupID, devaccID, deviceID);
+        }
+    }
+    
+    /* remove device from this normal/universal group */
     public void removeDeviceFromDeviceGroup(Device device)
         throws DBException
     {
         if (device != null) {
-            this.removeDeviceFromDeviceGroup(device.getDeviceID());
+        	String devaccID = device.getAccountID();
+        	String deviceID = device.getDeviceID();
+        	String accountID = this.getAccountID();
+        	String groupID   = this.getGroupID();       	        	
+        	DeviceGroup.removeDeviceFromDeviceGroup(accountID, groupID, devaccID, deviceID);
         }
     }
+
+    /* remove device from normal device group */
+    public static void removeDeviceFromDeviceGroup(String accountID, String groupID, String deviceID)
+        throws DBException
+    {
+
+        /* device exists? */
+        if (!Device.exists(accountID,deviceID)) {
+            throw new DBException("Device does not exist: " + accountID + "/" + deviceID);
+        }
+
+        /* delete record */
+        DeviceList.Key devListKey = new DeviceList.Key(accountID, groupID, deviceID);
+        devListKey.delete(false); // no dependencies
+        
+    }
+
+    /* remove device from universal device group */
+    public static void removeDeviceFromDeviceGroup(String accountID, String groupID, String devaccID, String deviceID)
+        throws DBException
+    {
+
+        /* device exists? */
+        if (!Device.exists(devaccID,deviceID)) {
+            throw new DBException("Device does not exist: " + accountID + "/" + deviceID);
+        }
+
+        /* delete record */
+        DeviceUList.Key devUListKey = new DeviceUList.Key(accountID, groupID, devaccID, deviceID);
+        devUListKey.delete(false); // no dependencies
+        
+    }
+
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -488,6 +592,7 @@ public class DeviceGroup
     *** Returns count of events in this DeviceGroup.<br>
     *** Note: Will return -1 if EventData table is InnoDB.
     **/
+    // ******************** TODO: universal groups support
     public static long countOldEvents(Account account, String groupID, long oldTimeSec, boolean log)
         throws DBException
     {
@@ -600,6 +705,7 @@ public class DeviceGroup
     *** @param log         True to display log
     *** @return The number of events deleted
     **/
+    // ******************** TODO: universal groups support
     public long deleteOldEvents(
         long oldTimeSec, 
         boolean log)
@@ -621,6 +727,7 @@ public class DeviceGroup
     *** @param log         True to display log
     *** @return The number of events deleted
     **/
+    // ******************** TODO: universal groups support    
     public static long deleteOldEvents(
         Account account, String groupID, 
         long oldTimeSec, 
@@ -762,7 +869,7 @@ public class DeviceGroup
 
     /* return true if specified group exists in the account */
     public static boolean exists(String acctID, String groupID)
-        throws DBException // if error occurs while testing existance
+        throws DBException // if error occurs while testing existence
     {
         if (StringTools.isBlank(acctID)) {
             // invalid account
@@ -801,78 +908,6 @@ public class DeviceGroup
             return deviceUListKey.exists();
         }
         return false;
-    }
-
-    // ------------------------------------------------------------------------
-
-    /* add device to normal device group */
-    public static void addDeviceToDeviceGroup(String accountID, String groupID, String deviceID)
-        throws DBException
-    {
-
-        /* device exists? */
-        if (!Device.exists(accountID,deviceID)) {
-            throw new DBException("Device does not exist: " + accountID + "/" + deviceID);
-        }
-
-        /* group exists? */
-        if (!DeviceGroup.exists(accountID,groupID)) {
-            throw new DBException("DeviceGroup does not exist: " + accountID + "/" + groupID);
-        }
-
-        /* create/save record */
-        DeviceList.Key devListKey = new DeviceList.Key(accountID, groupID, deviceID);
-        if (devListKey.exists()) {
-            // already exists
-        } else {
-            DeviceList devListEntry = devListKey.getDBRecord();
-            // no other data fields/columns required
-            devListEntry.save();
-        }
-
-    }
-
-    /* add device to universal device group */
-    public static void addDeviceToDeviceGroup(String accountID, String groupID, String devaccID, String deviceID)
-        throws DBException
-    {
-
-        /* device exists? */
-        if (!Device.exists(devaccID,deviceID)) {
-            throw new DBException("Device does not exist: " + devaccID + "/" + deviceID);
-        }
-
-        /* group exists? */
-        if (!DeviceGroup.exists(accountID,groupID)) {
-            throw new DBException("DeviceGroup does not exist: " + accountID + "/" + groupID);
-        }
-
-        /* create/save record */
-        DeviceUList.Key devUListKey = new DeviceUList.Key(accountID, groupID, devaccID, deviceID);
-        if (devUListKey.exists()) {
-            // already exists
-        } else {
-            DeviceUList devUListEntry = devUListKey.getDBRecord();
-            // no other data fields/columns required
-            devUListEntry.save();
-        }
-
-    }
-
-    /* remove device from device group */
-    public static void removeDeviceFromDeviceGroup(String accountID, String groupID, String deviceID)
-        throws DBException
-    {
-
-        /* device exists? */
-        if (!Device.exists(accountID,deviceID)) {
-            throw new DBException("Device does not exist: " + accountID + "/" + deviceID);
-        }
-
-        /* delete record */
-        DeviceList.Key devListKey = new DeviceList.Key(accountID, groupID, deviceID);
-        devListKey.delete(false); // no dependencies
-        
     }
 
     // ------------------------------------------------------------------------
@@ -938,8 +973,8 @@ public class DeviceGroup
 
     // ------------------------------------------------------------------------
 
-    /* return the DBSelect statement for the specified account/group */
-    protected static DBSelect _getDeviceListSelect(String acctId, String groupId, long limit)
+    /* return the DBSelect statement to search members of the specified normal group of the account */
+    protected static DBSelect<DeviceList> _getDeviceListSelect(String acctId, String groupId, long limit)
     {
 
         /* empty/null account */
@@ -971,14 +1006,71 @@ public class DeviceGroup
 
     }
 
-    /* return the number of devices in this group */
+    /* return the DBSelect statement to search members of the specified universal group of the account */
+    protected static DBSelect<DeviceUList> _getDeviceUListSelect(String acctId, String groupId, long limit)
+    {
+
+        /* empty/null account */
+        if (StringTools.isBlank(acctId)) {
+            return null;
+        }
+
+        /* empty/null group */
+        if (StringTools.isBlank(groupId)) {
+            return null;
+        }
+        
+        /* get select */
+        // DBSelect: SELECT devaccID,deviceID FROM DeviceUList WHERE ((accountID='acctId') and (groupID='groupId')) ORDER BY devaccID, deviceID
+        DBSelect<DeviceUList> dsel = new DBSelect<DeviceUList>(DeviceUList.getFactory());
+        dsel.setSelectedFields(DeviceUList.FLD_devaccID,DeviceList.FLD_deviceID);
+        DBWhere dwh = dsel.createDBWhere();
+        dsel.setWhere(
+            dwh.WHERE_(
+                dwh.AND(
+                    dwh.EQ(DeviceUList.FLD_devaccID,acctId ),
+                    dwh.EQ(DeviceList.FLD_groupID  ,groupId)
+                )
+            )
+        );
+        dsel.setOrderByFields(DeviceUList.FLD_devaccID,DeviceList.FLD_deviceID);
+        dsel.setLimit(limit);
+        return dsel;
+
+    }
+
+    /* return the number of devices in this normal/universal group */
+    public long getAllDeviceCount()
+    {
+        
+        /* get db selector */
+        String acctId  = this.getAccountID();
+        String groupId = this.getGroupID();
+        DBSelect<DeviceUList> dsel = DeviceGroup._getDeviceUListSelect(acctId, groupId, -1L);
+        if (dsel == null) {
+            return 0;
+        }
+
+        /* return count */
+        try {
+            //Print.logInfo("Retrieving count: " + dsel);
+            return DBRecord.getRecordCount(DeviceUList.getFactory(), dsel.getWhere());
+        } catch (DBException dbe) {
+            Print.logException("Unable to retrieve DeviceUList count", dbe);
+            return 0L;
+        }
+        
+    }
+
+    /* return the number of devices in this normal group (deprecated - getAllDeviceCount should be used) */
+    // ******************** Does not support universal groups
     public long getDeviceCount()
     {
         
         /* get db selector */
         String acctId  = this.getAccountID();
         String groupId = this.getGroupID();
-        DBSelect dsel = DeviceGroup._getDeviceListSelect(acctId, groupId, -1L);
+        DBSelect<DeviceList> dsel = DeviceGroup._getDeviceListSelect(acctId, groupId, -1L);
         if (dsel == null) {
             return 0;
         }
@@ -998,12 +1090,12 @@ public class DeviceGroup
     public OrderedSet<String> getDevices(User userAuth, boolean inclInactv)
         throws DBException
     {
-        String acctId  = this.getAccountID(); // TODO: matches "userAuth.getAccountID()"?
+        String acctId  = this.getAccountID();
         String groupId = this.getGroupID();
         return DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
     }
 
-    /* return list of all Devices within the specified DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    /* return list of all Devices within the specified normal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
     public static OrderedSet<String> getDeviceIDsForGroup(
         String acctId, String groupId, User userAuth, 
         boolean inclInactv)
@@ -1012,7 +1104,16 @@ public class DeviceGroup
         return DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
     }
 
-    /* return list of all Devices within the specified DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    /* return list of all Devices within the specified normal/universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    public static OrderedSet<String[]> getAllDevicesForGroup(
+        String acctId, String groupId, User userAuth,/*ignored*/ 
+        boolean inclInactv)
+        throws DBException
+    {
+        return DeviceGroup.getAllDevicesForGroup(acctId, groupId, userAuth,/*ignored*/ inclInactv, -1L);
+    }
+
+    /* return list of all Devices within the specified normal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
     public static OrderedSet<String> getDeviceIDsForGroup(
         String acctId, String groupId, User userAuth, 
         boolean inclInactv, long limit)
@@ -1033,7 +1134,7 @@ public class DeviceGroup
         }
 
         /* get db selector */
-        DBSelect dsel = DeviceGroup._getDeviceListSelect(acctId, groupId, limit);
+        DBSelect<DeviceList> dsel = DeviceGroup._getDeviceListSelect(acctId, groupId, limit);
         if (dsel == null) {
             return new OrderedSet<String>();
         }
@@ -1080,6 +1181,76 @@ public class DeviceGroup
             }
         } catch (SQLException sqe) {
             throw new DBException("Get Group DeviceList", sqe);
+        } finally {
+            if (rs   != null) { try { rs.close();   } catch (Throwable t) {} }
+            if (stmt != null) { try { stmt.close(); } catch (Throwable t) {} }
+            DBConnection.release(dbc);
+        }
+
+        /* return list */
+        return devList;
+
+    }
+
+    /* return list of all Devices within the specified normal/universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    public static OrderedSet<String[]> getAllDevicesForGroup(
+        String acctId, String groupId, User userAuth,/*ignored*/ 
+        boolean inclInactv, long limit)
+        throws DBException
+    {
+
+        /* valid accountId/groupId? */
+        if (StringTools.isBlank(acctId)) {
+            return new OrderedSet<String[]>();
+        } else
+        if (StringTools.isBlank(groupId)) {
+            return new OrderedSet<String[]>();
+        }
+
+        /* "All"? */
+        if (groupId.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
+            return Device.getAllDevices(inclInactv);	// We consider that 'all' universal group contains ALL devices of ALL accounts
+        }
+
+        /* get db selector */
+        DBSelect<DeviceUList> dsel = DeviceGroup._getDeviceUListSelect(acctId, groupId, limit);
+        if (dsel == null) {
+            return new OrderedSet<String[]>();
+        }
+
+        Account account = Account.getAccount(acctId);
+        if (account == null) {
+            // account not found?
+            Print.logWarn("Account not found? " + acctId);
+            return new OrderedSet<String[]>();
+        }
+        
+        
+        /* read devices for account */
+        OrderedSet<String[]> devList = new OrderedSet<String[]>();
+        DBConnection dbc = null;
+        Statement   stmt = null;
+        ResultSet     rs = null;
+        try {
+            dbc  = DBConnection.getDefaultConnection();
+            stmt = dbc.execute(dsel.toString());
+            rs   = stmt.getResultSet();
+            while (rs.next()) {
+                String dId = rs.getString(DeviceList.FLD_deviceID);
+                String aId = rs.getString(AccountRecord.FLD_accountID);
+                // trim inactive?
+                if (!inclInactv) {
+                	Account acc = Account.getAccount(aId);
+                    Device dev = (acc != null) ? Device._getDevice(acc, dId) : null;
+                    if ( (dev == null) || !dev.isActive()) {
+                        continue;
+                    }
+                }
+              String[] device = new String[] { aId, dId };
+              devList.add(device);
+            }
+        } catch (SQLException sqe) {
+            throw new DBException("Get Group UDeviceList", sqe);
         } finally {
             if (rs   != null) { try { rs.close();   } catch (Throwable t) {} }
             if (stmt != null) { try { stmt.close(); } catch (Throwable t) {} }
@@ -1166,14 +1337,15 @@ public class DeviceGroup
 
     // ------------------------------------------------------------------------
 
-    /* return list of all DeviceGroups in which the specified device is a member */
+    /* return list of all DeviceGroups of current account in which the specified device is a member */
     public static Collection<String> getDeviceGroupsForDevice(String acctId, String deviceId)
         throws DBException
     {
         return DeviceGroup.getDeviceGroupsForDevice(acctId, deviceId, true);
     }
     
-    /* return list of all DeviceGroups in which the specified device is a member */
+    /* return list of all DeviceGroups of current account in which the specified device is a member */
+    // TODO: add support of universal groups
     public static Collection<String> getDeviceGroupsForDevice(String acctId, String deviceId, boolean inclAll)
         throws DBException
     {

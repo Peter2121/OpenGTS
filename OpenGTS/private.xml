@@ -1466,7 +1466,7 @@ Notes:
                 <IconImage>device.png</IconImage>
     	        <ButtonImage>device.png</ButtonImage>
                 </Page>
-            <Page rtKey="GroupInfo" class="org.opengts.war.track.page.GroupInfo">
+            <Page rtKey="GroupInfo" class="org.opengts.war.track.page.UGroupInfo">
                 <AclName>acl.admin.group</AclName>
                 <IconImage>group.png</IconImage>
     	        <ButtonImage>group.png</ButtonImage>
