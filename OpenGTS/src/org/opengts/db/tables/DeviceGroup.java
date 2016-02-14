@@ -992,14 +992,8 @@ public class DeviceGroup
         DBSelect<DeviceList> dsel = new DBSelect<DeviceList>(DeviceList.getFactory());
         dsel.setSelectedFields(DeviceList.FLD_deviceID);
         DBWhere dwh = dsel.createDBWhere();
-        dsel.setWhere(
-            dwh.WHERE_(
-                dwh.AND(
-                    dwh.EQ(DeviceList.FLD_accountID,acctId ),
-                    dwh.EQ(DeviceList.FLD_groupID  ,groupId)
-                )
-            )
-        );
+        String wh = dwh.WHERE_(dwh.AND(dwh.EQ(AccountRecord.FLD_accountID,acctId ),dwh.EQ(DeviceList.FLD_groupID  ,groupId))); 
+        dsel.setWhere(wh);
         dsel.setOrderByFields(DeviceList.FLD_deviceID);
         dsel.setLimit(limit);
         return dsel;
@@ -1025,14 +1019,8 @@ public class DeviceGroup
         DBSelect<DeviceUList> dsel = new DBSelect<DeviceUList>(DeviceUList.getFactory());
         dsel.setSelectedFields(DeviceUList.FLD_devaccID,DeviceList.FLD_deviceID);
         DBWhere dwh = dsel.createDBWhere();
-        dsel.setWhere(
-            dwh.WHERE_(
-                dwh.AND(
-                    dwh.EQ(DeviceUList.FLD_devaccID,acctId ),
-                    dwh.EQ(DeviceList.FLD_groupID  ,groupId)
-                )
-            )
-        );
+        String wh = dwh.WHERE_(dwh.AND(dwh.EQ(AccountRecord.FLD_accountID,acctId),dwh.EQ(DeviceList.FLD_groupID,groupId))); 
+        dsel.setWhere(wh);
         dsel.setOrderByFields(DeviceUList.FLD_devaccID,DeviceList.FLD_deviceID);
         dsel.setLimit(limit);
         return dsel;
@@ -1237,7 +1225,7 @@ public class DeviceGroup
             rs   = stmt.getResultSet();
             while (rs.next()) {
                 String dId = rs.getString(DeviceList.FLD_deviceID);
-                String aId = rs.getString(AccountRecord.FLD_accountID);
+                String aId = rs.getString(DeviceUList.FLD_devaccID);
                 // trim inactive?
                 if (!inclInactv) {
                 	Account acc = Account.getAccount(aId);

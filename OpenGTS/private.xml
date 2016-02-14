@@ -398,7 +398,8 @@ Notes:
         <Property key="trackMap.showFleetDays">365</Property>          			<!-- [#] number of days before current date to show devices on "fleet" map -->
         <Property key="trackMap.showFleetLiveMins">180</Property>             	<!-- [#] number of minutes before current time to show devices on "fleetLive" map -->
         <Property key="trackMap.enableDygraphs">true</Property>                 <!-- [true|false] show Dygraphs div with speed/altitude graphs (device view only) -->
-        <Property key="trackMap.defaultDygraphsOpen">true</Property>         <!-- [true|false] Dygraphs div open/closed on page load (device view only) -->
+        <Property key="trackMap.defaultDygraphsOpen">true</Property>            <!-- [true|false] Dygraphs div open/closed on page load (device view only) -->
+        <Property key="trackMap.enableUniversalGroups">true</Property>          <!-- [true|false] (EXPERIMENTAL) Enable universal groups -->
         
 
         <!-- GoogleKML properties -->

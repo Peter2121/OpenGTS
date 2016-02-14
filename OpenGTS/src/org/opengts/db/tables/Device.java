@@ -11496,14 +11496,14 @@ public class Device // Asset
             /* select */
             // DBSelect: SELECT accountID,deviceID FROM Device ORDER BY accountID,deviceID
             DBSelect<Device> dsel = new DBSelect<Device>(Device.getFactory());
-            dsel.setSelectedFields(AccountRecord.FLD_accountID,Device.FLD_uniqueID);
+            dsel.setSelectedFields(AccountRecord.FLD_accountID,Device.FLD_deviceID);
             DBWhere dwh = dsel.createDBWhere();
             if (!inclInactv) {
                 dsel.setWhere(dwh.WHERE(
                         dwh.NE(Device.FLD_isActive,0)
                 ));
             }
-            dsel.setOrderByFields(AccountRecord.FLD_accountID,Device.FLD_uniqueID);
+            dsel.setOrderByFields(AccountRecord.FLD_accountID,Device.FLD_deviceID);
             dsel.setLimit(limit);
 
             /* get records */
@@ -11512,7 +11512,7 @@ public class Device // Asset
             rs = stmt.getResultSet();
             while (rs.next()) {
                 String accId = rs.getString(AccountRecord.FLD_accountID);
-                String devId = rs.getString(Device.FLD_uniqueID);
+                String devId = rs.getString(Device.FLD_deviceID);
                 String[] device = new String[] { accId, devId };
                 devList.add(device);
             }
