@@ -386,6 +386,17 @@ public class BasicPrivateLabel
     // ---
     public  static final String PROP_DeviceChooser_extraDebugEntries        = "deviceChooser.extraDebugEntries";        // int
 
+    /* AccountChooser misc properties (based on DeviceChooser) */
+    public  static final String PROP_AccountChooser_sortBy                   = "accountChooser.sortBy";                   // id|name|description
+    public  static final String PROP_AccountChooser_useTable                 = "accountChooser.useTable";                 // true|false
+    public  static final String PROP_AccountChooser_idPosition               = "accountChooser.idPosition";               // none|first|last (table only)
+    public  static final String PROP_AccountChooser_search                   = "accountChooser.search";                   // true|false (table only)
+    public  static final String PROP_AccountChooser_matchContains            = "accountChooser.matchContains";            // true|false 
+    public  static final String PROP_AccountChooser_singleItemTextField      = "accountChooser.singleItemTextField";      // true|false (hint)
+    public  static final String PROP_AccountChooser_includeListHtml          = "accountChooser.includeListHtml";          // include iniitial HTML
+    // ---
+    public  static final String PROP_AccountChooser_extraDebugEntries        = "accountChooser.extraDebugEntries";        // int
+
     /* WorkZoneInfo properties */
     public  static final String PROP_WorkZoneInfo_mapControlLocation        = "WorkZoneInfo.mapControlLocation";        // left|right|true|false
 

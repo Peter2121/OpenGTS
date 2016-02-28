@@ -521,6 +521,16 @@ Notes:
         <Property key="deviceChooser.includeListHtml">false</Property>          <!-- [true|false] EXPERIMENTAL -->
         <Property key="deviceChooser.extraDebugEntries">0</Property>            <!-- DEBUG TESTING PURPOSES ONLY! -->
 
+        <!-- AccountChooser properties -->
+        <Property key="accountChooser.sortBy">description</Property>             <!-- [id|name|description] sort by -->
+        <Property key="accountChooser.useTable">true</Property>                  <!-- [true|false] use DeviceChooser table selection -->
+        <Property key="accountChooser.idPosition">last</Property>                <!-- [none|first|last] ID column position -->
+        <Property key="accountChooser.search">false</Property>                   <!-- [true|false] enable description search -->
+        <Property key="accountChooser.matchContains">true</Property>             <!-- [true|false] match on 'contains' (otherwise 'startsWith') -->
+        <Property key="accountChooser.singleItemTextField">false</Property>      <!-- [true|false] text field for single selections (non-table only) -->
+        <Property key="accountChooser.includeListHtml">false</Property>          <!-- [true|false] EXPERIMENTAL -->
+        <Property key="accountChooser.extraDebugEntries">0</Property>            <!-- DEBUG TESTING PURPOSES ONLY! -->
+
         <!-- Calendar properties -->
         <Property key="calendar.firstDayOfWeek">1</Property>                    <!-- [0=Sun,1=Mon,...6=Sat] calendar first day of week -->
         <Property key="calendar.timeTextField">true</Property>                  <!-- [true|false] allow entering hour:minute via a text field -->

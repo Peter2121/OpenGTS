@@ -1,0 +1,79 @@
+
+/* account chooser DIV */
+DIV.acctSelectorDiv {
+    max-height: 440px;
+    /* height: expression("240px"); */
+    height: expression( this.scrollHeight > 439 ? "440px" : "auto" );
+    overflow-y: auto; /* scroll */
+    overflow-x: hidden;
+    border: solid 1px black;
+    background-color: #FFFFFF;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    cursor: default;
+    z-Index: 30000;
+}
+DIV.acctSelectorDiv_hidden {
+    visibility: collapse;
+    display: none;
+    height: 0px;
+}
+
+/* account table DIV */
+DIV.acctSelectorTableList {
+    /* */
+}
+ 
+/* search input text field */
+INPUT.acctChooserInput {
+    font: normal 8pt sans-serif; 
+}
+
+/* account selector header row/col */
+TR.acctSelectorRowHeader {
+    background-color: #E2E2E2;
+}
+TH.acctSelectorColHeader {
+    height: 12px;
+    font: bold 8pt sans-serif; 
+    text-align: center;
+    border-bottom: 3px double black;
+}
+TH.acctSelectorColHeaderX:hover {
+    height: 12px;
+    font: bold 8pt sans-serif; 
+    text-align: center;
+    border-bottom: 3px double #770000;
+    background-color: #CCCCCC;
+}
+
+/* account selector data row */
+TR.acctSelectorRowData {
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
+TR.acctSelectorRowData:hover {
+    background-color: #FFFFBB;
+}
+TR.acctSelectorRow_hidden {
+    visibility: collapse;
+    display: none;
+    height: 0px;
+}
+
+/* account selector data col */
+TD.acctSelectorColData {
+    font: normal 8pt sans-serif; 
+    text-align: center; 
+    border-right: 1px solid #CCCCCC; 
+    border-bottom: 1px solid #CCCCCC; 
+}
+TD.acctSelectorColData:hover {
+    background-color: #FFFFBB;
+}
+TD.acctSelectorCol_hidden {
+    visibility: collapse;
+    display: none;
+    height: 0px;
+}

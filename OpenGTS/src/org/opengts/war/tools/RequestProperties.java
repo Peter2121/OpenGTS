@@ -74,6 +74,7 @@ import org.opengts.Version;
 import org.opengts.db.*;
 import org.opengts.db.AclEntry.AccessLevel;
 import org.opengts.db.tables.*;
+import org.opengts.war.tools.IDDescription.SortBy;
 import org.opengts.war.track.Constants;
 import org.opengts.war.track.page.UserInfo;
 import org.opengts.war.track.page.TrackMap;
@@ -196,6 +197,7 @@ public class RequestProperties
 
     private String              userList[]              = null;
     private OrderedSet<String>  devList                 = null;
+    private OrderedSet<String>  acctList                = null;
     private OrderedSet<String>  devGrpSet               = null;
     private OrderedSet<String>  devGrpSetAll            = null;
 
@@ -1168,6 +1170,20 @@ public class RequestProperties
         }
         return this.devList;
     }
+    
+    /* return a list of accounts */
+    public OrderedSet<String> getAccountIDList(boolean inclInactv)
+    {
+        if (this.acctList == null) {
+            try {
+//                this.acctList = User.getAuthorizedDeviceIDs(this.getCurrentUser(), this.getCurrentAccountID(), inclInactv);
+                this.acctList = Account.getAllAccountIDs(inclInactv);
+            } catch (DBException dbe) {
+                this.acctList = new OrderedSet<String>();
+            }
+        }
+        return this.acctList;
+    }    
 
     /* return a list of known devices for this account */
     protected OrderedSet<String> _getDeviceIDsForSelectedGroup(boolean isFleet, boolean inclInactv)
@@ -1237,6 +1253,43 @@ public class RequestProperties
 
     }
 
+    /* get the description of a specific account */
+    private Account descLastAccountDescription = null; // last account-description cache
+
+    public String getAccountDescription(String accID, boolean rtnDispName)
+    {
+        /* no account ID specified? */
+        if (StringTools.isBlank(accID)) {
+            return "";
+        }
+
+        /* previous account? */
+        if ((this.descLastAccountDescription != null) && 
+            this.descLastAccountDescription.getAccountID().equals(accID)) {
+            String n = rtnDispName? 
+                this.descLastAccountDescription.getDisplayName() : 
+                this.descLastAccountDescription.getDescription();  
+            return !n.equals("")? n : accID;
+        }
+        else {
+        	try {
+	        	this.descLastAccountDescription = Account.getAccount(accID);
+	        	if(this.descLastAccountDescription!=null) {
+	                String n = rtnDispName? 
+	                		this.descLastAccountDescription.getDisplayName() :  
+	                        this.descLastAccountDescription.getDescription();   
+	                return !n.equals("")? n : accID;
+	                } else {
+	                    return accID;
+	                }
+        	} catch (DBException dbe) {
+                // -- drop through below
+            }
+        }
+        
+    return accID;
+    }
+    
     // ------------------------------------------------------------------------
 
     /* create Device/DeviceGroup IDDescription list */
@@ -1296,6 +1349,25 @@ public class RequestProperties
         }
         return idList;
     }
+    
+	public List<IDDescription> createAccountIDDescriptionList(boolean inclInactv,
+			IDDescription.SortBy sortBy) {
+        OrderedSet<String> acctList = this.getAccountIDList(inclInactv);
+        java.util.List<IDDescription> idList = new Vector<IDDescription>();
+        if (!ListTools.isEmpty(acctList)) {
+            sortBy = IDDescription.GetSortBy(sortBy); // make sure 'sortBy' is not null
+            boolean rtnDispName = sortBy.equals(IDDescription.SortBy.NAME);
+            for (int i = 0; i < acctList.size(); i++) {
+                String acctid = acctList.get(i); 
+                String desc = this.getAccountDescription(acctid, rtnDispName);
+                idList.add(new IDDescription(acctid, desc));
+                //Print.logInfo("Account: " + acctid + " - " + desc);
+            }
+            if (rtnDispName) { sortBy = IDDescription.SortBy.DESCRIPTION; }
+            IDDescription.SortList(idList, sortBy);
+        }
+        return idList;
+	}    
 
     /* create <Device,Description> map (sorted by description) */
     public OrderedMap<String,String> createDeviceDescriptionMap(boolean inclID)

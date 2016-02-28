@@ -534,6 +534,7 @@ public class UGroupInfo
             public void write(PrintWriter out) throws IOException {
                 MenuBar.writeJavaScript(out, pageName, reqState);
                 JavaScriptTools.writeJSInclude(out, JavaScriptTools.qualifyJSFileRef(SORTTABLE_JS), request);
+                AccountChooser.writeJavaScript(out, locale, reqState, "");
             }
         };
 
@@ -783,8 +784,8 @@ public class UGroupInfo
                     out.write("<input id='"+ID_ACCOUNT_ID   +"' name='"+ID_ACCOUNT_ID     +"' type='hidden' value='"+selAcctId+"'>");
                     out.write("<input id='"+ID_ACCOUNT_DESCR+"' name='"+ID_ACCOUNT_DESCR+"' type='text' value='"+selAcctDesc+"' readonly size='20' style='"+chooserStyle+"' onclick=\""+chooserOnclick+"\">");
                     out.write("</td>\n");
-
-                    out.write("<td style='vertical-align: bottom;'><span class=devChooserDD id='"+ID_ACCOUNT_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>\n");
+//						TODO:                                        create accountChooserDD style class                    
+                    out.write("<td style='vertical-align: bottom;'><span class='devChooserDD' id='"+ID_ACCOUNT_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>\n");
                     out.write("</tr>");
                     out.write("</table>\n");
                     out.write("<div class='"+CSS_DEVICES_VIEW+"'>\n");
@@ -837,6 +838,10 @@ public class UGroupInfo
                     /* end of form */
                     out.write("<hr style='margin-bottom:5px;'>\n");
                     out.write("<span style='padding-left:10px'>&nbsp;</span>\n");
+                    IDDescription.SortBy dcSortBy = AccountChooser.getSortBy(privLabel);
+                    java.util.List<IDDescription> idList = reqState.createAccountIDDescriptionList(false/*inclInactv*/, dcSortBy);
+                    IDDescription list[] = idList.toArray(new IDDescription[idList.size()]);
+                    AccountChooser.writeChooserDIV(out, reqState, list, null);
                     if (_editGroup) {
                         out.write("<input type='submit' name='"+PARM_SUBMIT_CHG+"' value='"+i18n.getString("GroupInfo.change","Change")+"'>\n");
                         out.write("<span style='padding-left:10px'>&nbsp;</span>\n");

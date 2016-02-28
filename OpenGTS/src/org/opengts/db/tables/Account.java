@@ -179,6 +179,17 @@ public class Account
         return accountID;
     }
 
+    public static String getAccountDescription(String accountID) 
+    		throws DBException
+    {
+        String desc = "";
+    	if (accountID != null) {
+        	Account acct = Account.getAccount(accountID);
+        	desc = acct.getDescription();
+        }
+        return desc;
+    }
+
     // ------------------------------------------------------------------------
     // Demo account information
     // This is the section that specifies the date ranges for the sample data found
@@ -3433,6 +3444,65 @@ public class Account
 
     }
 
+    public static OrderedSet<String>  getAllAccountIDs(boolean inclInactv) 
+    	throws DBException
+    {
+    	DBSelect<Account> dsel = null; 
+    			
+    	if (!inclInactv) {
+    		dsel = new DBSelect<Account>(Account.getFactory());
+            dsel.setSelectedFields(Account.FLD_accountID);
+            dsel.setOrderByFields(Account.FLD_accountID);
+            DBWhere dwh = dsel.createDBWhere();
+    		dsel.setWhere(dwh.WHERE(
+                    dwh.EQ(Device.FLD_isActive,1)
+                ));
+    	}
+  		return getAllAccountIDs(dsel);
+    }
+
+    /* return list of all Account IDs (NOT SCALABLE) */
+    public static OrderedSet<String>  getAllAccountIDs(DBSelect<Account> dsel)
+        throws DBException
+    {
+
+        /* default selection? */
+        if (dsel == null) {
+            // DBSelect: SELECT accountID FROM Account 
+            dsel = new DBSelect<Account>(Account.getFactory());
+            dsel.setSelectedFields(Account.FLD_accountID);
+            dsel.setOrderByFields(Account.FLD_accountID);
+        }
+
+        /* read accounts */
+        OrderedSet<String> acctList = new OrderedSet<String>();
+        DBConnection dbc = null;
+        Statement   stmt = null;
+        ResultSet     rs = null;
+        try {
+
+            /* get records */
+            dbc  = DBConnection.getDefaultConnection();
+            stmt = dbc.execute(dsel.toString());
+            rs   = stmt.getResultSet();
+            while (rs.next()) {
+                String acctId = rs.getString(Account.FLD_accountID);
+                acctList.add(acctId);
+            }
+
+        } catch (SQLException sqe) {
+            throw new DBException("Getting Account List", sqe);
+        } finally {
+            if (rs   != null) { try { rs.close();   } catch (Throwable t) {} }
+            if (stmt != null) { try { stmt.close(); } catch (Throwable t) {} }
+            DBConnection.release(dbc);
+        }
+
+        /* return list */
+        return acctList;
+
+    }
+    
     /* return list of all Account IDs (NOT SCALABLE) */
     public static Collection<String> getAuthorizedAccounts(Account account)
         throws DBException
