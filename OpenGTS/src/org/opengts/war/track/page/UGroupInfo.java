@@ -526,6 +526,10 @@ public class UGroupInfo
             public void write(PrintWriter out) throws IOException {
                 String cssDir = UGroupInfo.this.getCssDirectory();
                 WebPageAdaptor.writeCssLink(out, reqState, "GroupInfo.css", cssDir);
+                if (AccountChooser.isAccountChooserUseTable(privLabel)) {
+                    AccountChooser.writeStyle(out, reqState);
+                }
+                
             }
         };
 
