@@ -572,9 +572,26 @@ public class DeviceGroup
         
     }
 
-
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
+    /* replace current members of the group with the new ones */
+    /* groupMembers is a serialized JSON of array of Device objects */
+    /*  
+     	var Device = Object();
+		Device.accountID
+		Device.accountDesc
+		Device.deviceID
+		Device.deviceDesc
+		Device.deviceName
+    */
+    public void setMembers(String groupMembers)
+            throws DBException
+        {
+            if (groupMembers != null) {
+            	;
+            }
+        }
+    
+   // ------------------------------------------------------------------------
+   // ------------------------------------------------------------------------
 
     /** 
     *** Returns count of events in this DeviceGroup.<br>

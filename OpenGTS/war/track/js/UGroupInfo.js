@@ -16,8 +16,8 @@
 
  */
 
-var GroupMembers = Array(); // Array of Device objects
-var AccountDevices = Array(); // Array of Device objects
+//var GroupMembers = Array(); // Array of Device objects
+//var AccountDevices = Array(); // Array of Device objects
 
 var separator = "#";
 var accountDeviceSelected = -1;
@@ -28,9 +28,57 @@ function showGroupMembers()
 
 }
 
-function showAccountDevices()
+function showAccountDevices(acct,tid)
 {
-
+	var i,imax;
+	var table = document.getElementById(tid);
+	var tlen = table.rows.length;
+	var dev;
+	var row;
+	var cellClassName = "adminTableBodyCol";
+	var cellSelect;
+	var cellAccId;
+	var cellAccDesc;
+	var cellDevId;
+	var cellDevDesc;
+	var cellDevName;
+	var radioHTML = "<input type='radio' name='device'";
+	for(i=1; i<tlen; i++) {
+		table.deleteRow(1);
+	}
+	imax=AccountDevices.length;
+	for(i=0; i<imax; i++) {
+		dev=AccountDevices[i];
+		if(	(typeof dev.accountID=="undefined") || (typeof dev.deviceID=="undefined") ) continue;
+		if( (dev.accountID.length==0) || (dev.deviceID.length==0) ) continue;
+		if( dev.accountID!=acct ) continue;
+		tlen = table.rows.length;
+		row = table.insertRow(-1);
+		if(tlen%2 == 0) row.className="adminTableBodyRowOdd";
+		else row.className="adminTableBodyRowEvn";
+		cellSelect = row.insertCell(0);
+		cellSelect.className = cellClassName;
+		cellSelect.setAttribute("sorttable_customkey", tlen);
+		cellSelect.innerHTML = radioHTML + " id='"+dev.accountID+separator+dev.deviceID+"'"
+										 + " value='"+dev.accountID+separator+dev.deviceID+"'"
+										 + " onclick='javascript:onAccountDeviceRadioClick(this);'"
+										 + " >";
+		cellAccId = row.insertCell(1);
+		cellAccId.className = cellClassName;
+		cellAccId.innerHTML = dev.accountID;
+		cellAccDesc = row.insertCell(2);
+		cellAccDesc.className = cellClassName;
+		cellAccDesc.innerHTML = dev.accountDesc;
+		cellDevId = row.insertCell(3);
+		cellDevId.className = cellClassName;
+		cellDevId.innerHTML = dev.deviceID;
+		cellDevDesc = row.insertCell(4);
+		cellDevDesc.className = cellClassName;
+		cellDevDesc.innerHTML = dev.deviceDesc;
+		cellDevName = row.insertCell(5);
+		cellDevName.className = cellClassName;
+		cellDevName.innerHTML = dev.deviceName;
+	}
 }
 
 function addDeviceToGroup(dev,tid)
@@ -53,7 +101,7 @@ function addDeviceToGroup(dev,tid)
 					+ " value='"+dev.accountID+separator+dev.deviceID+"'"
 					+ " onclick='javascript:onGroupDeviceRadioClick(this);'"
 					+ " >";
-	var cellClassName = "adminTableBodyCol"
+	var cellClassName = "adminTableBodyCol";
 	var cellSelect = row.insertCell(0);
 	cellSelect.className = cellClassName;
 	cellSelect.setAttribute("sorttable_customkey", tlen);
@@ -150,4 +198,10 @@ function onGroupDeviceRadioClick(radio)
 {
 	var index = radio.parentNode.getAttribute("sorttable_customkey");
 	groupDeviceSelected = index;
+}
+
+function onGroupEditFormSubmit()
+{
+	var members_input = document.getElementById(PARM_GROUP_MEMBERS);
+	if(members_input!=null) members_input.value=JSON.stringify(GroupMembers);
 }

@@ -52,6 +52,7 @@ public class UGroupInfo
     public  static final String PARM_NEW_NAME               = "g_newname";
     public  static final String PARM_GROUP_SELECT           = "g_group";
     public  static final String PARM_GROUP_DESC             = "g_desc";
+    public  static final String PARM_GROUP_MEMBERS          = "g_members";
 
     // tables
     public  static final String PARM_TABLE_ACC_DEV          = "t_acctdev";
@@ -504,6 +505,11 @@ public class UGroupInfo
                 if (!groupDesc.equals("")) {
                     selGroup.setDescription(groupDesc);
                 }
+                // members
+                String groupMembers = AttributeTools.getRequestString(request, PARM_GROUP_MEMBERS, "");
+                if (!groupMembers.equals("")) {
+                    selGroup.setMembers(groupMembers);
+                }
                 // save
                 if (saveOK) {
                     selGroup.save();
@@ -717,8 +723,13 @@ public class UGroupInfo
                     // group view/edit form
     
                     /* start of form */
-                    out.write("<form name='"+FORM_GROUP_EDIT+"' method='post' action='"+editURL+"' target='_self'>\n"); // target='_top'
+            		JavaScriptTools.writeStartJavaScript(out);
+                    JavaScriptTools.writeJSVar(out, "PARM_GROUP_MEMBERS", PARM_GROUP_MEMBERS);
+                    JavaScriptTools.writeJSVar(out, "FORM_GROUP_EDIT", FORM_GROUP_EDIT); 
+                	JavaScriptTools.writeEndJavaScript(out);
+                    out.write("<form name='"+FORM_GROUP_EDIT+"' id='"+FORM_GROUP_EDIT+"' method='post' action='"+editURL+"' target='_self' onsubmit='onGroupEditFormSubmit()'>\n"); // target='_top'
                     out.write("<input type='hidden' name='"+PARM_COMMAND+"' value='"+COMMAND_INFO_UPD_GROUP+"'/>\n");
+                    out.write("<input type='hidden' name='"+PARM_GROUP_MEMBERS+"' id='"+PARM_GROUP_MEMBERS+"' value=''/>\n");
 
                     /* Group fields */
                     out.println("<table class='"+CommonServlet.CSS_ADMIN_VIEW_TABLE+"' cellspacing='0' callpadding='0' border='0'>");
@@ -756,35 +767,60 @@ public class UGroupInfo
                         out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.displayName","Short Name"))+"</th>\n");
                         out.write("  </tr>\n");
                         out.write(" </thead>\n");
-
-                        
                         out.write(" <tbody>\n");
-                        dmax = devList.size();
-                        for(int d=0; d<dmax; d++) {
-                            String rowClass = ((d & 1) == 0)? 
-                                    CSS_DEVICES_DATA_ROW_ODD : 
-                                    CSS_DEVICES_DATA_ROW_EVN;
-                            aId = devList.get(d)[0];
-                            dId = devList.get(d)[1];
-                        	try {
-                                acct = Account.getAccount(aId);
-                                dev  = Device.getDevice(acct, dId);
-                        	} catch (DBException e) {
-        						continue;
-        					}
-                        	if( (acct==null) || (dev==null) ) continue;
-                            aDesc = acct.getDescription();
-                            dDesc = dev.getDescription();
-                            dName = dev.getDisplayName();
-//                            String checked    = _selDevID.equals(dev.getDeviceID())? "checked" : "";
-                            out.write("  <tr class='"+rowClass+"'>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+d+"'><input type='radio' name='"+PARM_DEVICE+"' id='"+aId+ACC_DEV_SEP+dId+"' value='"+aId+ACC_DEV_SEP+dId+"' "+checked+" onclick='javascript:onGroupDeviceRadioClick(this);'></td>\n");
-                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+aId+"</td>\n");
-                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+aDesc+"</td>\n");
-                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+dId+"</td>\n");
-                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+dDesc+"</td>\n");
-                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+dName+"</td>\n");
-                            out.write("  </tr>\n");
+                        if(devList!=null) {
+	                        dmax = devList.size();	                        
+	                		JavaScriptTools.writeStartJavaScript(out);
+	                		JavaScriptTools.writeJS(out,"var GroupMembers = new Array();");
+	                    	for(int d=0; d<dmax; d++) {
+	                            aId = devList.get(d)[0];
+	                            dId = devList.get(d)[1];
+	                        	try {
+	                                acct = Account.getAccount(aId);
+	                                dev  = Device.getDevice(acct, dId);
+	                        	} catch (DBException e) {
+	        						continue;
+	        					}
+	                        	if( (acct==null) || (dev==null) ) continue;
+	                            aDesc = acct.getDescription();
+	                            dDesc = dev.getDescription();
+	                            dName = dev.getDisplayName();
+	                    		JavaScriptTools.writeJS(out,"var Device = new Object();");
+	                    		JavaScriptTools.writeJS(out,"Device.accountID=\""+aId+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.accountDesc=\""+aDesc+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.deviceID=\""+dId+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.deviceDesc=\""+dDesc+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.deviceName=\""+dName+"\";");
+	                    		JavaScriptTools.writeJS(out,"GroupMembers.push(Device);");
+	                    	}
+	                    	JavaScriptTools.writeEndJavaScript(out);
+	                        for(int d=0; d<dmax; d++) {
+	                            String rowClass = ((d & 1) == 0)? 
+	                                    CSS_DEVICES_DATA_ROW_ODD : 
+	                                    CSS_DEVICES_DATA_ROW_EVN;
+	                            aId = devList.get(d)[0];
+	                            dId = devList.get(d)[1];
+	                        	try {
+	                                acct = Account.getAccount(aId);
+	                                dev  = Device.getDevice(acct, dId);
+	                        	} catch (DBException e) {
+	        						continue;
+	        					}
+	                        	if( (acct==null) || (dev==null) ) continue;
+	                            aDesc = acct.getDescription();
+	                            dDesc = dev.getDescription();
+	                            dName = dev.getDisplayName();
+	//                            String checked    = _selDevID.equals(dev.getDeviceID())? "checked" : "";
+	                            out.write("  <tr class='"+rowClass+"'>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+d+"'>");
+	                            out.write("      <input type='radio' name='"+PARM_DEVICE+"' id='"+aId+ACC_DEV_SEP+dId+"' value='"+aId+ACC_DEV_SEP+dId+"' "+checked+" onclick='javascript:onGroupDeviceRadioClick(this);'></td>\n");
+	                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+aId+"</td>\n");
+	                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+aDesc+"</td>\n");
+	                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+dId+"</td>\n");
+	                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+dDesc+"</td>\n");
+	                            out.write("   <td class='"+CSS_DEVICES_DATA_COL    +"' nowrap>"+dName+"</td>\n");
+	                            out.write("  </tr>\n");
+	                        }
                         }
                         out.write(" </tbody>\n");
                         out.write("</table>\n");
@@ -792,74 +828,107 @@ public class UGroupInfo
                         // TODO
                     }
                     out.write("</div>\n");
-                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_REMOVE_DEV+"\" value=\"Remove\" onclick=\"javascript:onRemoveButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
-                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_ADD_DEV+"\" value=\"Add\" onclick=\"javascript:onAddButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
-                    out.write("</td>\n");
-                    String selAcctId = currAcct.getAccountID();
-                    String selAcctDesc = currAcct.getAccountDescription();
-                    try {
-						devList = Device.getAllDevices(true);
-					} catch (DBException e) {
-						devList = null;
-					}
-                    String chooserStyle   = "height:17px; padding:0px 0px 0px 3px; margin:0px 0px 0px 3px; cursor:pointer; border:1px solid gray;";
-                    String chooserOnclick = "javascript:groupInfoShowSelector()";
-                    out.write("<td width='100%'>\n");
-                    out.write("<table cellspacing='0' cellpadding='0' border='0'>\n<tr>");
-                    out.write("<td nowrap>");
-                    out.write("<input id='"+ID_ACCOUNT_ID   +"' name='"+ID_ACCOUNT_ID     +"' type='hidden' value='"+selAcctId+"'>");
-                    out.write("<input id='"+ID_ACCOUNT_DESCR+"' name='"+ID_ACCOUNT_DESCR+"' type='text' value='"+selAcctDesc+"' readonly size='20' style='"+chooserStyle+"' onclick=\""+chooserOnclick+"\">");
-                    out.write("</td>\n");
-//						TODO:                                        create accountChooserDD style class                    
-                    out.write("<td style='vertical-align: bottom;'><span class='devChooserDD' id='"+ID_ACCOUNT_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>\n");
-                    out.write("</tr>");
-                    out.write("</table>\n");
-                    out.write("<div class='"+CSS_DEVICES_VIEW+"'>\n");
-                    if(devList!=null) {
-                        out.write("<table class='"+CommonServlet.CSS_ADMIN_SELECT_TABLE+"' id='"+PARM_TABLE_ACC_DEV+"' cellspacing='0' cellpadding='0' border='0'>\n");
-                        out.write(" <thead>\n");
-                        out.write("  <tr class='" +CommonServlet.CSS_ADMIN_TABLE_HEADER_ROW+"'>\n");
-                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL_SEL+"' nowrap>"+FilterText(i18n.getString("DeviceInfo.select","Select"))+"</th>\n");
-                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("GroupInfo.accountID","Account ID"))+"</th>\n");
-                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("SysAdminAccounts.accountName","Account Description"))+"</th>\n");
-                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.deviceID","{0} ID",devTitles))+"</th>\n");
-                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.decription","Description",devTitles))+"</th>\n");
-                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.displayName","Short Name"))+"</th>\n");
-                        out.write("  </tr>\n");
-                        out.write(" </thead>\n");
-                        
-                        out.write(" <tbody>\n");
-                        dmax=devList.size();
-                        for(int d=0; d<devList.size(); d++) {
-                            String rowClass = ((d & 1) == 0)? 
-                                    CommonServlet.CSS_ADMIN_TABLE_BODY_ROW_ODD : 
-                                    CommonServlet.CSS_ADMIN_TABLE_BODY_ROW_EVEN;
-                            aId = devList.get(d)[0];
-                            dId = devList.get(d)[1];
-                        	try {
-                                acct = Account.getAccount(aId);
-                                dev  = Device.getDevice(acct, dId);
-                        	} catch (DBException e) {
-        						continue;
-        					}
-                        	if( (acct==null) || (dev==null) ) continue;
-                            aDesc = acct.getDescription();
-                            dDesc = dev.getDescription();
-                            dName = dev.getDisplayName();
-//                            String checked    = _selDevID.equals(dev.getDeviceID())? "checked" : "";
-                            out.write("  <tr class='"+rowClass+"'>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+d+"'><input type='radio' name='"+PARM_DEVICE+"' id='"+aId+ACC_DEV_SEP+dId+"' value='"+aId+ACC_DEV_SEP+dId+"' "+checked+" onclick='javascript:onAccountDeviceRadioClick(this);'></td>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+aId+"</td>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+aDesc+"</td>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+dId+"</td>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+dDesc+"</td>\n");
-                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+dName+"</td>\n");
-                            out.write("  </tr>\n");
-                        }
-                        out.write(" </tbody>\n");
-                        out.write("</table>\n");
+                    if (_uiEdit) {               
+	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_REMOVE_DEV+"\" value=\"Remove\" onclick=\"javascript:onRemoveButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
+	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_ADD_DEV+"\" value=\"Add\" onclick=\"javascript:onAddButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
                     }
-                    out.write("</div>\n");
+                    out.write("</td>\n");
+//                    String selAcctId = currAcct.getAccountID();
+//                    String selAcctDesc = currAcct.getAccountDescription();
+                    if (_uiEdit) {               
+	                    try {
+							devList = Device.getAllDevices(true);
+						} catch (DBException e) {
+							devList = null;
+						}
+	                    if(devList!=null) {
+	                    	dmax=devList.size();
+	                		JavaScriptTools.writeStartJavaScript(out);
+	                		JavaScriptTools.writeJS(out,"var AccountDevices = new Array();");
+	                    	for(int d=0; d<dmax; d++) {
+	                            aId = devList.get(d)[0];
+	                            dId = devList.get(d)[1];
+	                        	try {
+	                                acct = Account.getAccount(aId);
+	                                dev  = Device.getDevice(acct, dId);
+	                        	} catch (DBException e) {
+	        						continue;
+	        					}
+	                        	if( (acct==null) || (dev==null) ) continue;
+	                            aDesc = acct.getDescription();
+	                            dDesc = dev.getDescription();
+	                            dName = dev.getDisplayName();
+	                    		JavaScriptTools.writeJS(out,"var Device = new Object();");
+	                    		JavaScriptTools.writeJS(out,"Device.accountID=\""+aId+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.accountDesc=\""+aDesc+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.deviceID=\""+dId+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.deviceDesc=\""+dDesc+"\";");
+	                    		JavaScriptTools.writeJS(out,"Device.deviceName=\""+dName+"\";");
+	                    		JavaScriptTools.writeJS(out,"AccountDevices.push(Device);");
+	                    	}
+	                    	JavaScriptTools.writeEndJavaScript(out);
+	                    }
+	                    String chooserStyle   = "height:17px; padding:0px 0px 0px 3px; margin:0px 0px 0px 3px; cursor:pointer; border:1px solid gray;";
+	                    String chooserOnclick = "javascript:groupInfoShowSelector()";
+	                    out.write("<td width='100%'>\n");
+	                    out.write("<table cellspacing='0' cellpadding='0' border='0'>\n<tr>");
+	                    out.write("<td nowrap>");
+	                    out.write("<input id='"+ID_ACCOUNT_ID   +"' name='"+ID_ACCOUNT_ID     +"' type='hidden' value=''>");
+	                    out.write("<input id='"+ID_ACCOUNT_DESCR+"' name='"+ID_ACCOUNT_DESCR+"' type='text' value='"+i18n.getString("GroupInfo.allAccounts","All Accounts")+"' readonly size='20' style='"+chooserStyle+"' onclick=\""+chooserOnclick+"\">");
+	                    out.write("</td>\n");
+//					    	TODO:                           create accountChooserDD style class                    
+	                    out.write("<td style='vertical-align: bottom;'><span class='devChooserDD' id='"+ID_ACCOUNT_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>\n");
+	                    out.write("</tr>");
+	                    out.write("</table>\n");
+	                    out.write("<div class='"+CSS_DEVICES_VIEW+"'>\n");
+	                    if(devList!=null) {
+	                        out.write("<table class='"+CommonServlet.CSS_ADMIN_SELECT_TABLE+"' id='"+PARM_TABLE_ACC_DEV+"' cellspacing='0' cellpadding='0' border='0'>\n");
+	                        out.write(" <thead>\n");
+	                        out.write("  <tr class='" +CommonServlet.CSS_ADMIN_TABLE_HEADER_ROW+"'>\n");
+	                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL_SEL+"' nowrap>"+FilterText(i18n.getString("DeviceInfo.select","Select"))+"</th>\n");
+	                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("GroupInfo.accountID","Account ID"))+"</th>\n");
+	                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("SysAdminAccounts.accountName","Account Description"))+"</th>\n");
+	                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.deviceID","{0} ID",devTitles))+"</th>\n");
+	                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.decription","Description",devTitles))+"</th>\n");
+	                        out.write("   <th class='"+CommonServlet.CSS_ADMIN_TABLE_HEADER_COL    +"' nowrap>"+FilterText(i18n.getString("DeviceInfo.displayName","Short Name"))+"</th>\n");
+	                        out.write("  </tr>\n");
+	                        out.write(" </thead>\n");
+	                        
+	                        out.write(" <tbody>\n");
+//                            dmax=devList.size();
+	                        for(int d=0; d<dmax; d++) {
+	                            String rowClass = ((d & 1) == 0)? 
+	                                    CommonServlet.CSS_ADMIN_TABLE_BODY_ROW_ODD : 
+	                                    CommonServlet.CSS_ADMIN_TABLE_BODY_ROW_EVEN;
+	                            aId = devList.get(d)[0];
+	                            dId = devList.get(d)[1];
+	                        	try {
+	                                acct = Account.getAccount(aId);
+	                                dev  = Device.getDevice(acct, dId);
+	                        	} catch (DBException e) {
+	        						continue;
+	        					}
+	                        	if( (acct==null) || (dev==null) ) continue;
+	                            aDesc = acct.getDescription();
+	                            dDesc = dev.getDescription();
+	                            dName = dev.getDisplayName();
+//                                String checked    = _selDevID.equals(dev.getDeviceID())? "checked" : "";
+	                            out.write("  <tr class='"+rowClass+"'>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL_SEL+"' "+SORTTABLE_SORTKEY+"='"+d+"'><input type='radio' name='"+PARM_DEVICE+"' id='"+aId+ACC_DEV_SEP+dId+"' value='"+aId+ACC_DEV_SEP+dId+"' "+checked+" onclick='javascript:onAccountDeviceRadioClick(this);'></td>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+aId+"</td>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+aDesc+"</td>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+dId+"</td>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+dDesc+"</td>\n");
+	                            out.write("   <td class='"+CommonServlet.CSS_ADMIN_TABLE_BODY_COL    +"' nowrap>"+dName+"</td>\n");
+	                            out.write("  </tr>\n");
+	                        }
+	                        out.write(" </tbody>\n");
+	                        out.write("</table>\n");
+	                    }
+	                    out.write("</div>\n");
+                    }
+                    else 
+                    	out.write("<td>&nbsp;");
                     out.write("</td></tr></tbody></table>\n");
 
                     /* end of form */
@@ -871,6 +940,7 @@ public class UGroupInfo
                     AccountChooser.writeChooserDIV(out, reqState, list, null);
                     if (_editGroup) {
                         out.write("<input type='submit' name='"+PARM_SUBMIT_CHG+"' value='"+i18n.getString("GroupInfo.change","Change")+"'>\n");
+//                        out.write("<input type='button' name='"+PARM_SUBMIT_CHG+"' value='"+i18n.getString("GroupInfo.change","Change")+"' onclick=\"javascript:onChangeButtonClick();\">\n");
                         out.write("<span style='padding-left:10px'>&nbsp;</span>\n");
                         out.write("<input type='button' name='"+PARM_BUTTON_CANCEL+"' value='"+i18n.getString("GroupInfo.cancel","Cancel")+"' onclick=\"javascript:openURL('"+editURL+"','_self');\">\n"); // target='_top'
                     } else {

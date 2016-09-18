@@ -23,6 +23,9 @@ var ID_ACCOUNT_DD		         = "accountDropDown";
 var ID_ACCOUNT_ID        		 = "accountSelector";
 var ID_ACCOUNT_DESCR     		 = "accountDescription";
 
+/* these must match PARM_TABLE_ACC_DEV parameter's value in UGroupInfo.java */
+var ID_TABLE_ACC_DEV			 = "t_acctdev";
+
 var IDPOS_NONE                  = 0;
 var IDPOS_FIRST                 = 1;
 var IDPOS_LAST                  = 2;
@@ -467,7 +470,7 @@ function accountSelected(x)
     }
     var selID   = selRow.getAttribute("idVal");
     var selDesc = selRow.getAttribute("dsVal");
-    alert("Selected ("+x+") " + selID + " - " +selDesc);
+//    alert("Selected ("+x+") " + selID + " - " +selDesc + "!");
 
     /*
     var selItem = (chooserAccountList && (x < chooserAccountList.length))? chooserAccountList[x] : null;
@@ -486,6 +489,7 @@ function accountSelected(x)
     /* device delected */
     accountCloseChooser();
 //    deviceDeviceChanged();
+    showAccountDevices(selID,ID_TABLE_ACC_DEV);
     
 };
 
