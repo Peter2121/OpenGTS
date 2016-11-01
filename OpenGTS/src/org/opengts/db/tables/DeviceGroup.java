@@ -43,6 +43,7 @@ import java.io.*;
 import java.sql.*;
 
 import org.opengts.util.*;
+import org.opengts.util.JSON.JSONParsingException;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
@@ -425,7 +426,6 @@ public class DeviceGroup
     public void addDeviceToDeviceGroup(String devaccID, String deviceID)
         throws DBException
     {
-    	if (devaccID == null)
     	if (deviceID != null) {
             String accountID = this.getAccountID();
             String groupID   = this.getGroupID();
@@ -572,8 +572,21 @@ public class DeviceGroup
         
     }
 
-    /* replace current members of the group with the new ones */
+    /* removes all members from the group */
+    public void clear()
+    		throws DBException
+    	{
+	    	OrderedSet<String[]> devList = getAllDevicesForGroup(
+	    	        this.getAccountID(), this.getGroupID(), (User)null, true, -1L);
+	    	Iterator<String[]> dli = devList.iterator();
+	    	while(dli.hasNext()) {
+	    		String[] dev = dli.next();
+	    		this.removeDeviceFromDeviceGroup(dev[0],dev[1]);
+	    	}    	
+    	}
+    /* replaces current members of the group with the new ones */
     /* groupMembers is a serialized JSON of array of Device objects */
+    /* ATTENTION, this function removes ALL members from the group if the input does not contain usable data */
     /*  
      	var Device = Object();
 		Device.accountID
@@ -582,12 +595,35 @@ public class DeviceGroup
 		Device.deviceDesc
 		Device.deviceName
     */
-    public void setMembers(String groupMembers)
+    public Integer setMembers(String groupMembers)
             throws DBException
         {
+    		JSON._Object objJsonMember = null;
+    		JSON._Array arrJsonMembers = null;
+    		Integer len = 0;
             if (groupMembers != null) {
-            	;
+            	clear();
+            	try {
+            		arrJsonMembers = JSON.parse_Array(groupMembers);
+            		if(arrJsonMembers!=null) {
+            			Integer size = arrJsonMembers.size();
+            			for(int i=0; i<size; i++) {
+            				objJsonMember = arrJsonMembers.getObjectValueAt(i,null);
+            				if(objJsonMember!=null) {
+//            					String accountID = objJsonMember.getStringForName("accountID", "");
+//            					String deviceID = objJsonMember.getStringForName("deviceID", "");
+            					addDeviceToDeviceGroup(
+            							objJsonMember.getStringForName("accountID", ""), 
+            							objJsonMember.getStringForName("deviceID", ""));
+            				}
+            			}
+            		}
+				} catch (JSONParsingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
+            return len;
         }
     
    // ------------------------------------------------------------------------
