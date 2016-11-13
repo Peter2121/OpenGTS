@@ -281,9 +281,10 @@ public class BasicPrivateLabel
     public  static final String PROP_TrackMap_showAllDevices                = "trackMap.showAllDevices";            // true|false
     public  static final String PROP_TrackMap_showFleetDays                 = "trackMap.showFleetDays";             // days before current date
     public  static final String PROP_TrackMap_showFleetLiveMins             = "trackMap.showFleetLiveMins";         // minutes before current time
-    public  static final String PROP_TrackMap_enableDygraphs                = "trackMap.enableDygraphs";            // enable Dygraphs graphs
-    public  static final String PROP_TrackMap_defaultDygraphsOpen           = "trackMap.defaultDygraphsOpen";       // open Dygraphs graphs on page load
-
+    public  static final String PROP_TrackMap_enableDygraphs                = "trackMap.enableDygraphs";            // true|false enable Dygraphs graphs
+    public  static final String PROP_TrackMap_defaultDygraphsOpen           = "trackMap.defaultDygraphsOpen";       // true|false open Dygraphs graphs on page load
+    public  static final String PROP_TrackMap_enableUniversalGroups         = "trackMap.enableUniversalGroups";     // true|false enable universal (cross-accounts) groups
+    
     /* FullMap properties */
     // calendar properties
     public  static final String PROP_FullMap_calendarAction                 = "fullMap.calendarAction";

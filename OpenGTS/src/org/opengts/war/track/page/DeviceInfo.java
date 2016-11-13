@@ -789,6 +789,7 @@ public class DeviceInfo
         final boolean      showFuelEcon  = DBConfig.hasExtraPackage();
         final boolean      showFuelCost  = showFuelEcon;
         final boolean      acctBCEnabled = ((currAcct!=null)&&currAcct.getIsBorderCrossing())?true:false;
+        final boolean 	   enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
         String  msg         = null;
         boolean groupsChg   = false;
         String  serverID    = AttributeTools.getRequestString(request, PARM_SERVER_ID         , "");
@@ -834,6 +835,7 @@ public class DeviceInfo
         String  actvCorr    = AttributeTools.getRequestString(request, PARM_ACTIVE_CORRIDOR   , "");
         String  borderCross = AttributeTools.getRequestString(request, PARM_BORDER_CROSS_ENAB , "");
       //String  worderID    = AttributeTools.getRequestString(request, PARM_WORKORDER_ID      , "");
+        
         try {
             // -- unique id
             boolean editUniqID = sysadminLogin || privLabel.hasWriteAccess(currUser, this.getAclName(_ACL_UNIQUEID));
@@ -1329,8 +1331,8 @@ public class DeviceInfo
                     selDev.setGroupID(pgid);
                 }
             }
-            // -- DeviceGroups
-            if (!selDev.hasError()) {
+            // -- DeviceGroups, only used if we don't support Universal Groups
+            if (!selDev.hasError() && !enableUniversalGroups) {
                 String accountID = selDev.getAccountID();
                 String deviceID  = selDev.getDeviceID();
                 // -- 'grpKey' may only contain 'checked' items!
@@ -2300,6 +2302,7 @@ public class DeviceInfo
                     boolean showSerial  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSerialNumber,SHOW_SERIAL);
                     boolean showSmsEmail = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSmsEmail,SHOW_SMS_MAIL);
                     boolean showDriver = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showDriverID,SHOW_DRIVER);
+                    final boolean enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
                     
                     /* distance units description */
                     Account.DistanceUnits distUnits = Account.getDistanceUnits(currAcct);
@@ -2824,7 +2827,7 @@ public class DeviceInfo
                     }
 
                     /* preferred group-id */
-                    if (showPrefGrp) {
+                    if (showPrefGrp && !enableUniversalGroups) {
                         ComboMap grpMap = new ComboMap(reqState.createGroupDescriptionMap(true/*includeID*/,true/*inclAll*/));
                         //grpMap.insert("", i18n.getString("DeviceInfo.noGroup" ,"No {0}",grpTitles));
                         String grpSel = (_selDev != null)? _selDev.getGroupID() : "";
@@ -2835,32 +2838,33 @@ public class DeviceInfo
                     /* end of field table */
                     out.println("</table>");
 
-                    /* DeviceGroup membership */
-                    final OrderedSet<String> grpList = reqState.getDeviceGroupIDList(true/*includeAll*/);
-                    out.write("<span style='margin-left:4px; margin-top:10px; font-weight:bold;'>");
-                    out.write(  i18n.getString("DeviceInfo.groupMembership","{0} Membership:",grpTitles));
-                    out.write(  "</span>\n");
-                    out.write("<div style='border: 1px solid black; margin: 2px 20px 5px 10px; height:80px; width:400px; overflow-x: hidden; overflow-y: scroll;'>\n");
-                    out.write("<table>\n");
-                    for (int g = 0; g < grpList.size(); g++) {
-                        String grp  = grpList.get(g);
-                        String name = PARM_DEV_GROUP_ + grp;
-                        String desc = reqState.getDeviceGroupDescription(grp,false/*!rtnDispName*/);
-                        desc += desc.equals(grp)? ":" : (" ["+grp+"]:");
-                        out.write("<tr><td>"+desc+"</td><td>");
-                        if (grp.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
-                            out.write(Form_CheckBox(null,name,false,true,null,null));
-                        } else {
-                            boolean devInGroup = (_selDev != null)? 
-                                DeviceGroup.isDeviceInDeviceGroup(_selDev.getAccountID(), grp, _selDevID) :
-                                false;
-                            out.write(Form_CheckBox(null,name,_uiEdit,devInGroup,null,null));
-                        }
-                        out.write("</td></tr>\n");
+                    if(!enableUniversalGroups) {
+                    	/* DeviceGroup membership */
+	                    final OrderedSet<String> grpList = reqState.getDeviceGroupIDList(true/*includeAll*/);
+	                    out.write("<span style='margin-left:4px; margin-top:10px; font-weight:bold;'>");
+	                    out.write(  i18n.getString("DeviceInfo.groupMembership","{0} Membership:",grpTitles));
+	                    out.write(  "</span>\n");
+	                    out.write("<div style='border: 1px solid black; margin: 2px 20px 5px 10px; height:80px; width:400px; overflow-x: hidden; overflow-y: scroll;'>\n");
+	                    out.write("<table>\n");
+	                    for (int g = 0; g < grpList.size(); g++) {
+	                        String grp  = grpList.get(g);
+	                        String name = PARM_DEV_GROUP_ + grp;
+	                        String desc = reqState.getDeviceGroupDescription(grp,false/*!rtnDispName*/);
+	                        desc += desc.equals(grp)? ":" : (" ["+grp+"]:");
+	                        out.write("<tr><td>"+desc+"</td><td>");
+	                        if (grp.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
+	                            out.write(Form_CheckBox(null,name,false,true,null,null));
+	                        } else {
+	                            boolean devInGroup = (_selDev != null)? 
+	                                DeviceGroup.isDeviceInDeviceGroup(_selDev.getAccountID(), grp, _selDevID) :
+	                                false;
+	                            out.write(Form_CheckBox(null,name,_uiEdit,devInGroup,null,null));
+	                        }
+	                        out.write("</td></tr>\n");
+	                    }
+	                    out.write("</table>\n");
+	                    out.write("</div>\n");
                     }
-                    out.write("</table>\n");
-                    out.write("</div>\n");
-
                     /* end of form */
                     out.write("<hr style='margin-bottom:5px;'>\n");
                     out.write("<span style='padding-left:10px'>&nbsp;</span>\n");
