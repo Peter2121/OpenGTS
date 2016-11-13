@@ -584,6 +584,7 @@ public class DeviceGroup
 	    		this.removeDeviceFromDeviceGroup(dev[0],dev[1]);
 	    	}    	
     	}
+    
     /* replaces current members of the group with the new ones */
     /* groupMembers is a serialized JSON of array of Device objects */
     /* ATTENTION, this function removes ALL members from the group if the input does not contain usable data */
@@ -1145,7 +1146,7 @@ public class DeviceGroup
         return DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
     }
 
-    /* return list of all Devices within the specified normal/universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    /* return list of all Devices within the specified universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
     public static OrderedSet<String[]> getAllDevicesForGroup(
         String acctId, String groupId, User userAuth,/*ignored*/ 
         boolean inclInactv)
@@ -1233,7 +1234,7 @@ public class DeviceGroup
 
     }
 
-    /* return list of all Devices within the specified normal/universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    /* return list of all Devices within the specified universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
     public static OrderedSet<String[]> getAllDevicesForGroup(
         String acctId, String groupId, User userAuth,/*ignored*/ 
         boolean inclInactv, long limit)
@@ -1262,10 +1263,9 @@ public class DeviceGroup
         Account account = Account.getAccount(acctId);
         if (account == null) {
             // account not found?
-            Print.logWarn("Account not found? " + acctId);
+            Print.logWarn("Get Group UDeviceList - Account not found? " + acctId);
             return new OrderedSet<String[]>();
-        }
-        
+        }        
         
         /* read devices for account */
         OrderedSet<String[]> devList = new OrderedSet<String[]>();

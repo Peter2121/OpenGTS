@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
 <!ELEMENT PrivateLabels (SupportedLocales, TimeZones, Properties*, Pushpins*, Domain+)>
+	<!ATTLIST PrivateLabels i18nPackage CDATA #IMPLIED>
 
 <!-- SupportedLocales -->
 <!ELEMENT SupportedLocales (Locale+)>
@@ -51,6 +52,7 @@
 <!-- EMailAddresses/EMailAddress -->
 <!ELEMENT EMailAddresses (EMailAddress*)>
 	<!ATTLIST EMailAddresses domain CDATA #IMPLIED>
+	<!ATTLIST EMailAddresses domainName CDATA #IMPLIED>
 <!ELEMENT EMailAddress (#PCDATA)>
 	<!ATTLIST EMailAddress type (password | accounts| support | notify) #IMPLIED>
 
@@ -66,7 +68,7 @@
 
 <!ELEMENT Property (#PCDATA)>
 	<!ATTLIST Property key   CDATA #REQUIRED>
-	<!ATTLIST Property rtKey CDATA #REQUIRED>
+	<!ATTLIST Property rtKey CDATA #IMPLIED>
 
 <!-- MapProvider -->
 <!ELEMENT MapProvider (Property*, Pushpins*, IconSelector*, Legend*)>
@@ -84,6 +86,7 @@
 <!-- MapProvider/Legend -->
 <!ELEMENT Legend (Title?, Icon*)>
 	<!ATTLIST Legend type (device | fleet) #REQUIRED>
+	<!ATTLIST Legend includeDefault (true | false) #IMPLIED>
 
 <!-- Pushpins/Pushpin -->
 <!ELEMENT Pushpins (Pushpin*)>
@@ -134,13 +137,14 @@
 	<!ATTLIST Acls default (0 | 1 | 2| 3) #REQUIRED>
 <!ELEMENT Acl (#PCDATA)>
 	<!ATTLIST Acl name CDATA #REQUIRED>
-	<!ATTLIST Acl maximum (0 | 1 | 2 | 3) #REQUIRED>
+	<!ATTLIST Acl maximum (0 | 1 | 2 | 3) #IMPLIED>
 	<!ATTLIST Acl default (0 | 1 | 2 | 3) #REQUIRED>
 	<!ATTLIST Acl i18n CDATA #IMPLIED>
+	<!ATTLIST Acl values CDATA #IMPLIED>
 
 <!-- JSPEntries/JSP -->
 <!ELEMENT JSPEntries (JSP+)>
-	<!ATTLIST JSPEntriese rtPropPrefix CDATA #IMPLIED>
+	<!ATTLIST JSPEntries rtPropPrefix CDATA #IMPLIED>
 
 <!ELEMENT JSP (#PCDATA)>
 	<!ATTLIST JSP name  CDATA #IMPLIED>
@@ -152,11 +156,13 @@
 	<!ATTLIST WebPages jsp          CDATA #IMPLIED>
 	<!ATTLIST WebPages cssDir       CDATA #IMPLIED>
 	<!ATTLIST WebPages iconDir      CDATA #IMPLIED>
+	<!ATTLIST WebPages buttonDir	CDATA #IMPLIED>
 	<!ATTLIST WebPages rtPropPrefix CDATA #IMPLIED>
     
-<!ELEMENT Page (AclName?, NavigationDescription?, MenuDescrption?, MenuHelp?, Icon?, AltIcon?, Property?)>
-	<!ATTLIST Page name     CDATA #REQUIRED>
-	<!ATTLIST Page rtKey    CDATA #REQUIRED>
+<!-- <!ELEMENT Page (AclName?, NavigationDescription?, MenuDescrption?, MenuHelp?, Icon?, AltIcon?, Property?)> -->
+<!ELEMENT Page (Property*, AclName?, IconImage?, ButtonImage?)>
+	<!ATTLIST Page name     CDATA #IMPLIED>
+	<!ATTLIST Page rtKey    CDATA #IMPLIED>
 	<!ATTLIST Page class    CDATA #REQUIRED>
 	<!ATTLIST Page jsp      CDATA #IMPLIED>
 	<!ATTLIST Page aclName  CDATA #IMPLIED>
@@ -187,6 +193,8 @@
 <!ELEMENT AclName (#PCDATA)>
 
 <!ELEMENT Icon (#PCDATA)>
+	<!ATTLIST Icon name CDATA #IMPLIED>
+	<!ATTLIST Icon scale CDATA #IMPLIED>
 
 <!ELEMENT AltIcon (#PCDATA)>
 
@@ -203,11 +211,12 @@
 <!ELEMENT Reports (Report+)>
 	<!ATTLIST Reports rtPropPrefix CDATA #IMPLIED>
 
-<!ELEMENT Report EMPTY>
+<!ELEMENT Report (AclName+)>
 	<!ATTLIST Report name         CDATA #REQUIRED>
-	<!ATTLIST Report rtKey        CDATA #REQUIRED>
+	<!ATTLIST Report rtKey        CDATA #IMPLIED>
 	<!ATTLIST Report aclName      CDATA #IMPLIED>
 	<!ATTLIST Report sysAdminOnly CDATA #IMPLIED>
+	<!ATTLIST Report optional	  CDATA #IMPLIED>
 
 <!-- EventNotificationEMail/Subject/Body -->
 <!ELEMENT EventNotificationEMail (Subject, Body)>

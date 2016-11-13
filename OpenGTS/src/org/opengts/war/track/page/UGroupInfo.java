@@ -589,7 +589,7 @@ public class UGroupInfo
                     out.write("<span class='"+CommonServlet.CSS_MENU_TITLE+"'>"+frameTitle+"</span><br/>\n");
                     out.write("<hr>\n");
                         
-                    // group selection table (Select, Group ID, Group Description)
+                    // group selection table (Select, Group ID, Group Description, Device Count)
                     out.write("<h1 class='"+CommonServlet.CSS_ADMIN_SELECT_TITLE+"'>"+i18n.getString("GroupInfo.selectGroup","Select a {0}",grpTitles)+":</h1>\n");
                     out.write("<div style='margin-left:25px;'>\n");
                     out.write("<form name='"+FORM_GROUP_SELECT+"' method='post' action='"+selectURL+"' target='_self'>"); // target='_top'
@@ -747,14 +747,6 @@ public class UGroupInfo
                     out.write("<div class='"+CSS_DEVICES_VIEW+"'>\n");
                     try {
                         devList = DeviceGroup.getAllDevicesForGroup(currAcct.getAccountID(), _selGroupID, null/*User*/, true/*inclInactv*/);
-//                        java.util.List<IDDescription> list = new Vector<IDDescription>();
-//                        for (int i = 0; i < devList.size(); i++) {
-//                            String desc = reqState.getDeviceDescription(devList.get(i)[1],false/*!rtnDispName*/);
-//                            list.add(new IDDescription(devList.get(i)[1],desc));
-//                        }
-//                        String sortByStr = privLabel.getStringProperty(PrivateLabel.PROP_GroupInfo_deviceListSortBy,"desc");
-//                        IDDescription.SortBy sortBy = IDDescription.GetSortBy(sortByStr);
-//                        IDDescription.SortList(list, sortBy);
                         out.write("<table cellspacing='0' cellpadding='0' id='"+PARM_TABLE_GRP_DEV+"' border='1'>\n");
 
                         out.write(" <thead>\n");

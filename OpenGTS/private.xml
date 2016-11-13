@@ -1416,13 +1416,13 @@ Notes:
     	        <ButtonImage>map-device.png</ButtonImage>
                 </Page>
             <Page rtKey="TrackMapFleet" class="org.opengts.war.track.page.TrackMapFleet">
+                <Property key="showFleetFromCalendar">false</Property>
+                <!-- <Property key="fleetDeviceEventCount">1</Property> -->
                 <AclName>acl.map.fleet</AclName>
                 <!-- <ButtonImage> Place_Button_Cap_Image_URL_Here </ButtonImage> -->
                 <!-- <ButtonImageAlt> Place_Rollover_Button_Cap_Image_URL_Here </ButtonImageAlt> -->
                 <IconImage>map-group.png</IconImage>
     	        <ButtonImage>map-group.png</ButtonImage>
-                <Property key="showFleetFromCalendar">false</Property>
-                <!-- <Property key="fleetDeviceEventCount">1</Property> -->
                 </Page>
             <Page rtKey="TrackMapFleetLive" class="org.opengts.war.track.page.TrackMapFleetLive">
                 <AclName>acl.map.fleet</AclName>
@@ -1458,9 +1458,9 @@ Notes:
         <MenuGroup name="menuGroup.admin" topMenu="true" menuBar="true">
             <Title i18n="PrivateXML.menugroup.administration">Administration</Title>
             <Page rtKey="SysAdminAccounts" class="org.opengts.war.track.page.SysAdminAccounts">
+                <AclName>acl.admin.sysAdmin</AclName>
                 <IconImage>king.png</IconImage>
     	        <ButtonImage>king.png</ButtonImage>
-                <AclName>acl.admin.sysAdmin</AclName>
                 </Page>
             <Page rtKey="AccountInfo" class="org.opengts.war.track.page.AccountInfo">
                 <AclName>acl.admin.account</AclName>
@@ -1477,6 +1477,8 @@ Notes:
                 <IconImage>device.png</IconImage>
     	        <ButtonImage>device.png</ButtonImage>
                 </Page>
+       <!-- <Page rtKey="GroupInfo" class="org.opengts.war.track.page.GroupInfo"> -->
+       <!-- Use GroupInfo class for 'old-style' group management (on DeviceInfo page) -->
             <Page rtKey="GroupInfo" class="org.opengts.war.track.page.UGroupInfo">
                 <AclName>acl.admin.group</AclName>
                 <IconImage>group.png</IconImage>
