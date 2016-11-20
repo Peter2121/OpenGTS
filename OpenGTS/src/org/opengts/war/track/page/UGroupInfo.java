@@ -7,6 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.opengts.util.*;
+import org.opengts.util.JSON.JSONParsingException;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
@@ -267,6 +268,38 @@ public class UGroupInfo
 
     }
 
+    private OrderedSet<String[]> _decodeJSONGrp(String groupMembers, String currAcctId, boolean enableUniversalGroups)
+    {
+        String aId;
+        String dId;
+        OrderedSet<String[]> devList = new OrderedSet<String[]>();
+        
+		JSON._Object objJsonMember = null;
+		JSON._Array arrJsonMembers = null;
+        if (groupMembers != null) {
+        	try {
+        		arrJsonMembers = JSON.parse_Array(groupMembers);
+        		if(arrJsonMembers!=null) {
+        			Integer size = arrJsonMembers.size();
+        			for(int i=0; i<size; i++) {
+        				objJsonMember = arrJsonMembers.getObjectValueAt(i,null);
+        				if(objJsonMember!=null) {
+        					aId = objJsonMember.getStringForName("accountID", ""); 
+        					dId = objJsonMember.getStringForName("deviceID", "");
+        					if(!enableUniversalGroups && !aId.equals(currAcctId)) continue; 
+        			    	String[] device = new String[] { aId, dId };
+        			        devList.add(device);
+        				}
+        			}
+        		}
+			} catch (JSONParsingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+    	return devList;
+    }
+
     // ------------------------------------------------------------------------
     
     public void writePage(
@@ -282,6 +315,7 @@ public class UGroupInfo
         final User         currUser    = reqState.getCurrentUser(); // may be null
         final String       pageName    = this.getPageName();
         final String       grpTitles[] = reqState.getDeviceGroupTitles();
+        final boolean 	   enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
         String m = pageMsg;
         boolean error = false;
 
@@ -508,7 +542,7 @@ public class UGroupInfo
                 // members
                 String groupMembers = AttributeTools.getRequestString(request, PARM_GROUP_MEMBERS, "");
                 if (!groupMembers.equals("")) {
-                    selGroup.setMembers(groupMembers);
+                	  selGroup.setMembers(_decodeJSONGrp(groupMembers, selGroup.getAccountID(), enableUniversalGroups));
                 }
                 // save
                 if (saveOK) {

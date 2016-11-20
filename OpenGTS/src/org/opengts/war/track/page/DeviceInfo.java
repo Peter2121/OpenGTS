@@ -615,7 +615,7 @@ public class DeviceInfo
     {
         this.setBaseURI(RequestProperties.TRACK_BASE_URI());
         this.setPageName(PAGE_DEVICE_INFO);
-        this.setPageNavigation(new String[] { PAGE_LOGIN, PAGE_PASSWD, PAGE_MENU_TOP, PAGE_ZONE_INFO, PAGE_SYSADMIN_ACCOUNTS, PAGE_ACCOUNT_INFO, PAGE_USER_INFO, PAGE_GROUP_INFO, PAGE_MAP_FLEET, PAGE_MAP_DEVICE, PAGE_MAP_FLEETLIVE });
+        this.setPageNavigation(new String[] { PAGE_LOGIN, PAGE_PASSWD, PAGE_MENU_TOP, PAGE_ZONE_INFO, PAGE_SYSADMIN_ACCOUNTS, PAGE_ACCOUNT_INFO, PAGE_USER_INFO, PAGE_UGROUP_INFO, PAGE_MAP_FLEET, PAGE_MAP_DEVICE, PAGE_MAP_FLEETLIVE });
         this.setLoginRequired(true);
     }
     
@@ -2302,7 +2302,7 @@ public class DeviceInfo
                     boolean showSerial  = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSerialNumber,SHOW_SERIAL);
                     boolean showSmsEmail = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showSmsEmail,SHOW_SMS_MAIL);
                     boolean showDriver = privLabel.getBooleanProperty(PrivateLabel.PROP_DeviceInfo_showDriverID,SHOW_DRIVER);
-                    final boolean enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
+                    final boolean disableGroupMgmt = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_disableDeviceInfoGroupMgmt,false);
                     
                     /* distance units description */
                     Account.DistanceUnits distUnits = Account.getDistanceUnits(currAcct);
@@ -2827,7 +2827,7 @@ public class DeviceInfo
                     }
 
                     /* preferred group-id */
-                    if (showPrefGrp && !enableUniversalGroups) {
+                    if (showPrefGrp && !disableGroupMgmt) {
                         ComboMap grpMap = new ComboMap(reqState.createGroupDescriptionMap(true/*includeID*/,true/*inclAll*/));
                         //grpMap.insert("", i18n.getString("DeviceInfo.noGroup" ,"No {0}",grpTitles));
                         String grpSel = (_selDev != null)? _selDev.getGroupID() : "";
@@ -2838,7 +2838,7 @@ public class DeviceInfo
                     /* end of field table */
                     out.println("</table>");
 
-                    if(!enableUniversalGroups) {
+                    if(!disableGroupMgmt) {
                     	/* DeviceGroup membership */
 	                    final OrderedSet<String> grpList = reqState.getDeviceGroupIDList(true/*includeAll*/);
 	                    out.write("<span style='margin-left:4px; margin-top:10px; font-weight:bold;'>");

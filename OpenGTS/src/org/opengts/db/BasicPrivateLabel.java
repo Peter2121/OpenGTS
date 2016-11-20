@@ -284,6 +284,8 @@ public class BasicPrivateLabel
     public  static final String PROP_TrackMap_enableDygraphs                = "trackMap.enableDygraphs";            // true|false enable Dygraphs graphs
     public  static final String PROP_TrackMap_defaultDygraphsOpen           = "trackMap.defaultDygraphsOpen";       // true|false open Dygraphs graphs on page load
     public  static final String PROP_TrackMap_enableUniversalGroups         = "trackMap.enableUniversalGroups";     // true|false enable universal (cross-accounts) groups
+    public  static final String PROP_TrackMap_disableDeviceInfoGroupMgmt    = "trackMap.disableDeviceInfoGroupMgmt";// true|false disable group mgmt on DeviceInfo page
+    
     
     /* FullMap properties */
     // calendar properties

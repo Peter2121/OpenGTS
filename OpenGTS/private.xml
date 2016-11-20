@@ -400,6 +400,7 @@ Notes:
         <Property key="trackMap.enableDygraphs">true</Property>                 <!-- [true|false] show Dygraphs div with speed/altitude graphs (device view only) -->
         <Property key="trackMap.defaultDygraphsOpen">true</Property>            <!-- [true|false] Dygraphs div open/closed on page load (device view only) -->
         <Property key="trackMap.enableUniversalGroups">true</Property>          <!-- [true|false] (EXPERIMENTAL) Enable universal groups -->
+        <Property key="trackMap.disableDeviceInfoGroupMgmt">true</Property>     <!-- [true|false] (EXPERIMENTAL) Disable group management on DeviceInfo page (MUST be 'true' if enableUniversalGroups is 'true') -->
         
 
         <!-- GoogleKML properties -->

@@ -586,45 +586,20 @@ public class DeviceGroup
     	}
     
     /* replaces current members of the group with the new ones */
-    /* groupMembers is a serialized JSON of array of Device objects */
+    /* devList is a list of String arrays { accountId, deviceId } */
     /* ATTENTION, this function removes ALL members from the group if the input does not contain usable data */
-    /*  
-     	var Device = Object();
-		Device.accountID
-		Device.accountDesc
-		Device.deviceID
-		Device.deviceDesc
-		Device.deviceName
-    */
-    public Integer setMembers(String groupMembers)
+    public void setMembers(OrderedSet<String[]> devList)
             throws DBException
         {
-    		JSON._Object objJsonMember = null;
-    		JSON._Array arrJsonMembers = null;
-    		Integer len = 0;
-            if (groupMembers != null) {
+            if (devList != null) {
             	clear();
-            	try {
-            		arrJsonMembers = JSON.parse_Array(groupMembers);
-            		if(arrJsonMembers!=null) {
-            			Integer size = arrJsonMembers.size();
-            			for(int i=0; i<size; i++) {
-            				objJsonMember = arrJsonMembers.getObjectValueAt(i,null);
-            				if(objJsonMember!=null) {
-//            					String accountID = objJsonMember.getStringForName("accountID", "");
-//            					String deviceID = objJsonMember.getStringForName("deviceID", "");
-            					addDeviceToDeviceGroup(
-            							objJsonMember.getStringForName("accountID", ""), 
-            							objJsonMember.getStringForName("deviceID", ""));
-            				}
-            			}
-            		}
-				} catch (JSONParsingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	Iterator<String[]> dli = devList.iterator();
+    	    	while(dli.hasNext()) {
+    	    		String[] dev = dli.next();
+					this.addDeviceToDeviceGroup(dev[0],dev[1]);
+    	    	}
             }
-            return len;
+            return;
         }
     
    // ------------------------------------------------------------------------
