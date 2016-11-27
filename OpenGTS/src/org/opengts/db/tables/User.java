@@ -1094,14 +1094,14 @@ public class User
 
     }
 
-    /* return list of all Devices within the specified DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED GROUPS) */
+    /* return list of all device groups within for specified user */
     public static java.util.List<String> getGroupsForUser(String acctId, String userId)
         throws DBException
     {
         return User.getGroupsForUser(acctId, userId, -1L);
     }
 
-    /* return list of all Devices within the specified DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED GROUPS) */
+    /* return list of all device groups within for specified user */
     public static java.util.List<String> getGroupsForUser(String acctId, String userId, long limit)
         throws DBException
     {

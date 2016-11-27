@@ -415,6 +415,7 @@ public class Events
         }
 
         /* group list */
+        /* TODO: correctly handle universal groups */
         boolean emptyGroup = false;
         if (!StringTools.isBlank(groupArgs)) {
             String groupIDArray[] = StringTools.parseStringArray(groupArgs,",");

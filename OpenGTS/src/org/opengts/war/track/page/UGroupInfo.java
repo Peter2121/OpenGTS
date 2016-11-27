@@ -540,9 +540,12 @@ public class UGroupInfo
                     selGroup.setDescription(groupDesc);
                 }
                 // members
+                // TODO: check if we use Universal Groups, if not - modify another table here (to be able to use this page for normal groups management) 
                 String groupMembers = AttributeTools.getRequestString(request, PARM_GROUP_MEMBERS, "");
                 if (!groupMembers.equals("")) {
-                	  selGroup.setMembers(_decodeJSONGrp(groupMembers, selGroup.getAccountID(), enableUniversalGroups));
+                	OrderedSet<String[]> devList = _decodeJSONGrp(groupMembers, selGroup.getAccountID(), enableUniversalGroups);
+                	if(enableUniversalGroups) selGroup.setMembers(devList); 
+                	else selGroup.setMembersID(devList);
                 }
                 // save
                 if (saveOK) {

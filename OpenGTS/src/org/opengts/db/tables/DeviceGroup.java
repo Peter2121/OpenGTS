@@ -436,7 +436,7 @@ public class DeviceGroup
         }
     }
 
-    /* add device to this normal/universal group */
+    /* add device to this universal group */
     public void addDeviceToDeviceGroup(Device device)
         throws DBException
     {
@@ -572,7 +572,7 @@ public class DeviceGroup
         
     }
 
-    /* removes all members from the group */
+    /* removes all members from the universal group */
     public void clear()
     		throws DBException
     	{
@@ -585,7 +585,41 @@ public class DeviceGroup
 	    	}    	
     	}
     
-    /* replaces current members of the group with the new ones */
+    /* removes all members from the normal group */
+    public void clearDevices()
+    		throws DBException
+    	{
+	    	String accountID = this.getAccountID();
+	    	String groupID = this.getGroupID();
+	    	
+    		OrderedSet<String> devList = getDeviceIDsForGroup(
+    				accountID, groupID, (User)null, true, -1L);
+    	        
+	    	Iterator<String> dli = devList.iterator();
+	    	while(dli.hasNext()) {
+	    		String dev = dli.next();
+	    		removeDeviceFromDeviceGroup(accountID, groupID, dev);
+	    	}    	
+    	}
+    
+    /* replaces current members of the normal group with the new ones */
+    /* devList is a list of Strings deviceId  */
+    /* ATTENTION, this function removes ALL members from the group if the input does not contain usable data */
+    public void setMembersID(OrderedSet<String[]> devList)
+            throws DBException
+        {
+            if (devList != null) {
+            	clearDevices();
+    	    	Iterator<String[]> dli = devList.iterator();
+    	    	while(dli.hasNext()) {
+    	    		String[] dev = dli.next();
+					this.addDeviceToDeviceGroup(dev[1]);
+    	    	}
+            }
+            return;
+        }
+    
+    /* replaces current members of the universal group with the new ones */
     /* devList is a list of String arrays { accountId, deviceId } */
     /* ATTENTION, this function removes ALL members from the group if the input does not contain usable data */
     public void setMembers(OrderedSet<String[]> devList)
@@ -1277,7 +1311,7 @@ public class DeviceGroup
         return devList;
 
     }
-
+    
     // ------------------------------------------------------------------------
 
     /* return list of all DeviceGroups owned by the specified Account (NOT SCALABLE) */

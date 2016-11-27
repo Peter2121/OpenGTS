@@ -1016,7 +1016,7 @@ public class RequestProperties
         this.selDeviceGroup   = null;
     }
 
-    /* return a list of authorized devices for this account/user */
+    /* return a list of authorized device groups for this account/user */
     // does not return null
     public OrderedSet<String> getDeviceGroupIDList(boolean inclAll)
     {
@@ -1185,7 +1185,7 @@ public class RequestProperties
         return this.acctList;
     }    
 
-    /* return a list of known devices for this account */
+    /* return a list of devices for currently selected group */
     protected OrderedSet<String> _getDeviceIDsForSelectedGroup(boolean isFleet, boolean inclInactv)
         throws DBException
     {
@@ -1454,6 +1454,7 @@ public class RequestProperties
         throws DBException
     {
         PrivateLabel privLabel = this.getPrivateLabel();
+        final boolean enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
         // this assumes that the number of returned records is reasonable and fits in memory
         long limitCnt = this.getEventLimit(); // total record limit
         EventData.LimitType limitType = this.getEventLimitType();
@@ -1473,6 +1474,7 @@ public class RequestProperties
         //Print.logInfo("Date Range: " + new DateTime(startTime) + " to " + new DateTime(endTime));
 
         String groupID = this.getSelectedDeviceGroupID();
+        String accountID = this.getCurrentAccountID();
 
         /* get events */
         if (this.isFleet()) {
@@ -1492,70 +1494,140 @@ public class RequestProperties
             User user = this.getCurrentUser();
 
             // get list of devices
-            OrderedSet<String> devIDList = null;
-            if(!returnAllDevices) devIDList = this._getDeviceIDsForSelectedGroup(true/*fleet*/,false/*inclActv*/);
-            	else devIDList = Device.getAllDeviceUniqueIDs(false/*inclActv*/, -1L/*limit*/);	// TODO: check limit and send correct value 
-            if (ListTools.isEmpty(devIDList)) {
-                Print.logInfo("No devices ...");
-                return EventData.EMPTY_ARRAY;
+            OrderedSet<String> devIDList = null;	// for normal groups
+            OrderedSet<String[]> devList = null;	// for universal groups
+
+            if(returnAllDevices) {
+            	devIDList = Device.getAllDeviceUniqueIDs(false/*inclActv*/, -1L/*limit*/);	// TODO: check limit and send correct value
+                if (ListTools.isEmpty(devIDList)) {
+                    Print.logInfo("No devices ...");
+                    return EventData.EMPTY_ARRAY;
+                }
+            }
+            if(enableUniversalGroups) {
+            	devList = DeviceGroup.getAllDevicesForGroup(accountID, groupID, null, false);
+                if (ListTools.isEmpty(devList)) {
+                    Print.logInfo("No devices ...");
+                    return EventData.EMPTY_ARRAY;
+                }
+            }
+            if(!returnAllDevices && !enableUniversalGroups) { 
+            	devIDList = this._getDeviceIDsForSelectedGroup(true/*fleet*/,false/*inclActv*/);
+                if (ListTools.isEmpty(devIDList)) {
+                    Print.logInfo("No devices ...");
+                    return EventData.EMPTY_ARRAY;
+                }
             }
 
             // not every device may have an event
             java.util.List<EventData> evList = new Vector<EventData>();
-            for (int i = 0; i < devIDList.size(); i++) { // apply limit?
-                String deviceID = devIDList.get(i);
-
-                // omit unauthorized devices
-                if ( !returnAllDevices && (user != null) && !user.isAuthorizedDevice(deviceID)) continue;
-                
-                // get Device
-                Device device = null; 
-//                if ( !returnAllDevices) device = Device._getDevice(account, deviceID);
-                if ( !returnAllDevices) device = Device.getDevice(account, deviceID);	// as we check (device == null) probably this function should be used
-//                   	else device = Device.getDevice(deviceID);
-                	else device = Device.loadDeviceByUniqueID(deviceID);	// we use uniqueID in this case
-                if (device == null) {
-                    // -- (unlikely) skip this deviceID
-                    continue;
-                }
-
-                // get last event(s) for Device
-                if (notifyEventsOnly) {
-                    EventData E = device.getLastNotifyEvent();
-                    if (E != null) {
-                        long ts = E.getTimestamp();
-                        if ((startTime > 0L) && (ts < startTime)) {
-                            // skip this event
-                        } else
-                        if ((endTime > 0L) && (ts > endTime)) {
-                            // skip this event
-                        } else {
-                            evList.add(E);
-                        }
-                    }
-                } else {
-                    EventData ev[] = device.getRangeEvents(
-                        startTime,                  // startTime
-                        endTime,                    // endTime
-                        statusCodes,                // status codes
-                        true,                       // validGPS (or cell lat/lon?)
-                        limitType,                  // limitType (LAST)
-                        perDevLimit);               // max points
-                        // 'ev' already points to 'device'
-                    if (ev != null) {
-                        for (int e = 0; e < ev.length; e++) {
-                            evList.add(ev[e]);
-                        }
-                    }
-                }
-
-                // limit?
-                if ((limitCnt > 0L) && (evList.size() >= limitCnt)) {
-                    //Print.logWarn("Limit Reached: " + evList.size());
-                    break;
-                }
-
-            } // Device loop
+            if(devIDList!=null) {
+	            for (int i = 0; i < devIDList.size(); i++) { // TODO: apply limit?
+	                String deviceID = devIDList.get(i);
+	
+	                // omit unauthorized devices
+	                if ( !returnAllDevices && (user != null) && !user.isAuthorizedDevice(deviceID)) continue;
+	                
+	                // get Device
+	                Device device = null; 
+	//                if ( !returnAllDevices) device = Device._getDevice(account, deviceID);
+	                if ( !returnAllDevices) device = Device.getDevice(account, deviceID);	// as we check (device == null) probably this function should be used
+	//                   	else device = Device.getDevice(deviceID);
+	                	else device = Device.loadDeviceByUniqueID(deviceID);	// we use uniqueID in this case
+	                if (device == null) {
+	                    // -- (unlikely) skip this deviceID
+	                    continue;
+	                }
+	
+	                // get last event(s) for Device
+	                if (notifyEventsOnly) {
+	                    EventData E = device.getLastNotifyEvent();
+	                    if (E != null) {
+	                        long ts = E.getTimestamp();
+	                        if ((startTime > 0L) && (ts < startTime)) {
+	                            // skip this event
+	                        } else
+	                        if ((endTime > 0L) && (ts > endTime)) {
+	                            // skip this event
+	                        } else {
+	                            evList.add(E);
+	                        }
+	                    }
+	                } else {
+	                    EventData ev[] = device.getRangeEvents(
+	                        startTime,                  // startTime
+	                        endTime,                    // endTime
+	                        statusCodes,                // status codes
+	                        true,                       // validGPS (or cell lat/lon?)
+	                        limitType,                  // limitType (LAST)
+	                        perDevLimit);               // max points
+	                        // 'ev' already points to 'device'
+	                    if (ev != null) {
+	                        for (int e = 0; e < ev.length; e++) {
+	                            evList.add(ev[e]);
+	                        }
+	                    }
+	                }
+	
+	                // limit?
+	                if ((limitCnt > 0L) && (evList.size() >= limitCnt)) {
+	                    //Print.logWarn("Limit Reached: " + evList.size());
+	                    break;
+	                }
+	
+	            } // devIDList device loop
+            }
+            if(devList!=null) {
+	            for (int i = 0; i < devList.size(); i++) { // TODO: apply limit?
+//	            	String[] device = new String[] { aId, dId };
+	            	String aID = devList.get(i)[0];
+	            	String dID = devList.get(i)[1];
+	
+	                // get Device
+	                Device device = Device.getDevice(Account.getAccount(aID), dID);
+	                if (device == null) {
+	                    // -- (unlikely) skip this deviceID
+	                    continue;
+	                }
+	
+	                // get last event(s) for Device
+	                if (notifyEventsOnly) {
+	                    EventData E = device.getLastNotifyEvent();
+	                    if (E != null) {
+	                        long ts = E.getTimestamp();
+	                        if ((startTime > 0L) && (ts < startTime)) {
+	                            // skip this event
+	                        } else
+	                        if ((endTime > 0L) && (ts > endTime)) {
+	                            // skip this event
+	                        } else {
+	                            evList.add(E);
+	                        }
+	                    }
+	                } else {
+	                    EventData ev[] = device.getRangeEvents(
+	                        startTime,                  // startTime
+	                        endTime,                    // endTime
+	                        statusCodes,                // status codes
+	                        true,                       // validGPS (or cell lat/lon?)
+	                        limitType,                  // limitType (LAST)
+	                        perDevLimit);               // max points
+	                        // 'ev' already points to 'device'
+	                    if (ev != null) {
+	                        for (int e = 0; e < ev.length; e++) {
+	                            evList.add(ev[e]);
+	                        }
+	                    }
+	                }
+	
+	                // limit?
+	                if ((limitCnt > 0L) && (evList.size() >= limitCnt)) {
+	                    //Print.logWarn("Limit Reached: " + evList.size());
+	                    break;
+	                }
+	
+	            } // devList device loop
+            }
             
             /* sort by Device Description */
             Collections.sort(evList, EventData.getDeviceDescriptionComparator());

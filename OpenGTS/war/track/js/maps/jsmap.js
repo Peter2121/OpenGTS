@@ -834,6 +834,19 @@ function _jsmCreateDygraph(Data,pushPinList)
 					labelsKMB: false	
 				},
 				y: {
+	                valueFormatter: function(y) {
+	                	var ret;
+	                	if(y<1) ret=y.toFixed(2);
+	                		else if(y<10) ret=y.toFixed(1);
+	                			else ret=y.toFixed(0);
+	                    return ret;
+	                },
+	                axisLabelFormatter: function(y) {
+	                	var ret;
+	                	if(y<10) ret=y.toFixed(1);
+	                		else ret=y.toFixed(0);
+	                    return ret;
+	                },
 					axisLabelWidth: 40,
 					axisLabelColor: DYG_COLOR_ALT,
 					axisLineWidth: 2,
@@ -843,6 +856,19 @@ function _jsmCreateDygraph(Data,pushPinList)
 					labelsKMB: false
 				},
 				y2: {
+	                valueFormatter: function(y) {
+	                	var ret;
+	                	if(y<1) ret=y.toFixed(2);
+	                		else if(y<10) ret=y.toFixed(1);
+	                			else ret=y.toFixed(0);
+	                    return ret;
+	                },
+	                axisLabelFormatter: function(y) {
+	                	var ret;
+	                	if(y<10) ret=y.toFixed(1);
+	                		else ret=y.toFixed(0);
+	                    return ret;
+	                },
 					valueRange: [0, null],
 					axisLabelWidth: 40,
 					axisLabelColor: DYG_COLOR_SPEED,

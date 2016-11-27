@@ -11414,25 +11414,23 @@ public class Device // Asset
     }
 
     /**
-    *** Gets a set of Device IDs for all Accounts (does not return null)
+    *** Gets a set of Device Unique IDs for all Accounts (does not return null)
     *** @param inclInactv  True to include inactive Devices
     *** @param limit  The maximum number of Device IDs to return
-    *** @return A set of Device IDs
+    *** @return A set of Device Unique IDs
     *** @throws DBExeption
     **/
     public static OrderedSet<String> getAllDeviceUniqueIDs(boolean inclInactv, long limit)
         throws DBException
     {
         /* read devices for all accounts */
-    	/* we consider that device's ID is unique globally */
-    	/* TODO: add unique key in database, catch the error during device creation */
         OrderedSet<String> devList = new OrderedSet<String>();
         DBConnection dbc = null;
         Statement   stmt = null;
         ResultSet     rs = null;
         try {
             /* select */
-            // DBSelect: SELECT * FROM Device ORDER BY deviceID
+            // DBSelect: SELECT uniqueID FROM Device WHERE isActive<>0 ORDER BY uniqueID
             DBSelect<Device> dsel = new DBSelect<Device>(Device.getFactory());
             dsel.setSelectedFields(Device.FLD_uniqueID);
             DBWhere dwh = dsel.createDBWhere();

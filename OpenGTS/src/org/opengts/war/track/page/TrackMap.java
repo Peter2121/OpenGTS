@@ -785,10 +785,14 @@ public abstract class TrackMap
 		        	}	// End of switch(refPage)
 		        	break;	// end of currPage==PAGE_MAP_DEVICE
 		        case Constants.PAGE_MAP_FLEET:
+		        	shift = getLongProperty(privLabel, PrivateLabel.PROP_TrackMap_showFleetDays, 30);
+		        	if(shift < Integer.MIN_VALUE) ishift = Integer.MIN_VALUE;
+		        		else if(shift > Integer.MAX_VALUE) ishift = Integer.MAX_VALUE;
+		        			else ishift = (int) shift;
 		        	switch(refPage) {
 	        		case Constants.PAGE_MAP_FLEET:	// Trying to get request data as we can have from calendar active
 	        	        if (ListTools.isEmpty(rangeFrFld)) {	// No data - initialize dateFr
-	        	        	dateFr = new DateTime(now.getDayStart(tz), tz);
+				        	dateFr = new DateTime(now.getDaysDelta(tz,-ishift),tz);
 	        	        } else {	// Decoding data
 	        	            if (rangeFrFld.length == 1) { // parse as 'Epoch' time
 	        	                long epoch = StringTools.parseLong(rangeFrFld[0], now.getTimeSec());
@@ -814,14 +818,10 @@ public abstract class TrackMap
 	        	        }
 	        			break;	// End of 'PAGE_MAP_DEVICE' (decoding request data)
 	        		default:	// Need to reinitialize dateFr
-			        	shift = getLongProperty(privLabel, PrivateLabel.PROP_TrackMap_showFleetDays, 30);
-			        	if(shift < Integer.MIN_VALUE) ishift = Integer.MIN_VALUE;
-			        		else if(shift > Integer.MAX_VALUE) ishift = Integer.MAX_VALUE;
-			        			else ishift = (int) shift;
 			        	dateFr = new DateTime(now.getDaysDelta(tz,-ishift),tz);
 	        			break;
 		        	}	// End of switch(refPage)
-		        	break;
+		        	break;	// end of currPage==PAGE_MAP_FLEET
 		        case Constants.PAGE_MAP_FLEETLIVE:
 		        	shift = getLongProperty(privLabel, PrivateLabel.PROP_TrackMap_showFleetLiveMins, 60);
 	            	dateFr=new DateTime(DateTime.getCurrentTimeSec()-60*shift,tz);
