@@ -540,7 +540,6 @@ public class UGroupInfo
                     selGroup.setDescription(groupDesc);
                 }
                 // members
-                // TODO: check if we use Universal Groups, if not - modify another table here (to be able to use this page for normal groups management) 
                 String groupMembers = AttributeTools.getRequestString(request, PARM_GROUP_MEMBERS, "");
                 if (!groupMembers.equals("")) {
                 	OrderedSet<String[]> devList = _decodeJSONGrp(groupMembers, selGroup.getAccountID(), enableUniversalGroups);
@@ -783,7 +782,8 @@ public class UGroupInfo
                     out.write("<td>\n");
                     out.write("<div class='"+CSS_DEVICES_VIEW+"'>\n");
                     try {
-                        devList = DeviceGroup.getAllDevicesForGroup(currAcct.getAccountID(), _selGroupID, null/*User*/, true/*inclInactv*/);
+                    	if(enableUniversalGroups) devList = DeviceGroup.getAllDevicesForGroup(currAcct.getAccountID(), _selGroupID, null/*User*/, true/*inclInactv*/);
+                    	else devList = DeviceGroup.getArrDeviceIDsForGroup(currAcct.getAccountID(), _selGroupID, null/*User*/, true/*inclInactv*/);
                         out.write("<table cellspacing='0' cellpadding='0' id='"+PARM_TABLE_GRP_DEV+"' border='1'>\n");
 
                         out.write(" <thead>\n");

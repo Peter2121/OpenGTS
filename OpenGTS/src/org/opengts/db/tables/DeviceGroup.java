@@ -1155,6 +1155,25 @@ public class DeviceGroup
         return DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
     }
 
+    /* return list of all Devices within the specified normal DeviceGroup as array (to be compatible with getAllDevicesForGroup) */
+    public static OrderedSet<String[]> getArrDeviceIDsForGroup(
+        String acctId, String groupId, User userAuth, 
+        boolean inclInactv)
+        throws DBException
+    {
+    	OrderedSet<String> devList;
+    	OrderedSet<String[]> arrDevList = new OrderedSet<String[]>();
+    	Integer devListSize;
+    	devList = DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
+    	if(devList!=null) {
+	    	devListSize = devList.size();
+	    	for(int i=0; i<devListSize; i++) {
+	    		arrDevList.add( new String[] { acctId, devList.get(i) } );
+	    	}
+    	}
+        return arrDevList;
+    }
+
     /* return list of all Devices within the specified universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
     public static OrderedSet<String[]> getAllDevicesForGroup(
         String acctId, String groupId, User userAuth,/*ignored*/ 

@@ -376,9 +376,9 @@ Notes:
         <Property key="trackMap.showDistanceRuler">true</Property>              <!-- [true|false] show distance ruler (if supported by map) -->
         <Property key="trackMap.showLegend">true</Property>                     <!-- [true|false] show legend -->
         <Property key="trackMap.mapUpdateOnLoad">all</Property>                 <!-- [all|last] Update Map -->
-        <Property key="trackMap.autoUpdateRecenter">no</Property>             <!-- [no|last|zoom] recenter map on auto-update -->
+        <Property key="trackMap.autoUpdateRecenter">no</Property>             	<!-- [no|last|zoom] recenter map on auto-update -->
         <Property key="trackMap.detailCenterPushpin">false</Property>           <!-- [true|false] center pushpin when selecting a detail row -->
-        <Property key="trackMap.showLocationDetails">false</Property>            <!-- [true|false] show "Location Details" report -->
+        <Property key="trackMap.showLocationDetails">false</Property>           <!-- [true|false] show "Location Details" report -->
         <Property key="trackMap.detailAscending">true</Property>                <!-- [true|false] sort detail events in ascending/descending order -->
         <Property key="trackMap.showUpdateAll">true</Property>                  <!-- [true|false] show "Update All" location button -->
         <Property key="trackMap.showUpdateLast">false</Property>                <!-- [true|false] show Update "Last" location button -->
@@ -395,7 +395,7 @@ Notes:
         <Property key="trackMap.lastDevicePushpin.fleet">true</Property>        <!-- [true|false] show device pushpin for last pushpin on fleet map -->
         <Property key="trackMap.lastDevicePushpin.device">true</Property>       <!-- [true|false] show device pushpin for last pushpin on device map -->
         <Property key="trackMap.showAllDevices">true</Property>                 <!-- [true|false] show Devices from ALL accounts on fleet map if 'All' group is selected (attention, no security AT ALL) -->
-        <Property key="trackMap.showFleetDays">1000</Property>          			<!-- [#] number of days before current date to show devices on "fleet" map -->
+        <Property key="trackMap.showFleetDays">1000</Property>          		<!-- [#] number of days before current date to show devices on "fleet" map -->
         <Property key="trackMap.showFleetLiveMins">180</Property>             	<!-- [#] number of minutes before current time to show devices on "fleetLive" map -->
         <Property key="trackMap.enableDygraphs">true</Property>                 <!-- [true|false] show Dygraphs div with speed/altitude graphs (device view only) -->
         <Property key="trackMap.defaultDygraphsOpen">true</Property>            <!-- [true|false] Dygraphs div open/closed on page load (device view only) -->
