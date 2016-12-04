@@ -1161,10 +1161,9 @@ public class DeviceGroup
         boolean inclInactv)
         throws DBException
     {
-    	OrderedSet<String> devList;
-    	OrderedSet<String[]> arrDevList = new OrderedSet<String[]>();
     	Integer devListSize;
-    	devList = DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
+    	OrderedSet<String[]> arrDevList = new OrderedSet<String[]>();
+    	OrderedSet<String> devList = DeviceGroup.getDeviceIDsForGroup(acctId, groupId, userAuth, inclInactv, -1L);
     	if(devList!=null) {
 	    	devListSize = devList.size();
 	    	for(int i=0; i<devListSize; i++) {
@@ -1514,7 +1513,7 @@ public class DeviceGroup
         System.exit(1);
     }
 
-    public static void main(String argv[])
+    public static void main(String argv[])	// TODO: add universal groups management
     {
         DBConfig.cmdLineInit(argv,true);  // main
         String accountID = RTConfig.getString(ARG_ACCOUNT, "");

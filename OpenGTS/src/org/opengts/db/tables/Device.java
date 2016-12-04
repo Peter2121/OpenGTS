@@ -11413,6 +11413,27 @@ public class Device // Asset
 
     }
 
+    public static OrderedSet<String[]> getAllDevicesForAccount(String acctId, boolean inclInactv)
+            throws DBException
+    {
+    		return Device.getAllDevicesForAccount(acctId, inclInactv, -1L);
+    }
+    
+    public static OrderedSet<String[]> getAllDevicesForAccount(String acctId, boolean inclInactv, long limit)
+            throws DBException
+    {
+    	OrderedSet<String> devList = getDeviceIDsForAccount(acctId, null, inclInactv, limit);
+    	OrderedSet<String[]> arrDevList = new OrderedSet<String[]>();
+    	Integer devListSize;
+    	if(devList!=null) {
+	    	devListSize = devList.size();
+	    	for(int i=0; i<devListSize; i++) {
+	    		arrDevList.add( new String[] { acctId, devList.get(i) } );
+	    	}
+    	}
+        return arrDevList;
+    }
+    
     /**
     *** Gets a set of Device Unique IDs for all Accounts (does not return null)
     *** @param inclInactv  True to include inactive Devices

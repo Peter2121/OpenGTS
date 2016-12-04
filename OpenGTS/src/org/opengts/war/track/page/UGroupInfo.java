@@ -862,11 +862,12 @@ public class UGroupInfo
 	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_ADD_DEV+"\" value=\"Add\" onclick=\"javascript:onAddButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
                     }
                     out.write("</td>\n");
-//                    String selAcctId = currAcct.getAccountID();
-//                    String selAcctDesc = currAcct.getAccountDescription();
+                    String selAcctId = currAcct.getAccountID();
+                    String selAcctDesc = currAcct.getAccountDescription();
                     if (_uiEdit) {               
 	                    try {
-							devList = Device.getAllDevices(true);
+	                    	if(enableUniversalGroups) devList = Device.getAllDevices(true);
+	                    	else devList=Device.getAllDevicesForAccount(selAcctId, true);
 						} catch (DBException e) {
 							devList = null;
 						}
@@ -963,9 +964,15 @@ public class UGroupInfo
                     /* end of form */
                     out.write("<hr style='margin-bottom:5px;'>\n");
                     out.write("<span style='padding-left:10px'>&nbsp;</span>\n");
-                    IDDescription.SortBy dcSortBy = AccountChooser.getSortBy(privLabel);
-                    java.util.List<IDDescription> idList = reqState.createAccountIDDescriptionList(false/*inclInactv*/, dcSortBy);
-                    IDDescription list[] = idList.toArray(new IDDescription[idList.size()]);
+                    IDDescription list[] = null;
+                    if(enableUniversalGroups) {
+	                    IDDescription.SortBy dcSortBy = AccountChooser.getSortBy(privLabel);
+	                    java.util.List<IDDescription> idList = reqState.createAccountIDDescriptionList(false/*inclInactv*/, dcSortBy);
+	                    list = idList.toArray(new IDDescription[idList.size()]);
+                    }
+                    else {
+                    	list = new IDDescription[] { new IDDescription(selAcctId, selAcctDesc) };
+                    }
                     AccountChooser.writeChooserDIV(out, reqState, list, null);
                     if (_editGroup) {
                         out.write("<input type='submit' name='"+PARM_SUBMIT_CHG+"' value='"+i18n.getString("GroupInfo.change","Change")+"'>\n");
