@@ -858,8 +858,8 @@ public class UGroupInfo
                     }
                     out.write("</div>\n");
                     if (_uiEdit) {               
-	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_REMOVE_DEV+"\" value=\"Remove\" onclick=\"javascript:onRemoveButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
-	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_ADD_DEV+"\" value=\"Add\" onclick=\"javascript:onAddButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
+	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_REMOVE_DEV+"\" value=\""+i18n.getString("GroupInfo.remove","Remove")+"\" onclick=\"javascript:onRemoveButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">"); 
+	                    out.write("<input type=\"button\" name=\""+PARM_BUTTON_ADD_DEV+"\" value=\""+i18n.getString("GroupInfo.add","Add")+"\" onclick=\"javascript:onAddButtonClick('"+PARM_TABLE_ACC_DEV+"','"+PARM_TABLE_GRP_DEV+"');\">");
                     }
                     out.write("</td>\n");
                     String selAcctId = currAcct.getAccountID();
