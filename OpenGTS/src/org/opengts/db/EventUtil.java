@@ -96,7 +96,6 @@ import java.io.IOException;
 
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
-
 import org.opengts.Version;
 import org.opengts.dbtypes.*;
 import org.opengts.geocoder.*;
@@ -744,6 +743,7 @@ public class EventUtil
     public  static final String  ATTR_textColor                 = "textColor";
     public  static final String  ATTR_timestamp                 = "timestamp";
     public  static final String  ATTR_timezone                  = "timezone";
+    public  static final String  ATTR_account                   = "account";
     public  static final String  ATTR_device                    = "device";
     public  static final String  ATTR_year                      = "year";
     public  static final String  ATTR_month                     = "month";
@@ -1120,7 +1120,7 @@ public class EventUtil
         boolean isFleet, boolean fleetRoute, String selID,
         TimeZone tmz, 
         Account acct, User user,
-        DateTime latestTime, double lastBattery, double lastSignal,
+        DateTime latestTime, double lastBattery, double lastSignal, String lastDevAcctID,
         double minProximityM)
         throws IOException
     {
@@ -1134,7 +1134,7 @@ public class EventUtil
                 isFleet, fleetRoute, selID,
                 tmz,
                 acct, user,
-                latestTime, lastBattery, lastSignal,
+                latestTime, lastBattery, lastSignal, lastDevAcctID,
                 minProximityM,
                 CSV_SEPARATOR_CHAR);
         } else {
@@ -1147,7 +1147,7 @@ public class EventUtil
                 isFleet, fleetRoute, selID,
                 tmz,
                 acct, user,
-                latestTime, lastBattery, lastSignal,
+                latestTime, lastBattery, lastSignal,	// TODO: add lastDevAcctID
                 minProximityM,
                 CSV_SEPARATOR_CHAR);
         }
@@ -1165,7 +1165,7 @@ public class EventUtil
         boolean isFleet, boolean fleetRoute, String selID,
         TimeZone tmz, 
         Account acct, User user,
-        DateTime latestTime, double lastBattery, double lastSignal,
+        DateTime latestTime, double lastBattery, double lastSignal, String lastDevAcctID,
         double minProximityM)
         throws IOException
     {
@@ -1178,7 +1178,7 @@ public class EventUtil
             isFleet, fleetRoute, selID,
             tmz,
             acct, user,
-            latestTime, lastBattery, lastSignal,
+            latestTime, lastBattery, lastSignal, lastDevAcctID,
             minProximityM,
             CSV_SEPARATOR_CHAR);
     }
@@ -1193,7 +1193,7 @@ public class EventUtil
         boolean isFleet, boolean fleetRoute, String selID,
         TimeZone tmz, 
         Account acct, User user,
-        DateTime latestTime, double lastBattery, double lastSignal,
+        DateTime latestTime, double lastBattery, double lastSignal, String lastDevAcctID,
         double minProximityM,
         char csvSep)
         throws IOException
@@ -1274,6 +1274,7 @@ public class EventUtil
             String lastTmzFmt = (tmzStr != null)? tmzStr : latestTime.format("zzz",tmz);
             this.write(pwout, PFX2);
             this.write(pwout, XMLTools.startTAG(isSoapRequest,TAG_LastEvent,
+                XMLTools.ATTR(ATTR_account  , lastDevAcctID) +
                 XMLTools.ATTR(ATTR_device   , selID) +
                 XMLTools.ATTR(ATTR_timestamp, latestTime.getTimeSec()) +
                 XMLTools.ATTR(ATTR_timezone , lastTmzFmt) +
@@ -1482,6 +1483,7 @@ public class EventUtil
             edp, 
             iconSelector, iconKeys, 
             isFleet, fleetRoute, selID,
+            accountID,
             tmz, dateFmt, timeFmt, 
             csvSep,
             minProximityM);
@@ -1565,6 +1567,7 @@ public class EventUtil
         EventDataProvider edp[], 
         String iconSelector, OrderedSet<String> iconKeys, 
         boolean isFleet, boolean fleetRoute, String selID, // "selID" is either a DeviceID or GroupID
+        String acctID,
         TimeZone tmz, 
         String dateFmt, String timeFmt, 
         char csvSep,
@@ -1591,6 +1594,7 @@ public class EventUtil
         boolean  didStartSet   = false;
         GeoPoint lastGP        = null;
         String   lastDevID     = "";
+        String   lastDevAcctID = "";
         String   routeColor    = "";
         String   textColor     = "";
         int      evNdx         = 0;
@@ -1599,10 +1603,18 @@ public class EventUtil
         for (int i = 0; i < edp.length; i++) {
             EventData ev = (edp[i] instanceof EventData)? (EventData)edp[i] : null; // likely not-null
             String thisDevID = edp[i].getDeviceID();
+            String thisDevAcctID = edp[i].getAccountID();
 
             /* device changed? (XML) */
-            if (!thisDevID.equals(lastDevID)) {
-                Device dev = ((EventData)edp[i]).getDevice();
+            if (!thisDevID.equals(lastDevID) || !thisDevAcctID.equals(lastDevAcctID)) {
+                Device dev;
+				try {
+					dev = Device.getDevice(Account.getAccount(thisDevAcctID), thisDevID);
+				} catch (DBException e) {
+					Print.logError("EventUtil: Device not found: " + thisDevAcctID + "/" + thisDevID);
+					continue;
+				}
+//                Device dev = ((EventData)edp[i]).getDevice();
                 if (isFleet /*&& fleetRoute*/) {
                     if (didStartSet) {
                         // close previous dataset
@@ -1614,6 +1626,7 @@ public class EventUtil
                     selID        = thisDevID;
                 }
                 lastDevID    = thisDevID;
+                lastDevAcctID= thisDevAcctID;
                 lastGP       = null;
                 textColor    = "";
                 routeColor   = "";
@@ -1698,7 +1711,8 @@ public class EventUtil
                 edp[i].setIsLastEvent(true);
             } else {
                 String nextDevID = edp[i + 1].getDeviceID();
-                if (!thisDevID.equals(nextDevID)) {
+                String nextDevAcctID = edp[i + 1].getAccountID();
+                if (!thisDevID.equals(nextDevID) || !thisDevAcctID.equals(nextDevAcctID)) {
                     // DeviceID will change on next iteration
                     edp[i].setIsLastEvent(true);
                     evNdx = 0; // reset
@@ -1732,13 +1746,22 @@ public class EventUtil
             if (!didStartSet) {
                 String type = isDeviceData? DSTYPE_device : DSTYPE_group; // "poi"
                 this.write(pwout, PFX1);
-                this.write(pwout, XMLTools.startTAG(isSoapRequest,TAG_DataSet,
-                    XMLTools.ATTR(ATTR_type      , type        ) +
-                    XMLTools.ATTR(ATTR_id        , selID       ) +
-                    XMLTools.ATTR(ATTR_route     , isDeviceData) +
-                    XMLTools.ATTR(ATTR_routeColor, routeColor  ) +
-                    XMLTools.ATTR(ATTR_textColor , textColor   ),
+                if(isDeviceData) this.write(pwout, XMLTools.startTAG(isSoapRequest,TAG_DataSet,
+                    XMLTools.ATTR(ATTR_type      , type          ) +
+                    XMLTools.ATTR(ATTR_account   , thisDevAcctID ) +
+                    XMLTools.ATTR(ATTR_id        , thisDevID     ) +
+                    XMLTools.ATTR(ATTR_route     , isDeviceData  ) +
+                    XMLTools.ATTR(ATTR_routeColor, routeColor    ) +
+                    XMLTools.ATTR(ATTR_textColor , textColor     ),
                     false,true));
+                else this.write(pwout, XMLTools.startTAG(isSoapRequest,TAG_DataSet,
+                        XMLTools.ATTR(ATTR_type      , type        ) +
+                        XMLTools.ATTR(ATTR_account   , acctID      ) +
+                        XMLTools.ATTR(ATTR_id        , selID       ) +
+                        XMLTools.ATTR(ATTR_route     , isDeviceData) +
+                        XMLTools.ATTR(ATTR_routeColor, routeColor  ) +
+                        XMLTools.ATTR(ATTR_textColor , textColor   ),
+                        false,true));
                 didStartSet = true;
                 //Print.logWarn(i + ") New DataSet: " + selID);
             }
@@ -1991,6 +2014,7 @@ public class EventUtil
         if (!isFleet && (latestTime != null)) {
             String lastTmzFmt = (tmzStr != null)? tmzStr : latestTime.format("zzz",tmz);
             JSON._Object lastEventObj = new JSON._Object();
+            lastEventObj.addKeyValue(ATTR_account  , accountID);
             lastEventObj.addKeyValue(ATTR_device   , selID);
             lastEventObj.addKeyValue(ATTR_timestamp, latestTime.getTimeSec());
             lastEventObj.addKeyValue(ATTR_timezone , lastTmzFmt);
@@ -2620,7 +2644,7 @@ public class EventUtil
     public  static final String  TAG_EngineCoolantTemperature   = "EngineCoolantTemperature";
     public  static final String  TAG_EngineFuelUsed             = "EngineFuelUsed";
 
-    public  static final String  ATTR_account                   = "account";
+  //public  static final String  ATTR_account                   = "account";
   //public  static final String  ATTR_device                    = "device";
   //public  static final String  ATTR_timezone                  = "timezone";
     public  static final String  ATTR_epoch                     = "epoch";

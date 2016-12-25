@@ -583,8 +583,10 @@ public class Track
         }
 
         /* session cached device/group */
-        String deviceID = (String)AttributeTools.getRequestAttribute(request, Constants.PARM_DEVICE   , "");
-        String groupID  = (String)AttributeTools.getRequestAttribute(request, Constants.PARM_GROUP    , "");
+        String deviceID 		= (String)AttributeTools.getRequestAttribute(request, Constants.PARM_DEVICE   		  , "");
+        String groupID  		= (String)AttributeTools.getRequestAttribute(request, Constants.PARM_GROUP    		  , "");
+        String deviceAccountID 	= (String)AttributeTools.getRequestAttribute(request, Constants.PARM_DEVICE_ACCOUNT   , "");
+        
         // the following prevents HTML/JavaScript injection
         if ((privLabel == null) || privLabel.globalValidateIDs()) {
             //Print.logInfo("Validating device/group IDs");

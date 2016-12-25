@@ -1173,7 +1173,15 @@ public class DeviceGroup
         return arrDevList;
     }
 
-    /* return list of all Devices within the specified universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    /**
+    *** return list of all Devices within the specified universal DeviceGroup 
+    *** (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES)
+    *** @param acctId      The account
+    *** @param groupID     The group-id
+    *** @param userAuth    Ignored
+    *** @param inclInactv  Include inactive devices?
+    *** @return Ordered set of String arrays { accountId, deviceId }
+    **/
     public static OrderedSet<String[]> getAllDevicesForGroup(
         String acctId, String groupId, User userAuth,/*ignored*/ 
         boolean inclInactv)
@@ -1261,7 +1269,16 @@ public class DeviceGroup
 
     }
 
-    /* return list of all Devices within the specified universal DeviceGroup (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES) */
+    /**
+    *** return list of all Devices within the specified universal DeviceGroup 
+    *** (NOT SCALABLE BEYOND A FEW HUNDRED DEVICES)
+    *** @param acctId      The account
+    *** @param groupID     The group-id
+    *** @param userAuth    Ignored
+    *** @param inclInactv  Include inactive devices?
+    *** @param limit	   Maximum number of devices returned
+    *** @return Ordered set of String arrays { accountId, deviceId }
+    **/
     public static OrderedSet<String[]> getAllDevicesForGroup(
         String acctId, String groupId, User userAuth,/*ignored*/ 
         boolean inclInactv, long limit)

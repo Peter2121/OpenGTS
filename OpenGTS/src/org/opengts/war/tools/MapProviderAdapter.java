@@ -1034,20 +1034,21 @@ public abstract class MapProviderAdapter
         }
 
         /* arguments */
-        PrivateLabel privLabel  = reqState.getPrivateLabel();
-        boolean      isFleet    = reqState.isFleet();
-        Account      acct       = reqState.getCurrentAccount();
-        User         user       = reqState.getCurrentUser(); // may be null;
-        TimeZone     tmz        = reqState.getTimeZone();
-        Device       selDev     = isFleet? null : reqState.getSelectedDevice();
-        String       selID      = isFleet? reqState.getSelectedDeviceGroupID() : reqState.getSelectedDeviceID();
-        DateTime     latest     = isFleet? null : reqState.getLastEventTime();
-        double       lastBatt   = isFleet? 0.0 : (selDev == null)? 0.0 : selDev.getLastBatteryLevel();
-        double       lastSig    = isFleet? 0.0 : (selDev == null)? 0.0 : 0.0; // selDev.getLastSignalStrength();
-        double       proximityM = this.getProperties().getDouble(MapProvider.PROP_map_minProximity, 0.0);
-        String       iconSel    = this.getIconSelector(reqState);
-        boolean      fleetRoute = (reqState.getFleetDeviceEventCount() > 1L);
-        boolean      inclZones  = this.getProperties().getBoolean(MapProvider.PROP_map_includeGeozones, false);
+        PrivateLabel privLabel  	= reqState.getPrivateLabel();
+        boolean      isFleet    	= reqState.isFleet();
+        Account      acct       	= reqState.getCurrentAccount();
+        User         user       	= reqState.getCurrentUser(); // may be null;
+        TimeZone     tmz        	= reqState.getTimeZone();
+        Device       selDev     	= isFleet? null : reqState.getSelectedDevice();
+        String       selID      	= isFleet? reqState.getSelectedDeviceGroupID() : reqState.getSelectedDeviceID();
+        DateTime     latest     	= isFleet? null : reqState.getLastEventTime();
+        double       lastBatt   	= isFleet? 0.0 : (selDev == null)? 0.0 : selDev.getLastBatteryLevel();
+        double       lastSig    	= isFleet? 0.0 : (selDev == null)? 0.0 : 0.0; // selDev.getLastSignalStrength();
+        String		 lastDevAcctID	= isFleet? "" : (selDev == null)? "" : selDev.getAccountID();
+        double       proximityM 	= this.getProperties().getDouble(MapProvider.PROP_map_minProximity, 0.0);
+        String       iconSel    	= this.getIconSelector(reqState);
+        boolean      fleetRoute 	= (reqState.getFleetDeviceEventCount() > 1L);
+        boolean      inclZones  	= this.getProperties().getBoolean(MapProvider.PROP_map_includeGeozones, false);
         OrderedSet<String> iconKeys = (OrderedSet<String>)this.getPushpinIconMap(reqState).keySet();
 
         /* return events */
@@ -1077,7 +1078,7 @@ public abstract class MapProviderAdapter
                 isFleet, fleetRoute, selID,
                 tmz, 
                 acct, user,
-                latest, lastBatt, lastSig, proximityM);
+                latest, lastBatt, lastSig, lastDevAcctID, proximityM);
         } catch (IOException ioe) {
             Print.logException("Error writing events", ioe);
             out.println("\nError writing Events"); // output is Mime type plain

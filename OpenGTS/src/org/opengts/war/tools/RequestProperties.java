@@ -187,6 +187,7 @@ public class RequestProperties
     
     private Device              selDevice               = null;
     private String              selDeviceID             = null;
+    private String              selDeviceAccountID      = null;
     private boolean             isActualSelDevID        = false;
     
     private DeviceGroup         selDeviceGroup          = null;
@@ -1106,13 +1107,13 @@ public class RequestProperties
 
     // ------------------------------------------------------------------------
 
-    /* return the current device group ID/name */
+    /* set currently selected device ID */
     public void setSelectedDeviceID(String devID)
     {
         this.setSelectedDeviceID(devID, true);
     }
-
-    /* return the current device group ID/name */
+    
+    /* set currently selected device ID */
     public void setSelectedDeviceID(String devID, boolean isActualSpecifiedDevice)
     {
         this.selDeviceID      = devID;
@@ -1120,10 +1121,31 @@ public class RequestProperties
         this.selDevice        = null;
     }
 
-    /* return the current device ID/name */
+    /* set currently selected device ID */
+    public void setSelectedDeviceID(String devID, String devAcctID)
+    {
+        this.setSelectedDeviceID(devID, devAcctID, true);
+    }
+    
+    /* set currently selected device ID */
+    public void setSelectedDeviceID(String devID, String devAcctID, boolean isActualSpecifiedDevice)
+    {
+        this.selDeviceID      	= devID;
+        this.selDeviceAccountID = devAcctID;
+        this.isActualSelDevID 	= isActualSpecifiedDevice;
+        this.selDevice        	= null;
+    }
+
+    /* return the current device ID */
     public String getSelectedDeviceID()
     {
         return (this.selDeviceID != null)? this.selDeviceID : "";
+    }
+
+    /* return the current device account ID */
+    public String getSelectedDeviceAccountID()
+    {
+        return (this.selDeviceAccountID != null)? this.selDeviceAccountID : "";
     }
 
     /* is actual specified device ID (ie. not a 'default' selection) */
@@ -1137,15 +1159,18 @@ public class RequestProperties
     {
         if (this.selDevice == null) {
             String deviceID = this.getSelectedDeviceID();
+            String deviceAccountID = this.getSelectedDeviceAccountID();
+            Account account = null;
             if (!StringTools.isBlank(deviceID)) {
                 try {
-                    Account account = this.getCurrentAccount();
+                    if(StringTools.isBlank(deviceAccountID)) account = this.getCurrentAccount();
+                    else account = Account.getAccount(deviceAccountID);
                     this.selDevice = Device.getDevice(account, deviceID); // null if non-existent
                     if (this.selDevice == null) {
                         Print.logWarn("Device not found: " + deviceID);
                     }
                 } catch (DBException dbe) {
-                    Print.logException("Error reading Device: " + this.getCurrentAccountID() + "/" + deviceID, dbe);
+                    Print.logException("Error reading Device: " + this.getCurrentAccountID() + "(" + deviceAccountID + ")/" + deviceID, dbe);
                 }
             }
         }
@@ -1480,6 +1505,7 @@ public class RequestProperties
         if (this.isFleet()) {
             // fleet events
 
+        	// Special case: show ALL devices from ALL accounts on FleetLive map when DeviceGroup.DEVICE_GROUP_ALL is selected
         	final boolean returnAllDevices=this.needShowAllDevices() && this.isFleetLive() && groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);
 
 //        	final boolean returnAllDevices=groupID.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL);	// ****** For debug only!!!
@@ -1494,8 +1520,8 @@ public class RequestProperties
             User user = this.getCurrentUser();
 
             // get list of devices
-            OrderedSet<String> devIDList = null;	// for normal groups
-            OrderedSet<String[]> devList = null;	// for universal groups
+            OrderedSet<String> devIDList = null;	// for normal groups: contains Device IDs OR Device Unique IDs (case of returnAllDevices) 
+            OrderedSet<String[]> devList = null;	// for universal groups: contains Account ID AND Device ID
 
             if(returnAllDevices) {
             	devIDList = Device.getAllDeviceUniqueIDs(false/*inclActv*/, -1L/*limit*/);	// TODO: check limit and send correct value
@@ -1521,18 +1547,19 @@ public class RequestProperties
 
             // not every device may have an event
             java.util.List<EventData> evList = new Vector<EventData>();
+            
+            // case of normal groups OR returnAllDevices
             if(devIDList!=null) {
 	            for (int i = 0; i < devIDList.size(); i++) { // TODO: apply limit?
 	                String deviceID = devIDList.get(i);
 	
 	                // omit unauthorized devices
-	                if ( !returnAllDevices && (user != null) && !user.isAuthorizedDevice(deviceID)) continue;
+	                if ( !returnAllDevices && (user != null) && !user.isAuthorizedDevice(deviceID) ) continue;
 	                
 	                // get Device
 	                Device device = null; 
 	//                if ( !returnAllDevices) device = Device._getDevice(account, deviceID);
 	                if ( !returnAllDevices) device = Device.getDevice(account, deviceID);	// as we check (device == null) probably this function should be used
-	//                   	else device = Device.getDevice(deviceID);
 	                	else device = Device.loadDeviceByUniqueID(deviceID);	// we use uniqueID in this case
 	                if (device == null) {
 	                    // -- (unlikely) skip this deviceID
@@ -1561,7 +1588,6 @@ public class RequestProperties
 	                        true,                       // validGPS (or cell lat/lon?)
 	                        limitType,                  // limitType (LAST)
 	                        perDevLimit);               // max points
-	                        // 'ev' already points to 'device'
 	                    if (ev != null) {
 	                        for (int e = 0; e < ev.length; e++) {
 	                            evList.add(ev[e]);
@@ -1577,6 +1603,8 @@ public class RequestProperties
 	
 	            } // devIDList device loop
             }
+            
+         // case of universal groups
             if(devList!=null) {
 	            for (int i = 0; i < devList.size(); i++) { // TODO: apply limit?
 //	            	String[] device = new String[] { aId, dId };
@@ -1612,7 +1640,6 @@ public class RequestProperties
 	                        true,                       // validGPS (or cell lat/lon?)
 	                        limitType,                  // limitType (LAST)
 	                        perDevLimit);               // max points
-	                        // 'ev' already points to 'device'
 	                    if (ev != null) {
 	                        for (int e = 0; e < ev.length; e++) {
 	                            evList.add(ev[e]);
@@ -1665,7 +1692,6 @@ public class RequestProperties
                     limitType,                  // limitType
                     perDevLimit);               // max points
             }
-            // 'ev' already points to 'device'
 
             /* no data? */
             if (ev == null) {

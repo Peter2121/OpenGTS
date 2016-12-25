@@ -73,6 +73,7 @@ public interface Constants
 
     public  static final String PARM_DEVICE                 = "device";
     public  static final String PARM_GROUP                  = "group";
+    public  static final String PARM_DEVICE_ACCOUNT         = "devaccount";
     
     public  static final String PARM_MAP_LIMIT              = "limit";      // map limit
     public  static final String PARM_MAP_LIMIT_TYPE         = "limType";    // map limit type

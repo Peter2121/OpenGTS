@@ -147,6 +147,8 @@ var ATTR_command                = "command";
 var ATTR_radius                 = "radius";
 var ATTR_battery                = "battery";
 var ATTR_signal                 = "signal";
+var ATTR_device					= "device";
+var ATTR_account				= "account";
 
 /* partial data */
 var jsvPartialData              = false;
@@ -427,6 +429,8 @@ JSMapPushpin.prototype.getHTML = function()
     var code    = evRcd.code;
     var sats    = evRcd.satCount;
     var stopSec = evRcd.stopSec;
+    var devID	= evRcd.typeID; 
+    var devAcctID = evRcd.devAcct; 
 
     /* extra GPS location information */
     var gpsStr  = "";
@@ -445,7 +449,8 @@ JSMapPushpin.prototype.getHTML = function()
     var h = "";
     //h += "<div style='width:300px'>";
     h += "<table class='infoBoxTable' cellspacing='1' cellpadding='1' border='0'>";
-    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <b>"+dev+" : "+code+"</b></td></tr>";
+//    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <b>"+dev+"</b></td></tr>";
+    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <b>"+devAcctID+"/"+devID+"</b></td></tr>";
     h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_DATE   +":</b> "+dtime+" ["+tmz+"]</td></tr>";
     h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_GPS    +":</b> "+flat+" / "+flon+" "+gpsStr+"</td></tr>";
     if (SHOW_SPEED) {
@@ -1395,6 +1400,8 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
         var day               = getXMLNodeAttribute(timeAttr,ATTR_day,0);      // date (in selected timezone)
         var battery           = getXMLNodeAttribute(timeAttr,ATTR_battery,0);  // battery level (%)
         var signal            = getXMLNodeAttribute(timeAttr,ATTR_signal,0);   // signal strength (%)
+        var latest_dev		  = getXMLNodeAttribute(timeAttr,ATTR_device,"");  // device of last record
+        var latest_dev_acct	  = getXMLNodeAttribute(timeAttr,ATTR_account,"");
         jsvLastEventYMD       = { YYYY:year, MM:month1, DD:day };              // in selected timezone
         jsvLastBatteryLevel   = battery;
         jsvLastSignalStrength = signal;
@@ -1508,6 +1515,9 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
         var textColor   = getXMLNodeAttribute(dsAttr, ATTR_textColor, "");
         var routeColor  = getXMLNodeAttribute(dsAttr, ATTR_routeColor, "");
         if (routeColor == "") { routeColor = ROUTE_LINE_COLOR; }
+        
+//        var devID		= getXMLNodeAttribute(dsAttr,ATTR_device,"");
+        var devAccID	= getXMLNodeAttribute(dsAttr,ATTR_account,"");
 
         /* show route-line? */
         if (showRoute) {
@@ -1545,6 +1555,8 @@ function jsmParseAJAXPoints_XML(xmlText, recenterMode, replay) // tmz
             /* add type/typeID */
             evRcd.type   = type;
             evRcd.typeID = typeID;
+//            evRcd.dev = devID;
+            evRcd.devAcct = devAccID;
 
             /* Point Of Interest? [XML] */
             if (isPOI) {
