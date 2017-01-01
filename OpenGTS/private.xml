@@ -366,7 +366,7 @@ Notes:
          -->
 
         <!-- TrackMap properties -->
-        <Property key="trackMap.fleetDeviceEventCount">10</Property>             <!-- [#] limit of points per device on "fleet" map -->
+        <Property key="trackMap.fleetDeviceEventCount">10</Property>            <!-- [#] limit of points per device on "fleet" map -->
         <Property key="trackMap.showFleetMapDevicePushpin">default</Property>   <!-- [default|true|false] display device pushpin on fleet map -->
         <Property key="trackMap.calendarAction">fade</Property>                 <!-- [fixed|fade|popup] calendar action -->
         <Property key="trackMap.calendarDateOnLoad">last</Property>             <!-- [last|current] set calendar date OnLoad -->

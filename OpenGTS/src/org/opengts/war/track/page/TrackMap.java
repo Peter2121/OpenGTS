@@ -586,8 +586,15 @@ public abstract class TrackMap
         String  refPage  = "";
         String  currPage = reqState.getPageName();
 
-        String [] buf = StringTools.split(_refPage,'=');
-        if(buf.length > 1) refPage = buf[1]; 
+        String [] buf = null;
+	    if(_refPage != null) {
+	        buf = StringTools.split(_refPage,'=');
+	        if(buf.length > 1) {
+	        	_refPage = buf[1];
+		        buf = StringTools.split(_refPage,'&');
+		        refPage = buf[0];
+	        }
+        }
 
         /* limit info */
         long   limitCnt  = AttributeTools.getRequestLong(  request, PARM_MAP_LIMIT     , -1L);
@@ -630,7 +637,7 @@ public abstract class TrackMap
         /* device "Ping" (Command) */
         final Map<String,String> commandMap;
         final boolean deviceSupportsPing;
-        String showLocateNow = this.getStringProperty(privLabel,PrivateLabel.PROP_TrackMap_showLocateNow,"device");
+        String showLocateNow = this.getStringProperty(privLabel,PrivateLabel.PROP_TrackMap_showLocateNow,"false");
         if (isFleet) {
             // no "ping" for fleet
             commandMap = null;
@@ -753,6 +760,7 @@ public abstract class TrackMap
 		        case Constants.PAGE_MAP_DEVICE:
 		        	switch(refPage) {
 		        		case Constants.PAGE_MAP_DEVICE:	// Trying to get request data
+		        		case "":
 		        	        if (ListTools.isEmpty(rangeFrFld)) {	// No data - initialize dateFr
 		        	        	dateFr = new DateTime(now.getDayStart(tz), tz);
 		        	        } else {	// Decoding data
@@ -790,36 +798,36 @@ public abstract class TrackMap
 		        		else if(shift > Integer.MAX_VALUE) ishift = Integer.MAX_VALUE;
 		        			else ishift = (int) shift;
 		        	switch(refPage) {
-	        		case Constants.PAGE_MAP_FLEET:	// Trying to get request data as we can have from calendar active
-	        	        if (ListTools.isEmpty(rangeFrFld)) {	// No data - initialize dateFr
+		        		case Constants.PAGE_MAP_FLEET:	// Trying to get request data as we can have from calendar active
+		        	        if (ListTools.isEmpty(rangeFrFld)) {	// No data - initialize dateFr
+					        	dateFr = new DateTime(now.getDaysDelta(tz,-ishift),tz);
+		        	        } else {	// Decoding data
+		        	            if (rangeFrFld.length == 1) { // parse as 'Epoch' time
+		        	                long epoch = StringTools.parseLong(rangeFrFld[0], now.getTimeSec());
+		        	                dateFr = new DateTime(epoch, tz);
+		        	            } else { // (rangeFrFld.length >= 2)
+		        	                YY = StringTools.parseInt(rangeFrFld[0], now.getYear());
+		        	                MM = StringTools.parseInt(rangeFrFld[1], now.getMonth1());
+		        	                hh = 0; // default to beginning of day
+		        	                mm = 0;
+		        	                ss = 0;
+		        	                if (rangeFrFld.length >= 3) {
+		        	                    // at least YYYY/MM/DD provided
+		        	                    DD = StringTools.parseInt(rangeFrFld[2], now.getDayOfMonth());
+		        	                    if (rangeFrFld.length > 3) { hh = StringTools.parseInt(rangeFrFld[3], hh); }
+		        	                    if (rangeFrFld.length > 4) { mm = StringTools.parseInt(rangeFrFld[4], mm); }
+		        	                    if (rangeFrFld.length > 5) { ss = StringTools.parseInt(rangeFrFld[5], ss); }
+		        	                } else { // only YYYY/MM provided
+		        	                    DD = 1;
+		        	                	}
+		        	                dateFr = new DateTime(tz, YY, MM, DD, hh, mm, ss);
+		        	                //Print.logInfo("Fr: YY="+YY+", MM="+MM+", DD="+DD+", hh="+hh+", mm="+mm+", ss="+ss);
+		        	            }
+		        	        }
+		        			break;	// End of 'PAGE_MAP_DEVICE' (decoding request data)
+		        		default:	// Need to reinitialize dateFr
 				        	dateFr = new DateTime(now.getDaysDelta(tz,-ishift),tz);
-	        	        } else {	// Decoding data
-	        	            if (rangeFrFld.length == 1) { // parse as 'Epoch' time
-	        	                long epoch = StringTools.parseLong(rangeFrFld[0], now.getTimeSec());
-	        	                dateFr = new DateTime(epoch, tz);
-	        	            } else { // (rangeFrFld.length >= 2)
-	        	                YY = StringTools.parseInt(rangeFrFld[0], now.getYear());
-	        	                MM = StringTools.parseInt(rangeFrFld[1], now.getMonth1());
-	        	                hh = 0; // default to beginning of day
-	        	                mm = 0;
-	        	                ss = 0;
-	        	                if (rangeFrFld.length >= 3) {
-	        	                    // at least YYYY/MM/DD provided
-	        	                    DD = StringTools.parseInt(rangeFrFld[2], now.getDayOfMonth());
-	        	                    if (rangeFrFld.length > 3) { hh = StringTools.parseInt(rangeFrFld[3], hh); }
-	        	                    if (rangeFrFld.length > 4) { mm = StringTools.parseInt(rangeFrFld[4], mm); }
-	        	                    if (rangeFrFld.length > 5) { ss = StringTools.parseInt(rangeFrFld[5], ss); }
-	        	                } else { // only YYYY/MM provided
-	        	                    DD = 1;
-	        	                	}
-	        	                dateFr = new DateTime(tz, YY, MM, DD, hh, mm, ss);
-	        	                //Print.logInfo("Fr: YY="+YY+", MM="+MM+", DD="+DD+", hh="+hh+", mm="+mm+", ss="+ss);
-	        	            }
-	        	        }
-	        			break;	// End of 'PAGE_MAP_DEVICE' (decoding request data)
-	        		default:	// Need to reinitialize dateFr
-			        	dateFr = new DateTime(now.getDaysDelta(tz,-ishift),tz);
-	        			break;
+		        			break;
 		        	}	// End of switch(refPage)
 		        	break;	// end of currPage==PAGE_MAP_FLEET
 		        case Constants.PAGE_MAP_FLEETLIVE:
@@ -871,7 +879,10 @@ public abstract class TrackMap
 
         /* save from/to dates */
         if ((dateFr != null) && (dateTo != null)) { 
-            if(dateFr.isAfter(dateTo)) dateFr = dateTo; 
+            if(dateFr.isAfter(dateTo)) {
+//            	dateFr = dateTo;
+            	dateFr.setDate(dateTo.getTimeZone(), dateTo.getYear(), dateTo.getMonth1(), dateTo.getDayOfMonth(), 0, 0, 0);
+            }
         }
         
         if (dateFr != null) {
