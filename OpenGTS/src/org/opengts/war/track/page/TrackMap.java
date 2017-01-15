@@ -111,6 +111,7 @@ public abstract class TrackMap
     // ------------------------------------------------------------------------
 
     private static final String  ID_DEVICE_ID                   = "deviceSelector";
+    private static final String  ID_DEVICE_ACCOUNT_ID           = "deviceAccount";
     private static final String  ID_DEVICE_DESCR                = "deviceDescription";
     private static final String  ID_DEVICE_DD					= "deviceDropDown";
 
@@ -338,6 +339,7 @@ public abstract class TrackMap
         PrivateLabel        privLabel  = reqState.getPrivateLabel();
         I18N                i18n       = privLabel.getI18N(TrackMap.class);
         HttpServletRequest  request    = reqState.getHttpServletRequest();
+        String        mapDevicePageURL = reqState.getBaseURI()+"?"+CommonServlet.PARM_PAGE+"="+PAGE_MAP_DEVICE+"&"+PARM_DEVICE+"=$1"+"&"+PARM_DEVICE_ACCOUNT+"=$2";
 
         /* start JavaScript */
         JavaScriptTools.writeStartJavaScript(out);
@@ -455,6 +457,7 @@ public abstract class TrackMap
         JavaScriptTools.writeJSVar(out, "IS_CAL_FR_STATIC"          , useDateFr && !showFromCalendar);
         JavaScriptTools.writeJSVar(out, "IS_CAL_TO_STATIC"          , useDateTo && !showToCalendar);
         JavaScriptTools.writeJSVar(out, "MAP_UPDATE_URL"            , mapUpdURL);
+        JavaScriptTools.writeJSVar(out, "MAP_DEVICE_URL"            , mapDevicePageURL);
         JavaScriptTools.writeJSVar(out, "DEVICE_PING_URL"           , devicePingURL);
         JavaScriptTools.writeJSVar(out, "DEVICE_PUSHPIN"            , devicePushpinNdx);
         JavaScriptTools.writeJSVar(out, "KML_UPDATE_URL"            , kmlUpdURL);
@@ -464,6 +467,7 @@ public abstract class TrackMap
         JavaScriptTools.writeJSVar(out, "PARM_LIMIT"                , PARM_MAP_LIMIT);
         JavaScriptTools.writeJSVar(out, "PARM_LIMIT_TYPE"           , PARM_MAP_LIMIT_TYPE);
         JavaScriptTools.writeJSVar(out, "PARM_DEVICE_GROUP"         , parmDevGrp);
+        JavaScriptTools.writeJSVar(out, "PARM_DEVICE_ACCOUNT"       , PARM_DEVICE_ACCOUNT);
         JavaScriptTools.writeJSVar(out, "PARM_DEVICE_COMMAND"       , PARM_DEVICE_COMMAND);
         JavaScriptTools.writeJSVar(out, "BATTERY_LEVEL_TYPE"        , showBatteryLevel);
 
@@ -585,6 +589,9 @@ public abstract class TrackMap
         String  _refPage = reqState.getRefPage();
         String  refPage  = "";
         String  currPage = reqState.getPageName();
+        String devAccountID = currAcct.getAccountID();
+        final boolean enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
+        if(enableUniversalGroups) devAccountID = (String)AttributeTools.getRequestAttribute(request, PARM_DEVICE_ACCOUNT, "");
 
         String [] buf = null;
 	    if(_refPage != null) {
@@ -595,7 +602,20 @@ public abstract class TrackMap
 		        refPage = buf[0];
 	        }
         }
-
+/*	    
+	    boolean needDevFromReq = true;
+	    boolean paramDevice = false;
+	    
+        String queryString = request.getQueryString();
+        Integer indexParam = queryString.indexOf("&");
+        if(indexParam>1) {
+            String paramString = queryString.substring(indexParam);
+            if(paramString.contains(PARM_DEVICE)) paramDevice=true;
+//            needDevice = isFleet? true : !paramString.contains(PARM_DEVICE) && refPage.equals(currPage);                	
+        }
+//        if(refPage.equals(currPage) && !paramDevice) needDevFromReq=false;
+//        if(!refPage.equals(currPage) && paramDevice) needDevFromReq=false;
+*/	    
         /* limit info */
         long   limitCnt  = AttributeTools.getRequestLong(  request, PARM_MAP_LIMIT     , -1L);
         String limitType = AttributeTools.getRequestString(request, PARM_MAP_LIMIT_TYPE, "");
@@ -614,12 +634,19 @@ public abstract class TrackMap
         /* notify events only */
         reqState.setDeviceNotifyEventsOnly(this.alertEventsOnly);
 
+        /* set device account id */
+        if(!StringTools.isBlank(devAccountID) && enableUniversalGroups) reqState.setSelectedDeviceAccountID(devAccountID);
+        
         /* no defined Device? */
         final Device device;
         if (isFleet) {
             device = null;
         } else {
             device = reqState.getSelectedDevice();
+//            if(!devAccountID.equals(currAcct.getAccountID()) && !paramDevice) {	// Need to reinitialize device selection
+//            	device=Device.getDevice(currAcct, Device.getDeviceIDsForAccount(currAcct.getAccountID(), null, false, 1).get(0)); 
+//            	device=null;
+//            }
             if (device == null) {
                 String devID = reqState.getSelectedDeviceID();
                 if (StringTools.isBlank(devID)) {
@@ -1188,30 +1215,44 @@ public abstract class TrackMap
                 }
                 out.print("<td nowrap><b>"+mapTypeTitle+":</b>&nbsp;</td>");
                 String selId = isFleet? reqState.getSelectedDeviceGroupID() : reqState.getSelectedDeviceID();
+                String currAcctId = reqState.getCurrentAccountID();
+                String selDevAcctId = isFleet? currAcctId : reqState.getSelectedDeviceAccountID();
                 String parmDevGrp = isFleet? PARM_GROUP : PARM_DEVICE;
+                boolean activateOnClick = true;
                 IDDescription.SortBy dcSortBy = DeviceChooser.getSortBy(privLabel);
+//                HttpServletRequest request = reqState.getHttpServletRequest();
+                String queryString = reqState.getHttpServletRequest().getQueryString();
+                Integer indexParam = queryString.indexOf("&");
+                if(indexParam>1) {
+                    String paramString = queryString.substring(indexParam);
+                    activateOnClick = isFleet? !paramString.contains(PARM_GROUP) : !paramString.contains(PARM_DEVICE);                	
+                }
                 if (DeviceChooser.isDeviceChooserUseTable(privLabel)) {
                     out.write("<td nowrap>");
                     String chooserStyle   = "height:17px; padding:0px 0px 0px 3px; margin:0px 0px 0px 3px; cursor:pointer; border:1px solid gray;";
-                    String chooserOnclick = "javascript:trackMapShowSelector()";
+                    String chooserOnclick = activateOnClick? "javascript:trackMapShowSelector()" : "" ;
                     switch (dcSortBy) {
                         case DESCRIPTION : {
                             String selDesc = FilterValue(isFleet?reqState.getDeviceGroupDescription(selId,false):reqState.getDeviceDescription(selId,false));
                             out.write("<input id='"+ID_DEVICE_ID   +"' name='"+parmDevGrp     +"' type='hidden' value='"+selId+"'>");
+                            out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                             out.write("<input id='"+ID_DEVICE_DESCR+"' name='"+ID_DEVICE_DESCR+"' type='text' value='"+selDesc+"' readonly size='20' style='"+chooserStyle+"' onclick=\""+chooserOnclick+"\">");
                             } break;
                         case NAME : {
                             String selName = FilterValue(isFleet?reqState.getDeviceGroupDescription(selId,true ):reqState.getDeviceDescription(selId,true ));
                             out.write("<input id='"+ID_DEVICE_ID   +"' name='"+parmDevGrp     +"' type='hidden' value='"+selId+"'>");
+                            out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                             out.write("<input id='"+ID_DEVICE_DESCR+"' name='"+ID_DEVICE_DESCR+"' type='text' value='"+selName+"' readonly size='20' style='"+chooserStyle+"' onclick=\""+chooserOnclick+"\">");
                             } break;
                         case ID :
                         default : {
                             out.write("<input id='"+ID_DEVICE_ID   +"' name='"+parmDevGrp     +"' type='text' value='"+selId  +"' readonly size='14' style='"+chooserStyle+"' onclick=\""+chooserOnclick+"\">");
+                            out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                             } break;
                     }
                     out.write("</td>");
-                    out.write("<td style='vertical-align: bottom;'><span class=devChooserDD id='"+ID_DEVICE_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>");
+                    if(activateOnClick) out.write("<td style='vertical-align: bottom;'><span class=devChooserDD id='"+ID_DEVICE_DD+"' onclick='"+chooserOnclick+"'>&nabla;</span></td>");
+                    else out.write("<td>&nbsp;</td>");
                     out.write("<td style='padding-left:12px;'>&nbsp;</td>");
                 } else {
                     OrderedSet<String> dgList = isFleet? reqState.getDeviceGroupIDList(true) : reqState.getDeviceIDList(false);
@@ -1221,6 +1262,7 @@ public abstract class TrackMap
                         String dgDesc = FilterValue("?");
                         out.write("<td nowrap>");
                         out.write("<input id='"+ID_DEVICE_ID   +"' name='"+parmDevGrp    +"' type='hidden' value='"+id+"'>");
+                        out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                         out.write("<input id='"+ID_DEVICE_DESCR+"' name='"+ID_DEVICE_DESCR+"' class='"+CommonServlet.CSS_TEXT_READONLY+"' type='text' readonly size='16' maxlength='32' value='"+dgDesc+"'>");
                         out.write("</td>\n");
                     } else
@@ -1229,10 +1271,12 @@ public abstract class TrackMap
                         out.write("<td nowrap>");
                         if (dcSortBy.equals(IDDescription.SortBy.ID)) {
                             out.write("<input id='"+ID_DEVICE_ID   +"' name='"+parmDevGrp     +"' class='"+CommonServlet.CSS_TEXT_READONLY+"' type='text' readonly size='16' maxlength='32' value='"+id+"'>");
+                            out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                         } else {
                             boolean rtnDispName = dcSortBy.equals(IDDescription.SortBy.NAME);
                             String desc = FilterValue(isFleet?reqState.getDeviceGroupDescription(id,rtnDispName):reqState.getDeviceDescription(id,rtnDispName));
                             out.write("<input id='"+ID_DEVICE_ID   +"' name='"+parmDevGrp     +"' type='hidden' value='"+id+"'>");
+                            out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                             out.write("<input id='"+ID_DEVICE_DESCR+"' name='"+ID_DEVICE_DESCR+"' class='"+CommonServlet.CSS_TEXT_READONLY+"' type='text' readonly size='16' maxlength='32' value='"+desc+"'>");
                         }
                         out.write("</td>\n");
@@ -1246,7 +1290,8 @@ public abstract class TrackMap
                         }
                         IDDescription.SortList(sortList, rtnDispName? IDDescription.SortBy.DESCRIPTION : dcSortBy);
                         out.print("<td nowrap>");
-                        out.print("<select id='"+ID_DEVICE_ID+"' name='"+parmDevGrp+"' onchange=\"javascript:trackMapSelectDevice()\">");
+                        if(activateOnClick) out.print("<select id='"+ID_DEVICE_ID+"' name='"+parmDevGrp+"' onchange=\"javascript:trackMapSelectDevice()\">");
+                        else out.print("<select id='"+ID_DEVICE_ID+"' name='"+parmDevGrp+"'>");
                         for (IDDescription dd : sortList) {
                             String id   = dd.getID();
                             String desc = dd.getDescription();
@@ -1255,6 +1300,7 @@ public abstract class TrackMap
                             out.println("<option value='"+id+"' "+sel+">"+disp+"</option>");
                         }
                         out.write("</select>\n");
+                        out.write("<input id='"+ID_DEVICE_ACCOUNT_ID+"' name='"+PARM_DEVICE_ACCOUNT+"' type='hidden' value='"+selDevAcctId+"'>");
                         out.write("</td>\n");
                     }
                 }

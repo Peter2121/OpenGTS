@@ -430,7 +430,8 @@ JSMapPushpin.prototype.getHTML = function()
     var sats    = evRcd.satCount;
     var stopSec = evRcd.stopSec;
     var devID	= evRcd.typeID; 
-    var devAcctID = evRcd.devAcct; 
+    var devAcctID  = evRcd.devAcct;
+    var devPageURL = String(MAP_DEVICE_URL).replace("$1",devID).replace("$2",devAcctID);
 
     /* extra GPS location information */
     var gpsStr  = "";
@@ -450,7 +451,7 @@ JSMapPushpin.prototype.getHTML = function()
     //h += "<div style='width:300px'>";
     h += "<table class='infoBoxTable' cellspacing='1' cellpadding='1' border='0'>";
 //    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <b>"+dev+"</b></td></tr>";
-    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <b>"+devAcctID+"/"+devID+"</b></td></tr>";
+    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <a href='"+devPageURL+"'>"+devAcctID+"/"+devID+"</a></td></tr>";	// TODO: add style for <a>
     h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_DATE   +":</b> "+dtime+" ["+tmz+"]</td></tr>";
     h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_GPS    +":</b> "+flat+" / "+flon+" "+gpsStr+"</td></tr>";
     if (SHOW_SPEED) {

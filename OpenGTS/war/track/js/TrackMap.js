@@ -293,6 +293,7 @@ function trackMapUpdateMap(limit, limitType, recenterMode, replay)
     var limitFirst = false;
     //try { document.getElementById(ID_CENTER_LAST_POINT_FORM).centerLastPoint.checked = false; } catch (e) {}
     var dev = IS_FLEET? document.SelectDeviceForm.group.value : document.SelectDeviceForm.device.value; // PARM_GROUP/PARM_DEVICE
+    var devAcct = IS_FLEET? "" : document.SelectDeviceForm.deviceAccount.value;
     if(IS_CAL_FR_STATIC) var rfr = map_fr;
     else var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
     if(IS_CAL_TO_STATIC) var rto = map_to;
@@ -304,6 +305,9 @@ function trackMapUpdateMap(limit, limitType, recenterMode, replay)
         "&" + PARM_RANGE_TO + "=" + strEncode(rto) +
         "&" + PARM_TIMEZONE + "=" + strEncode(tmz) +
         "&" + PARM_DEVICE_GROUP + "=" + strEncode(dev);
+    if(devAcct!=null && devAcct!="") {
+    	url += "&" + PARM_DEVICE_ACCOUNT + "=" + strEncode(devAcct);
+    }
     if (limit > 0) {
         url += "&" + PARM_LIMIT + "=" + limit;
     }
@@ -319,6 +323,7 @@ function trackMapUpdateKML()
 {
     if (KML_UPDATE_URL && (KML_UPDATE_URL != "")) {
         var dev = IS_FLEET? document.SelectDeviceForm.group.value : document.SelectDeviceForm.device.value; // PARM_GEOUP/PARM_DEVICE
+        var devAcct = IS_FLEET? "" : document.SelectDeviceForm.deviceAccount.value;
         if(IS_CAL_FR_STATIC) var rfr = map_fr;
         else var rfr = mapCal_fr? mapCal_fr.getArgDateTime() : "";
         if(IS_CAL_TO_STATIC) var rto = map_to;
@@ -330,6 +335,7 @@ function trackMapUpdateKML()
             "&" + PARM_RANGE_TO + "=" + strEncode(rto) +
             "&" + PARM_TIMEZONE + "=" + strEncode(tmz) +
             "&" + PARM_DEVICE_GROUP + "=" + strEncode(dev);
+        if(devAcct!=null && devAcct!="") url += "&" + PARM_DEVICE_ACCOUNT + "=" + strEncode(devAcct);
         openURL(url, "_blank");
     }
 };
@@ -430,6 +436,7 @@ function trackMapSelectDevice()
     document.SelectDeviceForm.date_fr.value = mapCal_fr? mapCal_fr.getArgDateTime() : ""; // PARM_RANGE_FR
     document.SelectDeviceForm.date_to.value = mapCal_to? mapCal_to.getArgDateTime() : ""; // PARM_RANGE_TO
     document.SelectDeviceForm.date_tz.value = calGetTimeZone(); // PARM_TIMEZONE
+    document.SelectDeviceForm.deviceAccount = "";
     document.SelectDeviceForm.submit();
 };
 

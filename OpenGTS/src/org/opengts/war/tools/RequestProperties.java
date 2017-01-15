@@ -1136,6 +1136,12 @@ public class RequestProperties
         this.selDevice        	= null;
     }
 
+    /* set currently selected device ID */
+    public void setSelectedDeviceAccountID(String devAcctID)
+    {
+        this.selDeviceAccountID = devAcctID;
+    }
+
     /* return the current device ID */
     public String getSelectedDeviceID()
     {

@@ -11340,7 +11340,7 @@ public class Device // Asset
     }
 
     /**
-    *** Gets a set of Device IDs for the specified Account (oes not return null)
+    *** Gets a set of Device IDs for the specified Account (does not return null)
     *** @param acctId  The Account ID
     *** @param userAuth  The User record
     *** @param inclInactv  True to include inactive Devices
