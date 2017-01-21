@@ -2442,11 +2442,11 @@ function jsmSetReplayState(state)
             if (state == REPLAY_PAUSED) {
                 // Replay if paused, option is "Continue"
 //                btn.src = "images/Continue20.png";
-                btn.innerHTML = "►";
+                btn.innerHTML = "|►";
             } else {
                 // Replay is stopped, option is "Play"
 //                btn.src = "images/Play20.png";
-                btn.innerHTML = "►";
+                btn.innerHTML = "|►";
             }
         }
     } catch (e) {

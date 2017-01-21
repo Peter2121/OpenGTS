@@ -63,26 +63,22 @@ import java.io.*;
 import java.net.*;
 import java.math.*;
 import java.security.*;
-
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.RenderedImage;
-import javax.imageio.ImageIO;
 
+import javax.imageio.ImageIO;
 import javax.servlet.*;
 import javax.servlet.http.*;
-
 import javax.xml.parsers.*;
+
 import org.w3c.dom.*;
 import org.xml.sax.*;
-
 import org.opengts.util.*;
 import org.opengts.dbtools.*;
-
 import org.opengts.geocoder.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
-
 import org.opengts.war.tools.*;
 import org.opengts.war.track.page.AccountLogin;
 import org.opengts.war.track.page.TrackMap;
@@ -1641,14 +1637,35 @@ public class Track
         //}
 
         /* default selected device (if any) */
+        Integer indexParam = queryString.indexOf("&");
+	    boolean paramDevice = false;
+	    boolean paramDevAccount = false;
+	    boolean enableUniversalGroups = privLabel.getBooleanProperty(PrivateLabel.PROP_TrackMap_enableUniversalGroups,false);
+
+        if(indexParam>1) {
+            String paramString = queryString.substring(indexParam);
+            if(paramString.contains(PARM_DEVICE)) paramDevice=true;
+            if(paramString.contains(PARM_DEVICE_ACCOUNT)) paramDevAccount=true;
+        }
+
         if ((user != null) && !StringTools.isBlank(deviceID)) {
-            try {
-                if (!user.isAuthorizedDevice(deviceID)) {
-                    deviceID = null;
-                }
-            } catch (DBException dbe) {
-                deviceID = null;
-            }
+        	if (!enableUniversalGroups) {
+	        	try {
+	                if (!user.isAuthorizedDevice(deviceID)) {
+	                    deviceID = null;
+	                }
+	            } catch (DBException dbe) {
+	                deviceID = null;
+	            }
+        	}
+        	if(!paramDevice && !paramDevAccount) {	// Reset 'foreign' deviceID if it is not set directly in URL
+        		try {
+					Device device = account.getDevice(deviceID);
+					if(device==null) deviceID=null;
+				} catch (DBException e) {
+					deviceID=null;				
+					}
+        	}
         }
         if (!StringTools.isBlank(deviceID)) {
             reqState.setSelectedDeviceID(deviceID, true);

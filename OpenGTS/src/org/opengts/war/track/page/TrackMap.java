@@ -602,20 +602,7 @@ public abstract class TrackMap
 		        refPage = buf[0];
 	        }
         }
-/*	    
-	    boolean needDevFromReq = true;
-	    boolean paramDevice = false;
-	    
-        String queryString = request.getQueryString();
-        Integer indexParam = queryString.indexOf("&");
-        if(indexParam>1) {
-            String paramString = queryString.substring(indexParam);
-            if(paramString.contains(PARM_DEVICE)) paramDevice=true;
-//            needDevice = isFleet? true : !paramString.contains(PARM_DEVICE) && refPage.equals(currPage);                	
-        }
-//        if(refPage.equals(currPage) && !paramDevice) needDevFromReq=false;
-//        if(!refPage.equals(currPage) && paramDevice) needDevFromReq=false;
-*/	    
+    
         /* limit info */
         long   limitCnt  = AttributeTools.getRequestLong(  request, PARM_MAP_LIMIT     , -1L);
         String limitType = AttributeTools.getRequestString(request, PARM_MAP_LIMIT_TYPE, "");
@@ -1222,10 +1209,12 @@ public abstract class TrackMap
                 IDDescription.SortBy dcSortBy = DeviceChooser.getSortBy(privLabel);
 //                HttpServletRequest request = reqState.getHttpServletRequest();
                 String queryString = reqState.getHttpServletRequest().getQueryString();
-                Integer indexParam = queryString.indexOf("&");
-                if(indexParam>1) {
-                    String paramString = queryString.substring(indexParam);
-                    activateOnClick = isFleet? !paramString.contains(PARM_GROUP) : !paramString.contains(PARM_DEVICE);                	
+                if(queryString!=null) {
+	                Integer indexParam = queryString.indexOf("&");
+	                if(indexParam>1) {
+	                    String paramString = queryString.substring(indexParam);
+	                    activateOnClick = isFleet? !paramString.contains(PARM_GROUP) : !paramString.contains(PARM_DEVICE);                	
+	                }
                 }
                 if (DeviceChooser.isDeviceChooserUseTable(privLabel)) {
                     out.write("<td nowrap>");
@@ -1522,7 +1511,7 @@ public abstract class TrackMap
                     out.print  (  "<table cellpadding='0' cellspacing='2' border='0' style='margin-top: 2px;'><tr>"); // {
                     out.print  (    "<td valign='center' style='padding-right: 3px'><b>"+i18nReplayBtn+"</b></td>");
 //                    out.print  (    "<td valign='center'><input id='"+ID_MAP_REPLAY_BTN+"' type='image' name='replayMap' src='images/Play20.png' title=\""+i18nReplayTip+"\"></td>");
-                    out.print  (    "<td valign='center'><span id='"+ID_MAP_REPLAY_BTN+"' class='ctrlReplayMap' name='replayMap' title=\""+i18nReplayTip+"\" onclick=\"javascript:document.forms['ReplayMap'].submit();\">►</span></td>");
+                    out.print  (    "<td valign='center'><span id='"+ID_MAP_REPLAY_BTN+"' class='ctrlReplayMap' name='replayMap' title=\""+i18nReplayTip+"\" onclick=\"javascript:document.forms['ReplayMap'].submit();\">|►</span></td>");
                     out.print  (    "<td valign='center' style='padding-left: 3px'>");
                     out.print  (       "<span title=\""+i18nInfoTip+"\">");
                     out.print  (         "<label for='"+ID_MAP_SHOW_INFO+"'>"+i18nInfoText+"</label>&nbsp;" + Form_CheckBox(ID_MAP_SHOW_INFO,ID_MAP_SHOW_INFO,true,false,null,null));

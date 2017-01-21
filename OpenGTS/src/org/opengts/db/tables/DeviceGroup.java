@@ -1295,7 +1295,14 @@ public class DeviceGroup
 
         /* "All"? */
         if (groupId.equalsIgnoreCase(DeviceGroup.DEVICE_GROUP_ALL)) {
-            return Device.getAllDevices(inclInactv);	// We consider that 'all' universal group contains ALL devices of ALL accounts
+//            return Device.getAllDevices(inclInactv);	// We consider that 'all' universal group contains ALL devices of ALL accounts
+        	OrderedSet<String> acctDevList=Device.getDeviceIDsForAccount(acctId, userAuth, inclInactv);
+        	OrderedSet<String[]> devList = new OrderedSet<String[]>();
+        	for(String devId : acctDevList) {
+                String[] device = new String[] { acctId, devId };
+                devList.add(device);
+        	}
+        	return devList;
         }
 
         /* get db selector */
