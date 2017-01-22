@@ -1008,6 +1008,7 @@ public class DBConfig
                 PACKAGE_TABLES_       + "UniqueXID"    ,
                 PACKAGE_TABLES_       + "DeviceGroup"  ,
                 PACKAGE_TABLES_       + "DeviceList"   ,
+                PACKAGE_TABLES_       + "DeviceUList"  ,
                 PACKAGE_TABLES_       + "Driver"       ,
                 PACKAGE_TABLES_       + "EventData"    ,
                 PACKAGE_TABLES_       + "Geozone"      ,
@@ -1715,7 +1716,9 @@ public class DBConfig
     **/
     public static void main(String argv[])
     {
-        System.exit(DBConfig._main(argv));
+    	Print.sysPrintln("CommandLine:");
+    	for(String s : argv) Print.sysPrintln(s);
+    	System.exit(DBConfig._main(argv));
     }
 
 }
