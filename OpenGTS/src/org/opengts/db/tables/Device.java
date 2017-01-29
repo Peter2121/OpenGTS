@@ -203,10 +203,17 @@
 package org.opengts.db.tables;
 
 import java.lang.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.math.*;
 import java.io.*;
 import java.sql.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 import org.opengts.util.*;
 import org.opengts.geocoder.*;
@@ -8604,7 +8611,8 @@ public class Device // Asset
     **/
     public void setCreationDefaultValues()
     {
-        this.setIsActive(true);
+        boolean initUniqueID = RTConfig.getBoolean(BasicPrivateLabel.PROP_DeviceInfo_createUniqueID, false);
+    	this.setIsActive(true);
         this.setDescription(NEW_DEVICE_NAME_ + " [" + this.getDeviceID() + "]");
         this.setIgnitionIndex(-1);
         // Rules-Engine Allow Notification
@@ -8624,6 +8632,31 @@ public class Device // Asset
         this.setTotalMaxConnPerMin(Transport.DEFAULT_TOTAL_MAX_CONNECTIONS_PER_MIN);
         this.setDuplexMaxConnPerMin(Transport.DEFAULT_DUPLEX_MAX_CONNECTIONS_PER_MIN);
         this.setMaxAllowedEvents(Transport.DEFAULT_MAX_ALLOWED_EVENTS);
+        if(initUniqueID) {
+/*
+CREATE TRIGGER `gts`.`device_before_insert`
+BEFORE INSERT ON `gts`.`Device`
+FOR EACH ROW
+SET NEW.uniqueID=concat('gprmc_',md5(concat(NEW.accountID,NEW.deviceID)))
+*/        	
+        	try {
+        		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        		Date date = new Date();
+	        	String uidPrefix = RTConfig.getString(BasicPrivateLabel.PROP_DeviceInfo_uniqueIDPrefix, "gprmc_");
+	        	String id = this.getAccountID()+"#"+this.getDeviceID()+"#"+dateFormat.format(date);
+	        	byte[] bid = StringTools.getBytes(id);
+	        	MessageDigest md = MessageDigest.getInstance("MD5");
+	        	byte[] hash = md.digest(bid);
+	        	HexBinaryAdapter hba = new HexBinaryAdapter();
+	        	String uniqueId = hba.marshal(hash);
+//	        	String uniqueId = new String(hash,"UTF-8");
+	        	uniqueId = uidPrefix+uniqueId;
+	        	this.setUniqueID(uniqueId);
+        	}
+        	catch (NoSuchAlgorithmException ex) {
+        		Print.logError("Cannot create Unique ID for device", ex.getLocalizedMessage());
+        	}
+        }
         // other defaults
         super.setRuntimeDefaultValues();
     }

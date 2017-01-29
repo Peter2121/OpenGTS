@@ -231,6 +231,9 @@ public class BasicPrivateLabel
     public  static final String PROP_DeviceInfo_showFuelProf                = "deviceInfo.showFuelProf";            // true|false
     public  static final String PROP_DeviceInfo_showIgnState                = "deviceInfo.showIgnState";            // true|false
     
+    public  static final String PROP_DeviceInfo_createUniqueID              = "deviceInfo.createUniqueID";          // true|false
+    public  static final String PROP_DeviceInfo_uniqueIDPrefix              = "deviceInfo.uniqueIDPrefix";
+
     /* DeviceInfo custom fields */
     public  static final String PROP_DeviceInfo_custom_                     = "deviceInfo.custom.";                 // custom attr
 

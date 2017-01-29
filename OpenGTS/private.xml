@@ -459,6 +459,9 @@ Notes:
         <Property key="deviceInfo.showFuelProf">false</Property>                <!-- [true|false]  -->
         <Property key="deviceInfo.showIgnState">false</Property>                <!-- [true|false]  -->
 
+        <Property key="deviceInfo.createUniqueID">true</Property>               <!-- [true|false] initialize unique ID on device creation -->
+        <Property key="deviceInfo.uniqueIDPrefix">gprmc_</Property>             <!-- prefix for unique ID -->
+
         <!-- GroupInfo properties -->
         <Property key="groupInfo.showPropertiesButton">false</Property>         <!-- [true|false] show "Properties" button -->
         <Property key="groupInfo.deviceListSortBy">desc</Property>              <!-- [id|desc] sort device member list by -->

@@ -494,6 +494,7 @@ public class DBAdmin
                         sb.append(" Creating table ...");
                         Print.sysPrintln(sb.toString());
                         f.createTable();
+                        // TODO: add triggers creation
                     } else {
                         sb.append(" Table does not exist!");
                         Print.sysPrintln(sb.toString());
