@@ -1342,6 +1342,7 @@ Notes:
     <JSPEntries rtPropPrefix="Domain.JSPEntries.">
         <JSP name="default"     file="/jsp/loginSession.jsp"/>
         <JSP name="banner"      file="/jsp/loginSession_banner.jsp"/>
+        <JSP name="div"         file="/jsp/loginSession_div.jsp"/>
      <!--   
         <JSP name="frame"       file="/jsp/loginSession_frame.jsp"/>
         <JSP name="emailReport" file="/jsp/emailReport.jsp"/>
@@ -1395,7 +1396,7 @@ Notes:
     	        <IconImage>menu.png</IconImage>
     	        <ButtonImage>menu.png</ButtonImage>
                 </Page>
-            <Page rtKey="AccountLogin" jsp="banner" class="org.opengts.war.track.page.AccountLogin">
+            <Page rtKey="AccountLogin" jsp="div" class="org.opengts.war.track.page.AccountLogin">
                 <Property key="customLoginUrl"></Property>
                 <Property key="VSeparatorImage.path"></Property>
                 <Property key="VSeparatorImage.width"></Property>

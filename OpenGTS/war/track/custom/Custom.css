@@ -1,0 +1,63 @@
+BODY.bg {
+	margin: 0; 
+	padding: 0;
+    background: url('../images/flytrace-background.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+H2 {
+font-family: Arial;
+font-size: 11pt;
+white-space: pre;
+color: #3399ff;
+text-shadow: 0px 0px 3px #3399ff;
+}
+
+#content {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.accountLoginTable_nobord {
+margin-top: 7px;
+margin-bottom: 7px;
+margin-left: 0px;
+margin-right: 0px;
+width: 350px;
+text-align: center;
+}
+
+.accountLoginCell_nobord {
+padding: 0px;
+}
+
+TABLE.accountLoginFormTable {
+padding-left: 15px;
+}
+
+SPAN.copyrightText {
+	font-size: 7pt; 
+	font-style: oblique; 
+	color: #222222;
+}
+
+HR {
+margin-top: 2px;
+margin-bottom: 2px;
+border: 0px;
+}
+
+.contentMessage {
+margin-top: 5px;
+font: bold 8pt sans-serif;
+font-style: oblique;
+text-align: center;
+color: #CC29A3;
+text-shadow: 0px 0px 2px #CC29A3;
+}
