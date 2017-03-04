@@ -40,6 +40,7 @@ response.setDateHeader("EXPIRES"  , 0         );
   <meta http-equiv="expires" content="0"/>
   <meta name="copyright" content="${copyright}"/>
   <meta name="robots" content="none"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   </gts:var>
 
   <!-- page title -->
