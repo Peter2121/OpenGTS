@@ -92,6 +92,9 @@ public class NewAccount
     private static final String PROP_TempAccount_MaxUnconfirmHours 		= "Account.default.tempAccountMaxUnconfirmHours";
     private static final String PROP_ServiceProvider_Mail 				= "ServiceProvider.email";
     public static final String	PROP_Config_mail_subj					= "trackerConfig.mailSubj";
+    private static final String PROP_TempAccount_Info_Redirect			= "Account.default.tempAccountInfoRedirect";
+    private static final String PROP_TempAccount_Redirect_Page			= "Account.default.tempAccountRedirectPage";
+    
 
     // ------------------------------------------------------------------------
 
@@ -430,6 +433,7 @@ public class NewAccount
 
         String unconf = StringTools.toString(RTConfig.getInt(PROP_TempAccount_MaxUnconfirmHours, 12));
         String spmail = RTConfig.getString(PROP_ServiceProvider_Mail, "mail@domain.local");
+        Boolean infoRedirect = RTConfig.getBoolean(PROP_TempAccount_Info_Redirect, false);
 
 // TODO: modify translations (actually disabled) es ru-OK fr-OK       
         String subj = i18n.getString("NewAccount.newAccount", "New Account");
@@ -462,7 +466,18 @@ public class NewAccount
                 /*{5}*/ spmail,
                 /*{6}*/ unconf
             });
-        //Print.logInfo("EMail body:\n" + body);
+        if(infoRedirect) {
+        	String pageRedirect = RTConfig.getString(PROP_TempAccount_Redirect_Page, "");
+        	if(pageRedirect.length()>1) {
+        		pageRedirect += accountID;
+	        	String body1 = i18n.getString("NewAccount.emailBodyRedirectInfo",
+	        		"\nYou can use this shortcut {0} to share your traces\n"+
+	        		"(the visitors will be redirected to the page of 'guest' login of your account).",
+	        		pageRedirect);
+	        	body += body1;
+        	}
+        }
+        Print.logInfo("EMail body:\n" + body);
         String from = privLabel.getEMailAddress(PrivateLabel.EMAIL_TYPE_ACCOUNTS);
         String to   = account.getContactEmail();
         if (!StringTools.isBlank(from) && !StringTools.isBlank(to)) {

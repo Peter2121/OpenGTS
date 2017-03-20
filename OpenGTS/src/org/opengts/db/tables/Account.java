@@ -308,6 +308,8 @@ public class Account
     private static String           PROP_TempAccount_Max_Expiration_Days	= "Account.default.tempAccountMaxExpireDays";
     private static String           PROP_TempAccount_Max_Uncorfirmed_Hours	= "Account.default.tempAccountMaxUnconfirmHours";
     private static String           PROP_TempAccount_Max_Devices			= "Account.default.tempAccountMaxDevices";
+//    private static String           PROP_TempAccount_Info_Redirect			= "Account.default.tempAccountInfoRedirect";
+    
     
     // ------------------------------------------------------------------------
     // Password attributes
