@@ -264,8 +264,8 @@ public class DeviceChooser
     private static int    IDPOS_FIRST                 = 1;
     private static int    IDPOS_LAST                  = 2;
 
-    private static int    WIDTH_ID                    = 80;
-    private static int    WIDTH_DESC                  = 180;
+    private static int    WIDTH_ID                    = 150;
+    private static int    WIDTH_DESC                  = 300;
 
     private static int    SEARCH_TEXT_SIZE            = 18;
 

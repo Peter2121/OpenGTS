@@ -1,7 +1,7 @@
 
 /* device chooser DIV */
 DIV.devSelectorDiv {
-    max-height: 440px;
+    max-height: 540px;
     /* height: expression("240px"); */
     height: expression( this.scrollHeight > 439 ? "440px" : "auto" );
     overflow-y: auto; /* scroll */
@@ -27,7 +27,7 @@ DIV.devSelectorTableList {
  
 /* search input text field */
 INPUT.deviceChooserInput {
-    font: normal 8pt sans-serif; 
+    font: normal 12pt sans-serif; 
 }
 
 /* device selector header row/col */
@@ -37,9 +37,11 @@ TR.devSelectorRowHeader {
 }
 TH.devSelectorColHeader {
     height: 12px;
-    font: bold 8pt sans-serif; 
+    font: bold 12pt sans-serif; 
     text-align: center;
     border-bottom: 3px double black;
+    padding-top: 5px;
+	padding-bottom: 5px; 
 }
 TH.devSelectorColHeaderX:hover {
     height: 12px;
@@ -66,8 +68,10 @@ TR.devSelectorRow_hidden {
 /* device selector data col */
 TD.devSelectorColData {
     background-color: #383838;
-    font: normal 8pt sans-serif; 
-    text-align: center; 
+    font: normal 12pt sans-serif; 
+    text-align: center;
+    padding-top: 7px;
+	padding-bottom: 7px; 
 /*    border-right: 1px solid #CCCCCC; */
 /*    border-bottom: 1px solid #CCCCCC; */
 }
