@@ -372,6 +372,7 @@ Calendar.prototype.isSameMonthAsPriorCalendar = function()
 
 /**
 *** Sets the next calendar whose dates should be _after_ this calendar
+*** internal function
 **/
 Calendar.prototype.setNextCalendar = function(cal)
 {
@@ -380,6 +381,7 @@ Calendar.prototype.setNextCalendar = function(cal)
 
 /**
 *** Returns true if this calendar is the same month as the next calendar
+*** internal function
 **/
 Calendar.prototype.isSameMonthAsNextCalendar = function()
 {
@@ -393,16 +395,18 @@ Calendar.prototype.isSameMonthAsNextCalendar = function()
     }
 };
 
-/* return the other bound calendar */
+/** 
+*** Return the other bound calendar (next or prior)
+*** internal function
+**/
 Calendar.prototype.getOtherCalendar = function()
 {
     return (this.nextCal != null)? this.nextCal : this.priorCal;
 };
 
-// ----------------------------------------------------------------------------
-
 /**
 *** Returns the number of days in the specified year/month
+*** internal function
 **/
 Calendar.prototype.daysInMonth = function(year, month1)
 {
@@ -415,6 +419,7 @@ Calendar.prototype.daysInMonth = function(year, month1)
 
 /**
 *** Returns the day number of the specified date
+*** internal function
 **/
 Calendar.prototype.dayNumber = function(year, month1, day)
 {
@@ -426,6 +431,7 @@ Calendar.prototype.dayNumber = function(year, month1, day)
 
 /**
 *** Returns the day of week for the specified date
+*** internal function
 **/
 Calendar.prototype.dayOfWeek = function(year, month1, day)
 {
@@ -434,6 +440,7 @@ Calendar.prototype.dayOfWeek = function(year, month1, day)
 
 /**
 *** Converts the epoch timestamp to YYYY/MM/DD/hh/mm/ss
+*** internal function
 **/
 Calendar.prototype.epochSecondsToYmdHms = function(epoch)
 {
@@ -453,10 +460,9 @@ Calendar.prototype.epochSecondsToYmdHms = function(epoch)
     return { YYYY:year, MM:month1, DD:day, hh:hour, mm:minute, ss:second };
 };
 
-// ----------------------------------------------------------------------------
-
 /**
 *** Returns the YMD value as an argument for sending to the server
+*** internal function
 **/
 Calendar.prototype.getArgDate = function()
 {
@@ -468,6 +474,8 @@ Calendar.prototype.getArgDate = function()
 
 /**
 *** Returns the YMDhm value as an argument for sending to the server
+*** used in TrackMap.js:234,236,298,300,328,330,436,437
+*** used in ReportMenu.java:280,281
 **/
 Calendar.prototype.getArgDateTime = function()
 {
@@ -478,6 +486,7 @@ Calendar.prototype.getArgDateTime = function()
 
 /**
 *** Sets the form date/time
+*** internal function
 **/
 Calendar.prototype.setFormDate = function()
 {
@@ -524,10 +533,9 @@ Calendar.prototype.setFormDate = function()
 
 };
 
-// ----------------------------------------------------------------------------
-
 /**
 *** returns the current selected day number
+*** internal function
 **/
 Calendar.prototype.getSelectedDayNumber = function()
 {
@@ -536,6 +544,7 @@ Calendar.prototype.getSelectedDayNumber = function()
 
 /**
 *** returns the current selected month number
+*** internal function
 **/
 Calendar.prototype.getSelectedMonthNumber = function()
 {
@@ -545,6 +554,7 @@ Calendar.prototype.getSelectedMonthNumber = function()
 
 /**
 *** Constrain the selected day to the days within the current month
+*** internal function
 **/
 Calendar.prototype.constrainSelectedDay = function(adjustMonth)
 {
@@ -582,6 +592,7 @@ Calendar.prototype.constrainSelectedDay = function(adjustMonth)
 /**
 *** Selects the specified calendar day
 *** @param dy  The day to select
+*** internal function
 **/
 Calendar.prototype._selectDay = function(dy,hr,mn)
 {
@@ -609,6 +620,7 @@ Calendar.prototype._selectDay = function(dy,hr,mn)
 /**
 *** Selects the specified calendar day
 *** @param dy  The day to select
+*** internal function
 **/
 Calendar.prototype.selectDay = function(dy,hr,mn)
 {
@@ -621,6 +633,7 @@ Calendar.prototype.selectDay = function(dy,hr,mn)
 
 /**
 *** Advance the time by specified number of hours
+*** internal function
 **/
 Calendar.prototype.advanceHour = function(num)
 {
@@ -650,6 +663,7 @@ Calendar.prototype.advanceHour = function(num)
 
 /**
 *** Advance the time by specified number of minutes
+*** internal function
 **/
 Calendar.prototype.advanceMinute = function(num)
 {
@@ -660,7 +674,8 @@ Calendar.prototype.advanceMinute = function(num)
 };
 
 /**
-*** Advance the time by specified number of minutes
+*** Set hour using data from input field
+*** internal function
 **/
 Calendar.prototype.setInputHour = function()
 {
@@ -676,7 +691,8 @@ Calendar.prototype.setInputHour = function()
 };
 
 /**
-*** Advance the time by specified number of minutes
+*** Set minutes using data from input field
+*** internal function
 **/
 Calendar.prototype.setInputMinute = function()
 {
@@ -691,43 +707,10 @@ Calendar.prototype.setInputMinute = function()
     }
 };
 
-// ----------------------------------------------------------------------------
-
-/*
-Calendar.prototype.inputMinutes = function()
-{
-    if (this.minuteInputView != null) {
-        this.closeTimeInputView();
-    } else {
-        var mmfld = document.getElementById(this.calID + CAL_ID_TIME_MM);
-        if (mmfld != null) {
-            var absLoc = getElementPosition(mmfld);
-            var absSiz = getElementSize(mmfld);
-            this.minuteInputView = createDivBox("calMinuteInputView", absLoc.left, absLoc.top + absSiz.height + 2, -1, -1);
-            var html = "<select>";
-            for (var m = 0; m < 60; m++) {
-                var s = (m > 9)? m : ("0" + m);
-                html += "<option value=' "+ m + "'>" + s + "</option>";
-            }
-            html += "</select>";
-            this.minuteInputView.innerHTML = html;
-            document.body.appendChild(this.minuteInputView);
-        }
-    }
-};
-Calendar.prototype.closeTimeInputView = function()
-{
-    if (this.minuteInputView != null) {
-        document.body.removeChild(this.minuteInputView);
-        this.minuteInputView = null;
-    }
-};
-*/
-
-// ----------------------------------------------------------------------------
-
 /**
 *** Returns true if calendar is expanded
+*** used in DeviceInfo.js:45,72,97
+*** used in DriverInfo.js:36
 **/
 Calendar.prototype.isExpanded = function()
 {
@@ -736,6 +719,7 @@ Calendar.prototype.isExpanded = function()
 
 /**
 *** Toggle expand/collapse
+*** internal function
 **/
 Calendar.prototype.toggleExpand = function()
 {
@@ -745,6 +729,8 @@ Calendar.prototype.toggleExpand = function()
 
 /**
 *** Expand calendar
+*** used in DeviceInfo.js:...
+*** used in DriverInfo.js:38,43,45
 **/
 Calendar.prototype.setExpanded = function(expand, fade)
 {
@@ -767,6 +753,7 @@ Calendar.prototype.setExpanded = function(expand, fade)
 
 /**
 *** Fade calendar (in/out)
+*** internal function
 **/
 Calendar.prototype._fadeCalendar = function(expand)
 {
@@ -789,10 +776,9 @@ Calendar.prototype._fadeCalendar = function(expand)
     }
 };
 
-// ----------------------------------------------------------------------------
-
 /**
 *** Sets the Year/Month/Day for this calendar
+*** used in many files
 **/
 Calendar.prototype.setDate = function(YYYY,MM,DD)
 {
@@ -810,6 +796,8 @@ Calendar.prototype.setDate = function(YYYY,MM,DD)
 
 /**
 *** Gets the date for this calendar as a string value in the form "YYYY/MM/DD".
+*** used in DeviceInfo.js:51,78,103
+*** used in DriverInfo.js:42
 **/
 Calendar.prototype.setDateAsString = function(ymd)
 {
@@ -829,6 +817,8 @@ Calendar.prototype.setDateAsString = function(ymd)
 
 /**
 *** Gets the date for this calendar as a string value in the form "YYYY/MM/DD".
+*** used in DeviceInfo.js:55,82,107
+*** used in DriverInfo.js:39,46
 **/
 Calendar.prototype.getDateAsString = function()
 {
@@ -842,6 +832,7 @@ Calendar.prototype.getDateAsString = function()
 
 /**
 *** Rewrites the calendar for the previous year
+*** internal function
 **/
 Calendar.prototype.gotoPreviousYear = function()
 {
@@ -862,6 +853,7 @@ Calendar.prototype.gotoPreviousYear = function()
 
 /**
 *** Rewrites the calendar for the next year
+*** internal function
 **/
 Calendar.prototype.gotoNextYear = function()
 {
@@ -880,10 +872,9 @@ Calendar.prototype.gotoNextYear = function()
     }
 };
 
-// -------------------
-
 /**
 *** Rewrites the calendar for the previous month
+*** internal function
 **/
 Calendar.prototype.gotoPreviousMonth = function()
 {
@@ -908,6 +899,7 @@ Calendar.prototype.gotoPreviousMonth = function()
 
 /**
 *** Rewrites the calendar for the next month
+*** internal function
 **/
 Calendar.prototype.gotoNextMonth = function()
 {
@@ -930,11 +922,9 @@ Calendar.prototype.gotoNextMonth = function()
     }
 };
 
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-
 /**
 *** Write the calendar HTML
+*** used in TrackMap.js:75
 **/
 Calendar.prototype.writeCalendar = function()
 {
@@ -944,12 +934,10 @@ Calendar.prototype.writeCalendar = function()
 
 /**
 *** Write the calendar HTML
+*** internal function
 **/
 Calendar.prototype._writeCalendar = function(expanded, calRows)
 {
-    //if (isNaN(this.year)  ) { alert("Invalid 'this.year'"); }
-    //if (isNaN(this.month1)) { alert("Invalid 'this.month1'"); }
-
     var isLeapYear          = ((this.year % 4) == 0); // valid 1901 through 2399
     var daysInThisMonth     = this.daysInMonth(this.year, this.month1);
     var daysInLastMonth     = this.daysInMonth(this.year, this.month1 - 1);
@@ -1194,28 +1182,6 @@ Calendar.prototype._writeCalendar = function(expanded, calRows)
                 calendarBODY +
                 "</table>\n";
             document.body.appendChild(this.divCalView);
-            // set new 'onmousedown'
-            /*
-            if (DIVBOX_OVERRIDE_ONMOUSEDOWN) {
-                this.divOnmousedown = document.onmousedown;
-                var self = this;
-                document.onmousedown = function(e) {
-                    if (!e) var e = window.event;
-                    if (!e) { return false; }
-                    var targ = e.target? e.target : e.srcElement? e.srcElement : null;
-                    if (targ && (targ.nodeType == 3)) { targ = targ.parentNode; } // Safari bug?
-                    if (targ == calElem) {
-                        return false;
-                    } else {
-                        for (;targ && (targ.nodeName != "BODY"); targ = targ.parentNode) {
-                            if (targ == self.divCalView) { return false; }
-                        }
-                        self._divCloseCalendar();
-                        return true;
-                    }
-                };
-            }
-            */
         }
 
     } else {
@@ -1229,7 +1195,10 @@ Calendar.prototype._writeCalendar = function(expanded, calRows)
 
 };
 
-/* close the DIV calendar */
+/**
+***  Close the DIV calendar 
+*** internal function
+**/
 Calendar.prototype._divCloseCalendar = function()
 {
     if (this.divCalView != null) {
@@ -1242,10 +1211,10 @@ Calendar.prototype._divCloseCalendar = function()
     }
 };
 
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-
-/* return true if this event represents an Digit key (0..9) */
+/**
+*** Return true if this event represents an Digit key (0..9) 
+*** internal function
+**/
 Calendar.prototype.timeDigitKey = function(event, isMin)
 {
     
@@ -1312,5 +1281,3 @@ Calendar.prototype.timeDigitKey = function(event, isMin)
         return false; // ignore this char
     }
 };
-
-// ----------------------------------------------------------------------------
