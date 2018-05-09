@@ -1340,7 +1340,7 @@ Notes:
      ===    For instance "Domain.JSPEntries.defailt=/jsp/myLoginSession.jsp"
      -->
     <JSPEntries rtPropPrefix="Domain.JSPEntries.">
-        <JSP name="default"     file="/jsp/loginSession.jsp"/>
+        <JSP name="default"     file="/jsp/loginSession_help.jsp"/>
         <JSP name="banner"      file="/jsp/loginSession_banner.jsp"/>
         <JSP name="div"         file="/jsp/loginSession_div.jsp"/>
      <!--   
