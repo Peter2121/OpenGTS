@@ -453,7 +453,7 @@ JSMapPushpin.prototype.getHTML = function()
 //    h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <b>"+dev+"</b></td></tr>";
     h += "<tr class='infoBoxRow'><td class='infoBoxCell'>[#"+ndx+"] &nbsp; <a href='"+devPageURL+"'>"+devAcctID+"/"+devID+"</a></td></tr>";	// TODO: add style for <a>
     h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_DATE   +":</b> "+dtime+" ["+tmz+"]</td></tr>";
-    h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_GPS    +":</b> "+flat+" / "+flon+" "+gpsStr+"</td></tr>";
+    h += "<tr class='infoBoxRow'><td class='infoBoxCell'><b>"+TEXT_INFO_GPS    +":</b> <a href='https://maps.google.com/maps?q="+flat+","+flon+"'>"+flat+" / "+flon+" "+gpsStr+"</a></td></tr>";
     if (SHOW_SPEED) {
         if (COMBINE_SPEED_HEAD) {
             if (evRcd.speedKPH > 0) {
