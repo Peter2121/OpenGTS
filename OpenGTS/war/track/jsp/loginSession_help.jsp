@@ -216,7 +216,8 @@ response.setDateHeader("EXPIRES"  , 0         );
 <script>
   var langHelpDivHtml = ["<i><a href='https://www.flytrace.com/documents/quick-start-guide/' style='color:yellow'>Comment configurer un SmartPhone pour Live Tracking?</a></i>", "<i><a href='https://www.flytrace.com/documents/quick-start-guide/' style='color:yellow'>Как настроить смартфон для Live Tracking?</a></i>"];
   var lang;
-  if(TEXT_UNAVAILABLE!=null) {
+  if(typeof TEXT_UNAVAILABLE === 'undefined') lang=getFirstBrowserLanguage();
+  else if(TEXT_UNAVAILABLE!=null) {
    if(TEXT_UNAVAILABLE === "Indisponible") lang="fr";
    else if(TEXT_UNAVAILABLE === "нет") lang="ru";
   } else lang=getFirstBrowserLanguage();

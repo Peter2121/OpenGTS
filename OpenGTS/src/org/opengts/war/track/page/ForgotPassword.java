@@ -52,7 +52,6 @@ import org.opengts.util.*;
 import org.opengts.dbtools.*;
 import org.opengts.db.*;
 import org.opengts.db.tables.*;
-
 import org.opengts.war.tools.*;
 import org.opengts.war.track.*;
 
@@ -90,6 +89,10 @@ public class ForgotPassword
     public  static final String  PARM_EMAIL_ADDRESS         = "email_addr";
 
     public  static final String  CSS_FORGOT_PASSWORD[]      = new String[] { "forgotPasswordTable", "forgotPasswordCell" };
+    public  static final String  CSS_FORGOT_PASSWORD_TITLE       = "forgotPasswordTitle";
+//    public  static final String  CSS_FORGOT_PASSWORD_OFFLINE     = "forgotPasswordOffline";
+    public  static final String  CSS_FORGOT_PASSWORD_INSTRUCT    = "forgotPasswordInstructions";
+    public  static final String  CSS_FORGOT_PASSWORD_EXPIRE      = "forgotPasswordExpire";
 
     // ------------------------------------------------------------------------
     // WebPage interface
@@ -506,9 +509,9 @@ public class ForgotPassword
                 String menuURL   = privLabel.getWebPageURL(reqState, PAGE_MENU_TOP);
                 String emailURL  = privLabel.getWebPageURL(reqState, PAGE_PASSWD_EMAIL, COMMAND_EMAIL);
                 boolean usrLogin = privLabel.getUserLogin();
-                out.println("<span style='font-size:10pt; margin-bottom:7px;'>"+i18n.getString("ForgotPassword.instructions",
-                              "To have your password sent to you, please enter your "+
-                              "Login information and Contact Email Address "+
+                out.println("<span class='"+CSS_FORGOT_PASSWORD_INSTRUCT+"'>"+i18n.getString("ForgotPassword.instructions",
+                              "To have your password sent to you,\n please enter your "+
+                              "Login information\n and Contact Email Address\n "+
                               "(must match email address on file):") +
                             "</span>");
                 out.println("<hr/>");

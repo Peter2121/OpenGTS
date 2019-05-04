@@ -355,7 +355,7 @@ public class DBProvider
     public static final String  MySQL_MyISAM_Name     = "mysql_myisam";
     protected static DBProvider MySQL_MyISAM_Provider = new DBProvider(
         MySQL_MyISAM_Name, DB_MYSQL, 3306,
-        new String[] { "com.mysql.jdbc.Driver", "org.gjt.mm.mysql.Driver" },
+        new String[] { "org.mariadb.jdbc.Driver", "com.mysql.jdbc.Driver", "org.gjt.mm.mysql.Driver" },
         null,                                       // column name filter
         null,                                       // index name filter
         null,                                       // table name filter
@@ -388,7 +388,7 @@ public class DBProvider
     public static final String  MySQL_InnoDB_Name     = "mysql_innodb";
     protected static DBProvider MySQL_InnoDB_Provider = new DBProvider(
         MySQL_InnoDB_Name, DB_MYSQL, 3306,
-        new String[] { "com.mysql.jdbc.Driver", "org.gjt.mm.mysql.Driver" },
+        new String[] { "org.mariadb.jdbc.Driver", "com.mysql.jdbc.Driver", "org.gjt.mm.mysql.Driver" },
         null,                                       // column name filter
         null,                                       // index name filter
         null,                                       // table name filter
