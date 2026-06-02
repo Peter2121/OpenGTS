@@ -1535,6 +1535,12 @@ public class RequestProperties
                     Print.logInfo("No devices ...");
                     return EventData.EMPTY_ARRAY;
                 }
+            } else if (!enableUniversalGroups) {
+            	devIDList = this._getDeviceIDsForSelectedGroup(true/*fleet*/,false/*inclActv*/);
+                if (ListTools.isEmpty(devIDList)) {
+                    Print.logInfo("No devices ...");
+                    return EventData.EMPTY_ARRAY;
+                }
             }
             if(enableUniversalGroups) {
             	devList = DeviceGroup.getAllDevicesForGroup(accountID, groupID, null, false);
@@ -1543,14 +1549,15 @@ public class RequestProperties
                     return EventData.EMPTY_ARRAY;
                 }
             }
+            /*
             if(!returnAllDevices && !enableUniversalGroups) { 
-            	devIDList = this._getDeviceIDsForSelectedGroup(true/*fleet*/,false/*inclActv*/);
+            	devIDList = this._getDeviceIDsForSelectedGroup(true,false);
                 if (ListTools.isEmpty(devIDList)) {
                     Print.logInfo("No devices ...");
                     return EventData.EMPTY_ARRAY;
                 }
             }
-
+            */
             // not every device may have an event
             java.util.List<EventData> evList = new Vector<EventData>();
             
@@ -1608,10 +1615,7 @@ public class RequestProperties
 	                }
 	
 	            } // devIDList device loop
-            }
-            
-         // case of universal groups
-            if(devList!=null) {
+            } else if(devList!=null) {          // case of universal groups
 	            for (int i = 0; i < devList.size(); i++) { // TODO: apply limit?
 //	            	String[] device = new String[] { aId, dId };
 	            	String aID = devList.get(i)[0];
